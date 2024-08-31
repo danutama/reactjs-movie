@@ -1,0 +1,707 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500..600&display=swap');
+
+:root {
+  line-height: 1.5;
+  --background: hsl(225, 20%, 96%);
+  --background-secondary: #ffffff;
+  --background-3: #ffffff;
+  --light-dark: #ffffff;
+  --dark-light: #000000;
+  --light-dark-hover: hsl(225, 20%, 96%);
+  --skeleton-anim: rgba(0, 0, 0, 0.05);
+  --riple-shadow: rgba(112, 112, 112, 0.1);
+
+  --blue-primary: #0d6cfa;
+  --blue-secondary: #0d65eb;
+  --white: #fff;
+  --black: #000;
+  --gray: #6c757d;
+  --border: #dee2e6;
+  --yellow: #ffc853;
+}
+
+[data-theme='dark'] {
+  --blue-primary: #3772ff;
+  --blue-secondary: #4489fe;
+  --background: #0d1117;
+  --background-secondary: #161b22;
+  --background-3: #0d1117;
+  --light-dark: #000000;
+  --dark-light: #ffffff;
+  --light-dark-hover: rgba(211, 229, 255, 0.2);
+  --border: rgb(41, 51, 65);
+  --skeleton-anim: rgba(255, 255, 255, 0.05);
+  --riple-shadow: rgba(255, 255, 255, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans';
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  background-color: var(--background);
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  max-width: 1820px !important;
+}
+
+section {
+  padding: 3rem 0 4.3rem 0;
+}
+
+.container-box {
+  background-color: var(--background-secondary);
+}
+
+.dropdown-item.active-theme {
+  color: var(--white) !important;
+  background-color: var(--blue-primary) !important;
+}
+
+/* ============== GLOBAL CLASS ============ */
+.bg-primary,
+.btn-primary {
+  background-color: var(--blue-primary) !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--blue-secondary) !important;
+}
+
+.btn-secondary,
+.btn-secondary:active,
+.btn-secondary:focus {
+  background-color: var(--light-dark-hover) !important;
+  color: var(--dark-light) !important;
+}
+
+.btn-secondary:hover {
+  background-color: var(--border) !important;
+  color: var(--dark-light) !important;
+}
+
+.bg-secondary {
+  background-color: var(--background-secondary) !important;
+}
+
+.border-primary {
+  border: 1px solid var(--blue-primary) !important;
+}
+
+.hr {
+  background-color: var(--border);
+  height: 1px;
+  margin: 10px 0;
+}
+
+.spinner-primary {
+  color: var(--blue-primary) !important;
+}
+
+.spinner-secondary {
+  color: var(--gray) !important;
+}
+
+.text-yellow {
+  color: var(--yellow);
+}
+
+.text-red {
+  color: var(--red) !important;
+}
+
+.text-green {
+  color: var(--green) !important;
+}
+
+.text-primary {
+  color: var(--blue-primary) !important;
+}
+
+.text-white {
+  color: var(--white);
+}
+
+.btn-secondary-custom:hover,
+.btn-secondary-custom:active,
+.btn-secondary-custom:focus {
+  color: var(--dark-light) !important;
+}
+
+.icon {
+  margin-top: -3px !important;
+}
+
+.text {
+  color: var(--dark-light);
+}
+
+.text-secondary {
+  color: var(--gray);
+}
+
+.title-wrapper {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-title {
+  font-weight: bold;
+}
+
+.box-wrapper {
+  background-color: var(--background-secondary) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* scrollbar-custom */
+.scrollbar-custom::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background-color: var(--background);
+  border-radius: 10px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: var(--blue-primary);
+  border-radius: 10px;
+}
+/* --- end --- */
+/* ============== GLOBAL CLASS END ============ */
+
+.btn-link,
+a {
+  font-weight: bold;
+  color: var(--blue-primary);
+  text-decoration: inherit;
+}
+
+.btn-link:hover,
+.btn-link:focus,
+a:hover {
+  color: var(--blue-secondary) !important;
+}
+
+h1 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  line-height: 1.1;
+  color: var(--black);
+  margin: 1rem 0;
+}
+
+/* =========================== BUTTON TO TOP ========================= */
+.btn-to-top-wrapper {
+  position: fixed;
+  bottom: 4.5rem;
+  width: 100%;
+  right: 0;
+  left: 0;
+  height: 50px;
+  z-index: 1000;
+  display: none;
+  text-align: center;
+  transform: translateY(100%);
+  transition: opacity 0.3s ease, transform 0.5s ease;
+}
+
+.btn-to-top-wrapper.show,
+.btn-to-top-wrapper.show button {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.btn-to-top-wrapper.hide,
+.btn-to-top-wrapper.hide button {
+  display: none;
+  transform: translateY(100%);
+}
+
+.btn-to-top,
+.btn-to-top:hover,
+.btn-to-top:active,
+.btn-to-top:focus {
+  background-color: var(--background-secondary) !important;
+  color: var(--dark-light) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px !important;
+}
+/* =========================== BUTTON TO TOP END ========================= */
+
+/* =========================== SKELETON ========================= */
+.skeleton {
+  min-height: 400px;
+  width: 215px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--skeleton-anim),
+    transparent
+  );
+  animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+/* =========================== SKELETON END ========================= */
+
+/* ================== SPINNER CUSTOM ==================== */
+.container-spinner {
+  --uib-size: 40px;
+  --uib-speed: 2s;
+  --uib-bg-opacity: 0;
+  height: var(--uib-size);
+  width: var(--uib-size);
+  transform-origin: center;
+  animation: rotate var(--uib-speed) linear infinite;
+  will-change: transform;
+  overflow: visible;
+}
+
+.car {
+  fill: none;
+  stroke: var(--blue-primary);
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  stroke-linecap: round;
+  animation: stretch calc(var(--uib-speed) * 0.75) ease-in-out infinite;
+  will-change: stroke-dasharray, stroke-dashoffset;
+  transition: stroke 0.5s ease;
+}
+
+.track {
+  fill: none;
+  stroke: var(--blue-primary);
+  opacity: var(--uib-bg-opacity);
+  transition: stroke 0.5s ease;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes stretch {
+  0% {
+    stroke-dasharray: 0, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 75, 150;
+    stroke-dashoffset: -25;
+  }
+  100% {
+    stroke-dashoffset: -100;
+  }
+}
+/* ================== SPINNER CUSTOM END ==================== */
+
+/* =========================== HEADER ========================= */
+header {
+  background-color: var(--background-secondary);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001;
+}
+
+.header-container {
+  background-color: var(--background-secondary);
+}
+
+.header-box {
+  max-width: 1820px !important;
+  padding: 10px 0;
+}
+
+.header-title {
+  font-size: 1.5rem;
+}
+
+.dropdown-toggle.custom {
+  border-radius: 50%;
+  border: none;
+  padding: 6px !important;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dropdown-toggle.custom.show,
+.dropdown-toggle.custom:hover {
+  background-color: var(--light-dark-hover) !important;
+}
+
+.dropdown-toggle::after {
+  display: none !important;
+}
+
+.dropdown-header {
+  color: var(--dark-light);
+}
+
+.dropdown-menu {
+  border-radius: 12px !important;
+  z-index: 1005 !important;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+}
+
+.dropdown-menu-md {
+  max-width: 170px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-menu,
+.dropdown-divider {
+  border: 1px solid var(--border);
+}
+
+.dropdown-menu,
+.dropdown-item {
+  background-color: var(--background-secondary) !important;
+  color: var(--dark-light) !important;
+}
+
+.dropdown-item:hover,
+.dropdown-item.active-theme:hover {
+  background-color: var(--light-dark-hover) !important;
+  color: var(--dark-light) !important;
+}
+/* =========================== HEADER END ========================= */
+
+/* =========================== BOTTOM NAVBAR ========================= */
+.navbar-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 1003;
+  background-color: var(--background-secondary);
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid var(--border);
+}
+
+.navbar {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  width: 500px;
+  padding: 12px 0;
+}
+
+.nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 1.5rem;
+}
+
+.nav-btn p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.nav-item,
+.nav-item:hover {
+  color: var(--gray) !important;
+}
+
+.nav-item .outline {
+  display: inline-block;
+}
+
+.nav-item .fill,
+.nav-item.active .outline {
+  display: none;
+}
+
+.nav-item.active,
+.nav-item.active .fill {
+  display: inline-block;
+  color: var(--blue-primary) !important;
+}
+/* =========================== BOTTOM NAVBAR END ====================== */
+
+/* =========================== PERSON PAGE - CREDITS NAV TABS ====================== */
+.sticky-top {
+  background-color: var(--background-secondary);
+  z-index: 1002;
+}
+
+.nav-tabs {
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-link.tab,
+.nav-link.tab:hover {
+  border: 0;
+  color: var(--gray);
+}
+
+.nav-link.tab.active {
+  position: relative;
+  color: var(--blue-primary);
+}
+
+.nav-link.tab.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--blue-primary);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+/* =========================== PERSON PAGE - CREDITS NAV TABS END ====================== */
+
+/* =========================== 404 NOT FOUND ========================= */
+.not-found-img {
+  width: 100%;
+  max-width: 400px;
+}
+/* =========================== 404 NOT FOUND END ========================= */
+
+/* =========================== MODAL SEARCH ========================= */
+.modal-content {
+  border: 1px solid var(--border) !important;
+}
+
+.modal-dialog,
+.modal-content {
+  background-color: var(--background-secondary);
+  color: var(--dark-light);
+  border-radius: 15px;
+}
+
+.modal-dialog-scrollable {
+  background-color: transparent !important;
+}
+
+.search-suggest-body {
+  background-color: var(--background-secondary);
+}
+
+.form-input-custom {
+  background-color: var(--background) !important;
+}
+
+.form-input-custom::placeholder {
+  color: var(--gray) !important;
+}
+
+.form-input-custom {
+  color: var(--dark-light);
+  border: 1px solid var(--border);
+  background-color: var(--background);
+}
+
+.form-input-custom:active,
+.form-input-custom:focus {
+  color: var(--dark-light);
+  outline: none;
+  box-shadow: none !important;
+  border: 1px solid var(--blue-primary);
+}
+/* =========================== MODAL SEARCH END ========================= */
+
+.person-img-wrapper {
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  padding: 1rem;
+  border-radius: 25px;
+}
+
+.person-img {
+  width: 30%;
+}
+
+.company-name {
+  background-color: var(--background);
+  padding: 10px 15px;
+  white-space: nowrap;
+  border: 1px solid var(--border);
+}
+
+.credit-poster {
+  width: 100px;
+}
+
+/* =========================== MEDIA QUERY ========================= */
+
+@media (max-width: 700px) {
+  .header-title {
+    font-size: 1.1rem;
+  }
+
+  .navbar {
+    width: 85%;
+  }
+
+  .nav-btn {
+    font-size: 1.2rem;
+  }
+
+  .nav-btn p {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 500px) {
+  /* =========================== BOTTOM NAVBAR RIPPLE EFFECT =========================== */
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--riple-shadow);
+    transform: scale(0);
+    animation: ripple-animation 0.6s linear;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  @keyframes ripple-animation {
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+
+  .navbar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
+    align-items: center;
+    padding: 0;
+    width: 100%;
+  }
+
+  .nav-link-wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    border-radius: 25% / 60px;
+  }
+  /* =========================== RIPPLE EFFECT END =========================== */
+
+  .star-icon {
+    margin-top: -2px;
+  }
+
+  a,
+  button {
+    cursor: default !important;
+  }
+
+  .h5 {
+    font-size: 1rem !important;
+    font-weight: bold;
+  }
+
+  .skeleton {
+    min-height: 300px;
+    width: 160px;
+  }
+
+  .biography {
+    font-size: 0.9rem;
+  }
+
+  .credit-poster {
+    width: 60px;
+  }
+
+  /* ======= PERSON PAGE - CREDITS NAV TABS ======= */
+  .nav-tabs {
+    justify-content: space-between;
+  }
+
+  .nav-tabs .nav-item {
+    flex: 1;
+  }
+
+  .nav-link.tab {
+    width: 100%;
+    text-align: center;
+    display: block;
+    padding: 0.5rem 0;
+  }
+  /* ======= PERSON PAGE - CREDITS NAV TABS END ======= */
+  
+  .modal-search {
+    border: none !important;
+  }
+
+  .modal.fade .modal-dialog {
+    transition: transform 0s ease-out !important;
+  }
+  
+  .modal.fade {
+    transition: opacity 0s ease-out !important;
+  }
+  
+  .modal-backdrop {
+    transition: opacity 0s ease-out !important;
+  }
+
+  /* scrollbar-custom*/
+  .scrollbar-custom::-webkit-scrollbar {
+    display: none;
+    /* width: 3px;
+    height: 3px; */
+  }
+
+  /* .scrollbar-custom::-webkit-scrollbar-track {
+    background-color: var(--background);
+    border-radius: 10px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 10px;
+  } */
+  /* end */
+}
