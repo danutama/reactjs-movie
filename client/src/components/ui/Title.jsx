@@ -13,13 +13,13 @@ const Title = () => {
     const hours = date.getHours();
 
     if (hours >= 0 && hours < 3) {
-      return 'Good Evening'; // Dari 00:00 hingga 03:00
+      return 'Good evening'; // Dari 00:00 hingga 03:00
     } else if (hours >= 3 && hours < 12) {
-      return 'Good Morning'; // Dari 03:00 hingga 11:59
+      return 'Good morning'; // Dari 03:00 hingga 11:59
     } else if (hours >= 12 && hours < 18) {
-      return 'Good Afternoon'; // Dari 12:00 hingga 17:59
+      return 'Good afternoon'; // Dari 12:00 hingga 17:59
     } else {
-      return 'Good Evening'; // Dari 18:00 hingga 23:59
+      return 'Good evening'; // Dari 18:00 hingga 23:59
     }
   };
 

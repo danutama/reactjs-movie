@@ -75,6 +75,7 @@ section {
 
 .btn-primary:hover {
   background-color: var(--blue-secondary) !important;
+  color: var(--white) !important;
 }
 
 .btn-secondary,
@@ -685,6 +686,7 @@ header {
   
   .modal-backdrop {
     transition: opacity 0s ease-out !important;
+    opacity: 0 !important;
   }
 
   /* scrollbar-custom*/
