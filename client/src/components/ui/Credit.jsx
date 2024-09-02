@@ -5,7 +5,7 @@ const Credit = () => {
     <div className="text-center my-4">
       <small>
         <a href="https://www.themoviedb.org/" className="text-secondary" target="_blank" rel="noopener noreferrer">
-          Data by www.themoviedb.org
+          Data provided by themoviedb.org
         </a>
       </small>
     </div>

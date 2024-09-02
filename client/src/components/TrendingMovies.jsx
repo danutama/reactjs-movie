@@ -4,7 +4,6 @@ import { fetchTrendingMovies, fetchGenres } from '../service/api';
 import Container from './ui/Container';
 import Card from './ui/Card';
 import Skeleton from './ui/Skeleton';
-import { FaAngleRight } from 'react-icons/fa6';
 import { FaStar } from 'react-icons/fa';
 import { getYear, formatVoteAverage } from '../utils/Helper';
 
@@ -29,7 +28,7 @@ function TrendingMovies() {
         <p className="h5 text m-0">Trending Movies</p>
         <Link to="/trending-movies" className="btn-link">
           <small>
-            Explore <FaAngleRight className="icon" />
+            Explore
           </small>
         </Link>
       </div>

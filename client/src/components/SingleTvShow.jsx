@@ -57,6 +57,7 @@ function SingleTvShow() {
   const hasBackdropImage = Boolean(tvShow.backdrop_path);
   const hasImdbId = Boolean(externalIds && externalIds.imdb_id);
   const hasTvGenre = tvShow.genres && tvShow.genres.length > 0;
+  const hasStatus = Boolean(tvShow.status);
   const hasLanguage = tvShow.spoken_languages && tvShow.spoken_languages.length > 0;
 
   // Handle text truncation and toggle
@@ -90,16 +91,29 @@ function SingleTvShow() {
               </a>
             )}
           </div>
-          {hasLanguage && <p className="text-secondary">Language: {tvShow.spoken_languages.map((lang) => lang.english_name).join(', ')}</p>}
-          {hasTvGenre && (
-            <div className="d-sm-flex gap-1 mb-3">
-              {tvShow.genres.map((genre) => (
-                <Link key={genre.id} to={`/tv-genre/${genre.id}`} className="btn btn-sm btn-genre fw-normal text rounded-5 py-1 px-3 mb-sm-0 mb-1 me-sm-0 me-1">
-                  {genre.name}
-                </Link>
-              ))}
-            </div>
-          )}
+          <div className="mb-3">
+            {hasLanguage && (
+              <div className="row">
+                <small className="text-secondary col-sm-2 col-3">Language</small>
+                <small className="text col-7">{tvShow.spoken_languages.map((lang) => lang.english_name).join(', ')}</small>
+              </div>
+            )}
+            {hasStatus && (
+              <div className="row">
+                <small className="text-secondary col-sm-2 col-3">Status</small>
+                <small className="text col-7">{tvShow.status}</small>
+              </div>
+            )}
+            {hasTvGenre && (
+              <div className="d-sm-flex gap-1 mt-3">
+                {tvShow.genres.map((genre) => (
+                  <Link key={genre.id} to={`/tv-genre/${genre.id}`} className="btn btn-sm btn-genre fw-normal text rounded-5 py-1 px-3 mb-sm-0 mb-1 me-sm-0 me-1">
+                    {genre.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
           <h4 className="card-title text lh-base mb-3">{tvShow.name}</h4>
           <p className="card-text text lh-lg mb-0">
             {displayedText}
@@ -111,9 +125,9 @@ function SingleTvShow() {
         <div className="overflow-auto scrollbar-custom">
           <div className="d-flex gap-2 mb-3">
             {tvShow.production_companies.map((company) => (
-              <div key={company.id} className="text company-name fs-6 rounded-3">
+              <small key={company.id} className="text company-name rounded-3">
                 {company.name}
-              </div>
+              </small>
             ))}
           </div>
         </div>
