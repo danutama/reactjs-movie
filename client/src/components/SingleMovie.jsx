@@ -51,6 +51,8 @@ function SingleMovie() {
 
   const hasBackdropImage = Boolean(movie.backdrop_path);
   const hasImdbId = Boolean(movie.imdb_id);
+  const hasGenres = movie.genres && movie.genres.length > 0;
+  const hasLanguage = movie.spoken_languages && movie.spoken_languages.length > 0;
 
   // Handle text truncation and toggle
   const overviewText = movie.overview;
@@ -84,16 +86,16 @@ function SingleMovie() {
               </a>
             )}
           </div>
-          <p className="text-secondary">Language: {movie.spoken_languages.map((lang) => lang.english_name).join(', ')}</p>
-          <div className="d-sm-flex gap-1 mb-3">
-            {movie.genres && movie.genres.length > 0
-              ? movie.genres.map((genre) => (
-                  <Link key={genre.id} to={`/movie-genre/${genre.id}`} className="btn btn-sm btn-genre fw-normal text rounded-5 py-1 px-3 mb-sm-0 mb-1 me-sm-0 me-1">
-                    {genre.name}
-                  </Link>
-                ))
-              : '-'}
-          </div>
+          {hasLanguage && <p className="text-secondary">Language: {movie.spoken_languages.map((lang) => lang.english_name).join(', ')}</p>}
+          {hasGenres && (
+            <div className="d-sm-flex gap-1 mb-3">
+              {movie.genres.map((genre) => (
+                <Link key={genre.id} to={`/movie-genre/${genre.id}`} className="btn btn-sm btn-genre fw-normal text rounded-5 py-1 px-3 mb-sm-0 mb-1 me-sm-0 me-1">
+                  {genre.name}
+                </Link>
+              ))}
+            </div>
+          )}
           <h4 className="card-title text lh-base mb-3">{movie.title}</h4>
           <p className="card-text text lh-lg mb-0">
             {displayedText}

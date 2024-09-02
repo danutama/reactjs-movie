@@ -9,7 +9,7 @@ const NotFound = () => {
       <p className="text text-center fw-bold display-2 my-2">404</p>
       <p className="text text-center mb-0">Not Found</p>
       <p className="text text-center">Sorry, we can't find that page</p>
-      <img src={img404} alt="404 not found" className="not-found-img my-5" />
+      <img src={img404} alt="404 not found" className="not-found-img my-4" />
     </section>
   );
 };

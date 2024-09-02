@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { fetchTVShowsByGenre, fetchGenres } from '../service/api';
+import { fetchTVShowsByGenre, fetchTVGenres } from '../service/api';
 import Container from './ui/Container';
 import Card from './ui/Card';
 import { FaStar } from 'react-icons/fa';
@@ -21,7 +21,12 @@ const TVShowsByGenre = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [genreData, tvShowData] = await Promise.all([fetchGenres(), fetchTVShowsByGenre(genreId, page)]);
+        const [genreData, tvShowData] = await Promise.all([fetchTVGenres(), fetchTVShowsByGenre(genreId, page)]);
+
+        if (!genreData.find((genre) => genre.id === parseInt(genreId, 10))) {
+          navigate('/404');
+          return;
+        }
 
         const uniqueTVShows = Array.from(new Map(tvShowData.map((show) => [show.id, show])).values());
 

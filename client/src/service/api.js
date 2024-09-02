@@ -162,6 +162,16 @@ export const fetchTvShowCredits = async (id) => {
   }
 };
 
+export const fetchExternalIdsTv = async (id) => {
+  try {
+    const response = await axios.get(`/api/tv/${id}/external_ids`);
+    return response.data;
+  } catch (error) {
+    // Handle error silently
+    return null;
+  }
+};
+
 export const fetchTvSeasonById = async (tvId, seasonId) => {
   try {
     const response = await axios.get(`/api/tv/${tvId}/season/${seasonId}`);

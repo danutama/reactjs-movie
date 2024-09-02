@@ -21,10 +21,13 @@ const MovieByGenre = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [genreData, movieData] = await Promise.all([
-          fetchGenres(),
-          fetchMoviesByGenre(genreId, page)
-        ]);
+        const [genreData, movieData] = await Promise.all([fetchGenres(), fetchMoviesByGenre(genreId, page)]);
+
+        const currentGenre = genreData.find((genre) => genre.id === parseInt(genreId, 10));
+        if (!currentGenre) {
+          navigate('/404');
+          return;
+        }
 
         const uniqueMovies = Array.from(new Map(movieData.map((movie) => [movie.id, movie])).values());
 
@@ -33,8 +36,7 @@ const MovieByGenre = () => {
         setLoading(false);
         setHasMore(movieData.length > 0);
 
-        const currentGenre = genreData.find((genre) => genre.id === parseInt(genreId, 10));
-        const name = currentGenre ? currentGenre.name : '';
+        const name = currentGenre.name;
         setGenreName(name);
 
         document.title = name ? `React Movie | ${name}` : 'React Movie';
@@ -113,11 +115,7 @@ const MovieByGenre = () => {
             {movies.map((movie) => (
               <div key={movie.id} className="col-lg-2 col-md-4 col-6">
                 <Card>
-                  <img
-                    src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/default-poster.png'}
-                    className="card-img-top"
-                    alt={movie.title}
-                  />
+                  <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/default-poster.png'} className="card-img-top" alt={movie.title} />
                   <div className="card-body pb-4">
                     <div className="d-flex justify-content-between align-items-center gap-3 mb-3">
                       <small className="text-secondary">{getYear(movie.release_date)}</small>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { fetchTvShowById, fetchTvShowCredits, fetchTVGenres } from '../service/api';
+import { fetchTvShowById, fetchTvShowCredits, fetchTVGenres, fetchExternalIdsTv } from '../service/api';
 import Peoples from './Peoples';
 import Container from './ui/Container';
 import { FaStar } from 'react-icons/fa';
@@ -18,6 +18,7 @@ function SingleTvShow() {
   const [credits, setCredits] = useState([]);
   const [creators, setCreators] = useState([]);
   const [showFullOverview, setShowFullOverview] = useState(false);
+  const [externalIds, setExternalIds] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,11 +30,13 @@ function SingleTvShow() {
         }
         const creditsData = await fetchTvShowCredits(id);
         const genresData = await fetchTVGenres();
+        const externalIdsData = await fetchExternalIdsTv(id);
 
         setTvShow(tvShowData);
         setGenres(genresData);
         setCredits(creditsData.cast.concat(creditsData.crew));
         setCreators(tvShowData.created_by || []);
+        setExternalIds(externalIdsData);
         document.title = `React TV Show | ${tvShowData.name}`;
       } catch (error) {
         navigate('/404');
@@ -52,7 +55,9 @@ function SingleTvShow() {
   }
 
   const hasBackdropImage = Boolean(tvShow.backdrop_path);
-  const hasImdbId = Boolean(tvShow.imdb_id);
+  const hasImdbId = Boolean(externalIds && externalIds.imdb_id);
+  const hasTvGenre = tvShow.genres && tvShow.genres.length > 0;
+  const hasLanguage = tvShow.spoken_languages && tvShow.spoken_languages.length > 0;
 
   // Handle text truncation and toggle
   const overviewText = tvShow.overview;
@@ -80,21 +85,21 @@ function SingleTvShow() {
               <span className="text-secondary">{tvShow.production_countries[0]?.iso_3166_1}</span>
             </div>
             {hasImdbId && (
-              <a href={`https://www.imdb.com/title/${tvShow.imdb_id}`} className="btn btn-sm btn-primary border-0 rounded-5 py-1 px-3" target="_blank" rel="noopener noreferrer">
+              <a href={`https://www.imdb.com/title/${externalIds.imdb_id}`} className="btn btn-sm btn-primary border-0 rounded-5 py-1 px-3" target="_blank" rel="noopener noreferrer">
                 View on IMDb
               </a>
             )}
           </div>
-          <p className="text-secondary">Language: {tvShow.spoken_languages.map((lang) => lang.english_name).join(', ')}</p>
-          <div className="d-sm-flex gap-1 mb-3">
-            {tvShow.genres && tvShow.genres.length > 0
-              ? tvShow.genres.map((genre) => (
-                  <Link key={genre.id} to={`/tv-genre/${genre.id}`} className="btn btn-sm btn-genre fw-normal text rounded-5 py-1 px-3 mb-sm-0 mb-1 me-sm-0 me-1">
-                    {genre.name}
-                  </Link>
-                ))
-              : '-'}
-          </div>
+          {hasLanguage && <p className="text-secondary">Language: {tvShow.spoken_languages.map((lang) => lang.english_name).join(', ')}</p>}
+          {hasTvGenre && (
+            <div className="d-sm-flex gap-1 mb-3">
+              {tvShow.genres.map((genre) => (
+                <Link key={genre.id} to={`/tv-genre/${genre.id}`} className="btn btn-sm btn-genre fw-normal text rounded-5 py-1 px-3 mb-sm-0 mb-1 me-sm-0 me-1">
+                  {genre.name}
+                </Link>
+              ))}
+            </div>
+          )}
           <h4 className="card-title text lh-base mb-3">{tvShow.name}</h4>
           <p className="card-text text lh-lg mb-0">
             {displayedText}

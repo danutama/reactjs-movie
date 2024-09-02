@@ -55,7 +55,7 @@ body {
 }
 
 section {
-  padding: 3rem 0 4.3rem 0;
+  padding: 3rem 0 6rem 0;
 }
 
 .container-box {
@@ -208,7 +208,7 @@ h1 {
 /* =========================== BUTTON TO TOP ========================= */
 .btn-to-top-wrapper {
   position: fixed;
-  bottom: 4.5rem;
+  bottom: 5.5rem;
   width: 100%;
   right: 0;
   left: 0;
@@ -411,14 +411,17 @@ header {
 /* =========================== BOTTOM NAVBAR ========================= */
 .navbar-container {
   position: fixed;
-  bottom: 0;
+  bottom: 1%;
   right: 0;
   left: 0;
   z-index: 1003;
   background-color: var(--background-secondary);
   display: flex;
   justify-content: center;
-  border-top: 1px solid var(--border);
+  border: 1px solid var(--border);
+  width: 600px;
+  margin: 0 auto;
+  border-radius: 50px;
 }
 
 .navbar {
@@ -581,6 +584,10 @@ header {
 /* =========================== MEDIA QUERY ========================= */
 
 @media (max-width: 700px) {
+  section {
+    padding-bottom: 4rem;
+  }
+
   .header-title {
     font-size: 1.1rem;
   }
@@ -595,6 +602,18 @@ header {
 
   .nav-btn p {
     font-size: 0.8rem;
+  }
+
+  .navbar-container {
+    bottom: 0;
+    border-top: 1px solid var(--border) !important;
+    border: none;
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .btn-to-top-wrapper {
+    bottom: 4.5rem;
   }
 }
 

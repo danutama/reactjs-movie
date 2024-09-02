@@ -314,6 +314,26 @@ app.get('/api/tv/:id/aggregate_credits', async (req, res) => {
   }
 });
 
+// FETCH TV EXTERNAL ID BY TV ID
+app.get('/api/tv/:id/external_ids', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const API_KEY = process.env.TMDB_API_KEY;
+
+    const response = await axios.get(`https://api.themoviedb.org/3/tv/${id}/external_ids`, {
+      params: {
+        api_key: API_KEY,
+        language: 'en-US',
+      },
+    });
+
+    res.json(response.data);
+  } catch (error) {
+    console.error(`Error fetching external IDs for TV show ID ${id}:`, error);
+    res.status(500).json({ error: `Error fetching external IDs for TV show ID ${id}` });
+  }
+});
+
 // FETCH TV SEASON BY ID
 app.get('/api/tv/:tvId/season/:seasonId', async (req, res) => {
   try {
