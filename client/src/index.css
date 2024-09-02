@@ -558,11 +558,20 @@ header {
   width: 30%;
 }
 
+.btn-genre,
 .company-name {
   background-color: var(--background);
   padding: 10px 15px;
   white-space: nowrap;
   border: 1px solid var(--border);
+  transition: none;
+}
+
+.btn-genre:hover,
+.btn-genre:focus {
+  background-color: var(--background) !important;
+  color: var(--blue-primary) !important;
+  border: 1px solid var(--blue-primary);
 }
 
 .credit-poster {
@@ -640,6 +649,13 @@ header {
   .h5 {
     font-size: 1rem !important;
     font-weight: bold;
+  }
+
+  .header-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 200px;
   }
 
   .skeleton {

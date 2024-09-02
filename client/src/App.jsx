@@ -11,6 +11,8 @@ import Popular from './pages/Popular';
 import Single from './pages/Single';
 import SingleTv from './pages/SingleTv';
 import Person from './pages/Person';
+import MovieGenre from './pages/MovieGenre';
+import TvGenre from './pages/TvGenre';
 import NotFound from './pages/404';
 import Search from './components/ui/Search';
 
@@ -40,6 +42,8 @@ function App() {
         <Route path="/movie/:id" element={<Single />} />
         <Route path="/tv/:id" element={<SingleTv />} />
         <Route path="/person/:personId" element={<Person />} />
+        <Route path="/movie-genre/:genreId" element={<MovieGenre />} />
+        <Route path="/tv-genre/:genreId" element={<TvGenre />} />
         {/* fallback 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>

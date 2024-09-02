@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { fetchTvShowById, fetchTvShowCredits } from '../service/api';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { fetchTvShowById, fetchTvShowCredits, fetchTVGenres } from '../service/api';
 import Peoples from './Peoples';
-import GenreList from './Genre';
 import Container from './ui/Container';
 import { FaStar } from 'react-icons/fa';
 import { getYear, formatVoteAverage } from '../utils/Helper';
@@ -29,8 +28,10 @@ function SingleTvShow() {
           return;
         }
         const creditsData = await fetchTvShowCredits(id);
+        const genresData = await fetchTVGenres();
+
         setTvShow(tvShowData);
-        setGenres(tvShowData.genres);
+        setGenres(genresData);
         setCredits(creditsData.cast.concat(creditsData.crew));
         setCreators(tvShowData.created_by || []);
         document.title = `React TV Show | ${tvShowData.name}`;
@@ -85,7 +86,15 @@ function SingleTvShow() {
             )}
           </div>
           <p className="text-secondary">Language: {tvShow.spoken_languages.map((lang) => lang.english_name).join(', ')}</p>
-          <p className="text-secondary mb-3">Genre: {tvShow.genres && tvShow.genres.length > 0 ? <GenreList genreIds={tvShow.genres.map((genre) => genre.id)} genres={genres} /> : '-'}</p>
+          <div className="d-sm-flex gap-1 mb-3">
+            {tvShow.genres && tvShow.genres.length > 0
+              ? tvShow.genres.map((genre) => (
+                  <Link key={genre.id} to={`/tv-genre/${genre.id}`} className="btn btn-sm btn-genre fw-normal text rounded-5 py-1 px-3 mb-sm-0 mb-1 me-sm-0 me-1">
+                    {genre.name}
+                  </Link>
+                ))
+              : '-'}
+          </div>
           <h4 className="card-title text lh-base mb-3">{tvShow.name}</h4>
           <p className="card-text text lh-lg mb-0">
             {displayedText}

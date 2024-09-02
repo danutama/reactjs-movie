@@ -2,7 +2,41 @@ import axios from 'axios';
 
 export const fetchGenres = async () => {
   try {
-    const response = await axios.get('/api/genres');
+    const response = await axios.get('/api/movie-genres');
+    return response.data;
+  } catch (error) {
+    // Handle error silently
+    return [];
+  }
+};
+
+export const fetchTVGenres = async () => {
+  try {
+    const response = await axios.get('/api/tv-genres');
+    return response.data;
+  } catch (error) {
+    // Handle error silently
+    return [];
+  }
+};
+
+export const fetchMoviesByGenre = async (genreId, page = 1) => {
+  try {
+    const response = await axios.get(`/api/movies/genre/${genreId}`, {
+      params: { page },
+    });
+    return response.data;
+  } catch (error) {
+    // Handle error silently
+    return [];
+  }
+};
+
+export const fetchTVShowsByGenre = async (genreId, page = 1) => {
+  try {
+    const response = await axios.get(`/api/tvshows/genre/${genreId}`, {
+      params: { page },
+    });
     return response.data;
   } catch (error) {
     // Handle error silently

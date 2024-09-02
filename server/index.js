@@ -5,8 +5,8 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// GENRE
-app.get('/api/genres', async (req, res) => {
+// GENRE MOVIE
+app.get('/api/movie-genres', async (req, res) => {
   try {
     const API_KEY = process.env.TMDB_API_KEY;
     const response = await axios.get('https://api.themoviedb.org/3/genre/movie/list', {
@@ -19,6 +19,75 @@ app.get('/api/genres', async (req, res) => {
   } catch (error) {
     console.error('Error fetching genres:', error);
     res.status(500).json({ error: 'Error fetching genres' });
+  }
+});
+
+// GENRE TV
+app.get('/api/tv-genres', async (req, res) => {
+  try {
+    const API_KEY = process.env.TMDB_API_KEY;
+    const response = await axios.get('https://api.themoviedb.org/3/genre/tv/list', {
+      params: {
+        api_key: API_KEY,
+        language: 'en-US',
+      },
+    });
+    res.json(response.data.genres);
+  } catch (error) {
+    console.error('Error fetching TV genres:', error);
+    res.status(500).json({ error: 'Error fetching TV genres' });
+  }
+});
+
+// FETCH MOVIES BY GENRE
+app.get('/api/movies/genre/:genreId', async (req, res) => {
+  try {
+    const { genreId } = req.params;
+    const { page = 1 } = req.query;
+    const API_KEY = process.env.TMDB_API_KEY;
+
+    const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
+      params: {
+        api_key: API_KEY,
+        language: 'en-US',
+        sort_by: 'popularity.desc',
+        include_adult: false,
+        include_video: false,
+        page,
+        with_genres: genreId,
+      },
+    });
+
+    res.json(response.data.results);
+  } catch (error) {
+    console.error(`Error fetching movies for genre ID ${genreId}:`, error);
+    res.status(500).json({ error: `Error fetching movies for genre ID ${genreId}` });
+  }
+});
+
+// FETCH TV SHOWS BY GENRE
+app.get('/api/tvshows/genre/:genreId', async (req, res) => {
+  try {
+    const { genreId } = req.params;
+    const { page = 1 } = req.query;
+    const API_KEY = process.env.TMDB_API_KEY;
+
+    const response = await axios.get('https://api.themoviedb.org/3/discover/tv', {
+      params: {
+        api_key: API_KEY,
+        language: 'en-US',
+        sort_by: 'popularity.desc',
+        include_adult: false,
+        include_video: false,
+        page,
+        with_genres: genreId,
+      },
+    });
+
+    res.json(response.data.results);
+  } catch (error) {
+    console.error(`Error fetching TV shows for genre ID ${genreId}:`, error);
+    res.status(500).json({ error: `Error fetching TV shows for genre ID ${genreId}` });
   }
 });
 

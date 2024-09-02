@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { fetchMovieById, fetchGenres, fetchMovieCredits } from '../service/api';
 import Peoples from './Peoples';
 import GenreList from './Genre';
@@ -85,7 +85,15 @@ function SingleMovie() {
             )}
           </div>
           <p className="text-secondary">Language: {movie.spoken_languages.map((lang) => lang.english_name).join(', ')}</p>
-          <p className="text-secondary mb-3">Genre: {movie.genres && movie.genres.length > 0 ? <GenreList genreIds={movie.genres.map((genre) => genre.id)} genres={genres} /> : '-'}</p>
+          <div className="d-sm-flex gap-1 mb-3">
+            {movie.genres && movie.genres.length > 0
+              ? movie.genres.map((genre) => (
+                  <Link key={genre.id} to={`/movie-genre/${genre.id}`} className="btn btn-sm btn-genre fw-normal text rounded-5 py-1 px-3 mb-sm-0 mb-1 me-sm-0 me-1">
+                    {genre.name}
+                  </Link>
+                ))
+              : '-'}
+          </div>
           <h4 className="card-title text lh-base mb-3">{movie.title}</h4>
           <p className="card-text text lh-lg mb-0">
             {displayedText}

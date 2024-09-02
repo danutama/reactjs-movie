@@ -29,7 +29,7 @@ function UpcomingMovie() {
         <p className="h5 text m-0">Upcoming Movies</p>
         <Link to="/upcoming-movie" className="btn-link">
           <small>
-            View All <FaAngleRight className="icon" />
+            Explore <FaAngleRight className="icon" />
           </small>
         </Link>
       </div>

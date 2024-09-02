@@ -29,7 +29,7 @@ function PopularMovies() {
         <p className="h5 text m-0">Popular Movies</p>
         <Link to="/popular-movies" className="btn-link">
           <small>
-            View All <FaAngleRight className="icon" />
+            Explore <FaAngleRight className="icon" />
           </small>
         </Link>
       </div>
