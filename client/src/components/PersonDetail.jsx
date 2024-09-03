@@ -110,24 +110,24 @@ const PersonDetail = ({ personId }) => {
           </div>
 
           <p className="text-secondary">
-            Known for: <span className="text">{person.known_for_department || '-'}</span>
+            Known for: <span className="text-tertiary">{person.known_for_department || '-'}</span>
           </p>
           <p className="text-secondary">
-            Birthday: <span className="text">{person.birthday ? formatDate(person.birthday) : '-'}</span>
+            Birthday: <span className="text-tertiary">{person.birthday ? formatDate(person.birthday) : '-'}</span>
           </p>
           <p className="text-secondary">
-            Place of Birth: <span className="text">{person.place_of_birth || '-'}</span>
+            Place of Birth: <span className="text-tertiary">{person.place_of_birth || '-'}</span>
           </p>
           {person.deathday && (
             <p className="text-secondary">
-              Date of Death: <span className="text">{formatDate(person.deathday)}</span>
+              Date of Death: <span className="text-tertiary">{formatDate(person.deathday)}</span>
             </p>
           )}
         </div>
       </div>
       <p className="card-text text-secondary lh-lg mt-md-3">
         Biography:
-        <span className="text ms-1">
+        <span className="text-tertiary ms-1">
           {biographyText !== '-' && (
             <>
               {displayedBiography}
@@ -168,7 +168,7 @@ const PersonDetail = ({ personId }) => {
                     <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.png'} alt={credit.title || 'Poster'} />
                     <div className="w-100">
                       <div className="mb-2">
-                        <Link to={`/movie/${credit.id}`} className="text">
+                        <Link to={`/movie/${credit.id}`} className="text fw-normal">
                           {credit.title || credit.name} <span className="text-secondary">as</span> {credit.job || credit.character || '-'}
                         </Link>
                       </div>
@@ -203,7 +203,7 @@ const PersonDetail = ({ personId }) => {
                     <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.png'} alt={credit.name || 'Poster'} />
                     <div className="w-100">
                       <div className="mb-2">
-                        <Link to={`/tv/${credit.id}`} className="text">
+                        <Link to={`/tv/${credit.id}`} className="text fw-normal">
                           {credit.name || credit.title} <span className="text-secondary">as</span> {credit.job || credit.character || '-'}
                         </Link>
                       </div>

@@ -40,27 +40,27 @@ const Peoples = ({ credits, creators }) => {
       <div className="mb-5">
         {!isTVShow && (
           <>
-            <p className="text-secondary m-0 lh-lg">
-              Director: <span className="text">{directors.length > 0 ? directors.map((director) => director.name).join(', ') : '-'}</span>
-            </p>
+            <small className="text-secondary m-0 lh-lg">
+              Director: <span className="text-tertiary">{directors.length > 0 ? directors.map((director) => director.name).join(', ') : '-'}</span>
+            </small>
             <div className="hr"></div>
           </>
         )}
         {isTVShow && creators && creators.length > 0 && (
           <div>
-            <p className="text-secondary m-0 lh-lg">
-              Creator: <span className="text">{creators.map((creator) => creator.name).join(', ')}</span>
-            </p>
+            <small className="text-secondary m-0 lh-lg">
+              Creator: <span className="text-tertiary">{creators.map((creator) => creator.name).join(', ')}</span>
+            </small>
             <div className="hr"></div>
           </div>
         )}
-        <p className="text-secondary m-0 lh-lg">
-          Writers: <span className="text">{writers.length > 0 ? writers.map((writer) => writer.name).join(', ') : '-'}</span>
-        </p>
+        <small className="text-secondary m-0 lh-lg">
+          Writers: <span className="text-tertiary">{writers.length > 0 ? writers.map((writer) => writer.name).join(', ') : '-'}</span>
+        </small>
         <div className="hr"></div>
-        <p className="text-secondary m-0 lh-lg">
-          Screenplay: <span className="text">{screenplays.length > 0 ? screenplays.map((screenplay) => screenplay.name).join(', ') : '-'}</span>
-        </p>
+        <small className="text-secondary m-0 lh-lg">
+          Screenplay: <span className="text-tertiary">{screenplays.length > 0 ? screenplays.map((screenplay) => screenplay.name).join(', ') : '-'}</span>
+        </small>
         <div className="hr"></div>
       </div>
 

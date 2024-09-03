@@ -12,7 +12,7 @@ const ThemeDropdown = () => {
   return (
     <div className="dropdown">
       <button className="dropdown-toggle custom" type="button" id="themeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-        <FiSettings className="text" size={25} />
+        <FiSettings className="text fs-4" />
       </button>
       <ul className="dropdown-menu" aria-labelledby="themeDropdown">
         <li>

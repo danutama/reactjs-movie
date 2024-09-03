@@ -95,7 +95,7 @@ function SingleTvShow() {
             {hasLanguage && (
               <div className="row">
                 <small className="text-secondary col-sm-2 col-3">Language</small>
-                <small className="text col-7">{tvShow.spoken_languages.map((lang) => lang.english_name).join(', ')}</small>
+                <small className="text col-8 pe-0">{tvShow.spoken_languages.map((lang) => lang.english_name).join(', ')}</small>
               </div>
             )}
             {hasStatus && (
@@ -115,7 +115,7 @@ function SingleTvShow() {
             )}
           </div>
           <h4 className="card-title text lh-base mb-3">{tvShow.name}</h4>
-          <p className="card-text text lh-lg mb-0">
+          <p className="card-text text-tertiary lh-lg mb-0">
             {displayedText}
             <ToggleTextButton isLongText={isLongText} showFullOverview={showFullOverview} handleToggleOverview={handleToggleOverview} />
           </p>

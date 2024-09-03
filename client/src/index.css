@@ -7,6 +7,7 @@
   --background-3: #ffffff;
   --light-dark: #ffffff;
   --dark-light: #000000;
+  --dark-light-secondary: #1a1a1a;
   --light-dark-hover: hsl(225, 20%, 96%);
   --skeleton-anim: rgba(0, 0, 0, 0.05);
   --riple-shadow: rgba(112, 112, 112, 0.1);
@@ -28,6 +29,7 @@
   --background-3: #0d1117;
   --light-dark: #000000;
   --dark-light: #ffffff;
+  --dark-light-secondary: #e0e0e0;
   --light-dark-hover: rgba(211, 229, 255, 0.2);
   --border: rgb(41, 51, 65);
   --skeleton-anim: rgba(255, 255, 255, 0.05);
@@ -112,16 +114,20 @@ section {
   color: var(--gray) !important;
 }
 
+.text {
+  color: var(--dark-light);
+}
+
+.text-secondary {
+  color: var(--gray);
+}
+
+.text-tertiary {
+  color: var(--dark-light-secondary);
+}
+
 .text-yellow {
   color: var(--yellow);
-}
-
-.text-red {
-  color: var(--red) !important;
-}
-
-.text-green {
-  color: var(--green) !important;
 }
 
 .text-primary {
@@ -140,14 +146,6 @@ section {
 
 .icon {
   margin-top: -3px !important;
-}
-
-.text {
-  color: var(--dark-light);
-}
-
-.text-secondary {
-  color: var(--gray);
 }
 
 .title-wrapper {
@@ -584,7 +582,7 @@ header {
 
 @media (max-width: 700px) {
   section {
-    padding-bottom: 4rem;
+    padding: 2.5rem 0 4rem 0;
   }
 
   .header-title {
@@ -596,7 +594,7 @@ header {
   }
 
   .nav-btn p {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 
   .navbar-container {
