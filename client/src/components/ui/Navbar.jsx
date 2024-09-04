@@ -1,8 +1,6 @@
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { FaStar, FaRegStar } from 'react-icons/fa';
-import { HiOutlineUserGroup, HiUserGroup } from "react-icons/hi2";
-import { RiCalendarScheduleLine, RiCalendarScheduleFill } from "react-icons/ri";
+import { HiOutlineClock, HiClock, HiOutlineUserGroup, HiUserGroup, HiOutlineStar, HiStar } from "react-icons/hi2";
 import { GoHome, GoHomeFill } from 'react-icons/go';
 
 const Navbar = () => {
@@ -45,8 +43,8 @@ const Navbar = () => {
         <div className="nav-link-wrapper" onClick={createRipple}>
           <Link to="/upcoming-movie" className={`nav-item ${pathname === '/upcoming-movie' ? 'active' : ''}`}>
             <div className="nav-btn">
-              <RiCalendarScheduleFill className="fill" />
-              <RiCalendarScheduleLine className="outline" />
+              <HiClock className="fill" />
+              <HiOutlineClock className="outline" />
               <p>Upcoming</p>
             </div>
           </Link>
@@ -63,8 +61,8 @@ const Navbar = () => {
         <div className="nav-link-wrapper" onClick={createRipple}>
           <Link to="/popular-movies" className={`nav-item ${pathname === '/popular-movies' ? 'active' : ''}`}>
             <div className="nav-btn">
-              <FaStar className="fill" />
-              <FaRegStar className="outline" />
+              <HiStar className="fill" />
+              <HiOutlineStar className="outline" />
               <p>Popular</p>
             </div>
           </Link>
