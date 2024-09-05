@@ -5,7 +5,7 @@ function ToggleTextButton({ isLongText, showFullOverview, handleToggleOverview }
 
   return (
     <button onClick={handleToggleOverview} className="btn btn-link ps-0 fw-normal align-baseline" style={{ lineHeight: 'inherit', padding: 0 }}>
-      {showFullOverview ? 'Show Less' : 'Read More'}
+      {showFullOverview ? '- Show less' : 'Read more'}
     </button>
   );
 }

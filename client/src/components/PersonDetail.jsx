@@ -4,7 +4,7 @@ import { fetchPersonById, fetchGenres, fetchPersonMovieCredits, fetchPersonTVCre
 import GenreList from './Genre';
 import Container from './ui/Container';
 import SpinnerCustom from './ui/SpinnerCustom';
-import { formatDate, formatVoteAverage } from '../utils/Helper';
+import { formatFullDate, formatDate, formatVoteAverage } from '../utils/Helper';
 import ButtonToTop from './ui/ButtonToTop';
 import { FaStar } from 'react-icons/fa';
 import ToggleTextButton from './ui/ToggleTextButton';
@@ -113,31 +113,28 @@ const PersonDetail = ({ personId }) => {
             Known for: <span className="text-tertiary">{person.known_for_department || '-'}</span>
           </p>
           <p className="text-secondary">
-            Birthday: <span className="text-tertiary">{person.birthday ? formatDate(person.birthday) : '-'}</span>
+            Birthday: <span className="text-tertiary">{person.birthday ? formatFullDate(person.birthday) : '-'}</span>
           </p>
           <p className="text-secondary">
             Place of Birth: <span className="text-tertiary">{person.place_of_birth || '-'}</span>
           </p>
           {person.deathday && (
             <p className="text-secondary">
-              Date of Death: <span className="text-tertiary">{formatDate(person.deathday)}</span>
+              Date of Death: <span className="text-tertiary">{formatFullDate(person.deathday)}</span>
             </p>
           )}
         </div>
       </div>
-      <p className="card-text text-secondary lh-lg mt-md-3">
-        Biography:
-        <span className="text-tertiary ms-1">
-          {biographyText !== '-' && (
-            <>
-              {displayedBiography}
-              {isLongBiography && !showFullBiography && <span className="text-secondary">...</span>}
-              {isLongBiography && <ToggleTextButton isLongText={isLongBiography} showFullOverview={showFullBiography} handleToggleOverview={() => setShowFullBiography((prev) => !prev)} />}
-            </>
-          )}
-        </span>
-        {biographyText === '-' && <span className="text">{biographyText}</span>}
-      </p>
+      {biographyText !== '-' && (
+        <p className="card-text text-secondary lh-lg mt-md-3">
+          Biography:
+          <span className="text-tertiary ms-1">
+            {displayedBiography}
+            {isLongBiography && !showFullBiography && <span className="text-secondary">...</span>}
+            {isLongBiography && <ToggleTextButton isLongText={isLongBiography} showFullOverview={showFullBiography} handleToggleOverview={() => setShowFullBiography((prev) => !prev)} />}
+          </span>
+        </p>
+      )}
 
       {/* ----------- TAB CREDITS ---------- */}
       <div className="mt-4">
