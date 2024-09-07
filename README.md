@@ -1,4 +1,4 @@
-# React + Vite + Express + Axios + TMDB API
+# React + Vite + Express + Axios + TMDB API + PWA
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules, along with a simple Express server, Axios for making HTTP requests, and integration with The Movie Database (TMDB) API to fetch movie data.
 
