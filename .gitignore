@@ -11,6 +11,7 @@ client/node_modules
 server/node_modules
 client/dist
 client/dist-ssr
+client/dev-dist
 *.local
 
 # Editor directories and files
