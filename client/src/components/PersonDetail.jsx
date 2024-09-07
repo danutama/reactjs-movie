@@ -158,72 +158,76 @@ const PersonDetail = ({ personId }) => {
         <div className="tab-content" id="credit-tabs-content">
           {/* ----------- MOVIE CREDITS ---------- */}
           <div className="tab-pane fade show active" id="movie-credits" role="tabpanel" aria-labelledby="movie-credits-tab">
-            {movieCredits.length > 0 ? (
-              movieCredits.map((credit, index) => (
-                <div key={`${credit.id}-movie-${index}`}>
-                  <div className="d-flex gap-3 justify-content-start align-items-start">
-                    <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.png'} alt={credit.title || 'Poster'} />
-                    <div className="w-100">
-                      <div className="mb-2">
-                        <Link to={`/movie/${credit.id}`} className="text fw-normal">
-                          {credit.title || credit.name} <span className="text-secondary">as</span> {credit.job || credit.character || '-'}
-                        </Link>
+            <div className="row">
+              {movieCredits.length > 0 ? (
+                movieCredits.map((credit, index) => (
+                  <div key={`${credit.id}-movie-${index}`} className="col-lg-4 col-sm-6 my-sm-2 my-0">
+                    <div className="d-flex gap-3 justify-content-start align-items-start">
+                      <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.png'} alt={credit.title || 'Poster'} />
+                      <div className="w-100">
+                        <div className="mb-2">
+                          <Link to={`/movie/${credit.id}`} className="text fw-normal">
+                            {credit.title || credit.name} <span className="text-secondary">as</span> {credit.job || credit.character || '-'}
+                          </Link>
+                        </div>
+                        <div className="d-flex gap-3 justify-content-sm-start justify-content-between align-items-center">
+                          <small className="text-secondary">{credit.release_date ? formatDate(credit.release_date) : '-'}</small>
+                          <small className="text d-flex align-items-center">
+                            <FaStar className="text-yellow me-1" />
+                            {formatVoteAverage(credit.vote_average)}
+                          </small>
+                        </div>
+                        <p className="d-sm-block d-none mt-2">
+                          <GenreList genreIds={credit.genre_ids} genres={genres} />
+                        </p>
                       </div>
-                      <div className="d-flex gap-3 justify-content-sm-start justify-content-between align-items-center">
-                        <small className="text-secondary">{credit.release_date ? formatDate(credit.release_date) : '-'}</small>
-                        <small className="text d-flex align-items-center">
-                          <FaStar className="text-yellow me-1" />
-                          {formatVoteAverage(credit.vote_average)}
-                        </small>
-                      </div>
-                      <p className="d-sm-block d-none mt-2">
-                        <GenreList genreIds={credit.genre_ids} genres={genres} />
-                      </p>
                     </div>
+                    <div className="hr d-sm-none"></div>
                   </div>
-                  <div className="hr"></div>
+                ))
+              ) : (
+                <div className="text-sm-start text-center pt-3">
+                  <small className="text-secondary fst-italic">No movie credits available.</small>
                 </div>
-              ))
-            ) : (
-              <div className="text-sm-start text-center pt-3">
-                <small className="text-secondary fst-italic">No movie credits available.</small>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* ----------- TV CREDITS ---------- */}
           <div className="tab-pane fade" id="tv-credits" role="tabpanel" aria-labelledby="tv-credits-tab">
-            {tvCredits.length > 0 ? (
-              tvCredits.map((credit, index) => (
-                <div key={`${credit.id}-tv-${index}`}>
-                  <div className="d-flex gap-3 justify-content-start align-items-start">
-                    <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.png'} alt={credit.name || 'Poster'} />
-                    <div className="w-100">
-                      <div className="mb-2">
-                        <Link to={`/tv/${credit.id}`} className="text fw-normal">
-                          {credit.name || credit.title} <span className="text-secondary">as</span> {credit.job || credit.character || '-'}
-                        </Link>
+            <div className="row">
+              {tvCredits.length > 0 ? (
+                tvCredits.map((credit, index) => (
+                  <div key={`${credit.id}-tv-${index}`} className="col-lg-4 col-sm-6 my-sm-2 my-0">
+                    <div className="d-flex gap-3 justify-content-start align-items-start">
+                      <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.png'} alt={credit.name || 'Poster'} />
+                      <div className="w-100">
+                        <div className="mb-2">
+                          <Link to={`/tv/${credit.id}`} className="text fw-normal">
+                            {credit.name || credit.title} <span className="text-secondary">as</span> {credit.job || credit.character || '-'}
+                          </Link>
+                        </div>
+                        <div className="d-flex gap-3 justify-content-sm-start justify-content-between align-items-center">
+                          <small className="text-secondary">{credit.first_air_date ? formatDate(credit.first_air_date) : '-'}</small>
+                          <small className="text d-flex align-items-center">
+                            <FaStar className="text-yellow me-1" />
+                            {formatVoteAverage(credit.vote_average)}
+                          </small>
+                        </div>
+                        <p className="d-sm-block d-none mt-2">
+                          <GenreList genreIds={credit.genre_ids} genres={genres} />
+                        </p>
                       </div>
-                      <div className="d-flex gap-3 justify-content-sm-start justify-content-between align-items-center">
-                        <small className="text-secondary">{credit.first_air_date ? formatDate(credit.first_air_date) : '-'}</small>
-                        <small className="text d-flex align-items-center">
-                          <FaStar className="text-yellow me-1" />
-                          {formatVoteAverage(credit.vote_average)}
-                        </small>
-                      </div>
-                      <p className="d-sm-block d-none mt-2">
-                        <GenreList genreIds={credit.genre_ids} genres={genres} />
-                      </p>
                     </div>
+                    <div className="hr d-sm-none"></div>
                   </div>
-                  <div className="hr"></div>
+                ))
+              ) : (
+                <div className="text-sm-start text-center pt-3">
+                  <small className="text-secondary fst-italic">No TV credits available.</small>
                 </div>
-              ))
-            ) : (
-              <div className="text-sm-start text-center pt-3">
-                <small className="text-secondary fst-italic">No TV credits available.</small>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>

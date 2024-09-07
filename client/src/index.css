@@ -570,8 +570,8 @@ header {
 .btn-genre:hover,
 .btn-genre:focus {
   background-color: var(--background) !important;
-  color: var(--blue-primary) !important;
-  border: 1px solid var(--blue-primary);
+  color: var(--blue-secondary) !important;
+  border: 1px solid var(--blue-secondary);
 }
 
 .credit-poster {
