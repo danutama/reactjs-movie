@@ -1,20 +1,22 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, Suspense, lazy } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ScrollToTop from './utils/ScrollToTop';
 import Header from './components/ui/Header';
 import Navbar from './components/ui/Navbar';
-import Home from './pages/Home';
-import Latest from './pages/Upcoming';
-import Trending from './pages/Trending';
-import Popular from './pages/Popular';
-import Single from './pages/Single';
-import SingleTv from './pages/SingleTv';
-import Person from './pages/Person';
-import MovieGenre from './pages/MovieGenre';
-import TvGenre from './pages/TvGenre';
-import NotFound from './pages/404';
 import Search from './components/ui/Search';
+
+// Lazy load pages
+const Home = lazy(() => import('./pages/Home'));
+const Latest = lazy(() => import('./pages/Upcoming'));
+const Trending = lazy(() => import('./pages/Trending'));
+const Popular = lazy(() => import('./pages/Popular'));
+const Single = lazy(() => import('./pages/Single'));
+const SingleTv = lazy(() => import('./pages/SingleTv'));
+const Person = lazy(() => import('./pages/Person'));
+const MovieGenre = lazy(() => import('./pages/MovieGenre'));
+const TvGenre = lazy(() => import('./pages/TvGenre'));
+const NotFound = lazy(() => import('./pages/404'));
 
 function App() {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
@@ -34,19 +36,21 @@ function App() {
     <Router>
       <Header onSearchClick={handleSearchClick} />
       <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/upcoming-movie" element={<Latest />} />
-        <Route path="/trending-movies" element={<Trending />} />
-        <Route path="/popular-movies" element={<Popular />} />
-        <Route path="/movie/:id" element={<Single />} />
-        <Route path="/tv/:id" element={<SingleTv />} />
-        <Route path="/person/:personId" element={<Person />} />
-        <Route path="/movie-genre/:genreId" element={<MovieGenre />} />
-        <Route path="/tv-genre/:genreId" element={<TvGenre />} />
-        {/* fallback 404 */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <Suspense fallback={null}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/upcoming-movie" element={<Latest />} />
+          <Route path="/trending-movies" element={<Trending />} />
+          <Route path="/popular-movies" element={<Popular />} />
+          <Route path="/movie/:id" element={<Single />} />
+          <Route path="/tv/:id" element={<SingleTv />} />
+          <Route path="/person/:personId" element={<Person />} />
+          <Route path="/movie-genre/:genreId" element={<MovieGenre />} />
+          <Route path="/tv-genre/:genreId" element={<TvGenre />} />
+          {/* fallback 404 */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
       <Navbar />
       <Search show={isSearchModalOpen} onClose={handleCloseModal} />
     </Router>
