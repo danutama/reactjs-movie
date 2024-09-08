@@ -8,6 +8,7 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
 ### Additional Features:
-- **Express:** A lightweight web framework for handling backend routes and API endpoints. Useful for creating a RESTful API or serving your React application in a production environment.
-- **Axios:** A promise-based HTTP client for the browser and Node.js, integrated into the project for handling API requests. It simplifies making asynchronous HTTP requests to fetch data from APIs or your Express server.
-- **TMDB API Integration:** Utilizes TMDB API to fetch and display movie data such as the latest, popular, and upcoming movies. You can explore detailed movie information, including titles, posters, release dates, and ratings.
+- **[Express](https://github.com/expressjs/express):** A lightweight web framework for handling backend routes and API endpoints. Useful for creating a RESTful API or serving your React application in a production environment.
+- **[Axios](https://github.com/axios/axios):** A promise-based HTTP client for the browser and Node.js, integrated into the project for handling API requests. It simplifies making asynchronous HTTP requests to fetch data from APIs or your Express server.
+- **[TMDB API](https://developer.themoviedb.org/docs/getting-started):** Utilizes TMDB API to fetch and display movie data such as the latest, popular, and upcoming movies. You can explore detailed movie information, including titles, posters, release dates, and ratings.
+- **[Vite PWA](https://vite-pwa-org.netlify.app/):** Configured with Vite PWA for enhanced performance, background updates, and mobile-friendly app installation.
