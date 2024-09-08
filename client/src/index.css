@@ -564,7 +564,6 @@ header {
   padding: 10px 15px;
   white-space: nowrap;
   border: 1px solid var(--border);
-  transition: none;
 }
 
 .btn-genre:hover,

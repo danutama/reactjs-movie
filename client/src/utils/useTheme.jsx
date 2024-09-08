@@ -9,10 +9,22 @@ const useTheme = () => {
   }, []);
 
   const applyTheme = (theme) => {
-    if (theme === 'light' || theme === 'dark') {
-      document.documentElement.setAttribute('data-theme', theme);
+    const currentTheme = theme === 'system' ? systemTheme : theme;
+    document.documentElement.setAttribute('data-theme', currentTheme);
+
+    // Update meta theme-color for mobile status bar
+    let themeColorMetaTag = document.querySelector('meta[name="theme-color"]');
+
+    if (!themeColorMetaTag) {
+      themeColorMetaTag = document.createElement('meta');
+      themeColorMetaTag.name = 'theme-color';
+      document.head.appendChild(themeColorMetaTag);
+    }
+
+    if (currentTheme === 'dark') {
+      themeColorMetaTag.setAttribute('content', '#12161c');
     } else {
-      document.documentElement.setAttribute('data-theme', systemTheme);
+      themeColorMetaTag.setAttribute('content', '#ffffff');
     }
   };
 
