@@ -20,6 +20,10 @@ export default defineConfig({
         short_name: 'Dibimovie',
         description: 'A Progressive Web App for browsing and discovering movies or TV shows. Built with React, Vite, and powered by the TMDB API. Created with love by danutama.github.io',
         theme_color: '#ffffff',
+        display: 'standalone',
+        scope: '/',
+        start_url: '/',
+        orientation: 'portrait',
         icons: [
           {
             src: '/logo192.png',

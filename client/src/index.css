@@ -552,6 +552,10 @@ header {
   border: 1px solid var(--border);
   padding: 1rem;
   border-radius: 25px;
+  background-image: url(../public/bg-person.jpeg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .person-img {
