@@ -6,7 +6,6 @@ import { FaRegUser, FaHashtag } from 'react-icons/fa';
 import { BiMoviePlay } from 'react-icons/bi';
 // import { IoSearchOutline } from 'react-icons/io5';
 import { MdLiveTv } from 'react-icons/md';
-import searchImg from '../../../public/search.svg';
 
 const Search = ({ show, onClose }) => {
   const [query, setQuery] = useState('');
@@ -176,7 +175,7 @@ const Search = ({ show, onClose }) => {
               {!query && (
                 <div className="text-center">
                   {/* <IoSearchOutline className="fs-1 text-secondary mb-2" /> */}
-                  <img src={searchImg} alt="Search TMDB" className="w-50 my-4" />
+                  <img src="/search.svg" alt="Search TMDB" className="w-50 my-4" />
                   <p className="text-secondary">Start typing to search for movies, people, or TV shows</p>
                 </div>
               )}
