@@ -3,13 +3,14 @@ const axios = require('axios');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = 5001;
+const API_BASE_URL = 'https://api.themoviedb.org/3';
+const API_KEY = process.env.TMDB_API_KEY;
 
 // GENRE MOVIE
 app.get('/api/movie-genres', async (req, res) => {
   try {
-    const API_KEY = process.env.TMDB_API_KEY;
-    const response = await axios.get('https://api.themoviedb.org/3/genre/movie/list', {
+    const response = await axios.get(`${API_BASE_URL}/genre/movie/list`, {
       params: {
         api_key: API_KEY,
         language: 'en-US',
@@ -25,8 +26,7 @@ app.get('/api/movie-genres', async (req, res) => {
 // GENRE TV
 app.get('/api/tv-genres', async (req, res) => {
   try {
-    const API_KEY = process.env.TMDB_API_KEY;
-    const response = await axios.get('https://api.themoviedb.org/3/genre/tv/list', {
+    const response = await axios.get(`${API_BASE_URL}/genre/tv/list`, {
       params: {
         api_key: API_KEY,
         language: 'en-US',
@@ -44,14 +44,12 @@ app.get('/api/movies/genre/:genreId', async (req, res) => {
   try {
     const { genreId } = req.params;
     const { page = 1 } = req.query;
-    const API_KEY = process.env.TMDB_API_KEY;
 
-    const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
+    const response = await axios.get(`${API_BASE_URL}/discover/movie`, {
       params: {
         api_key: API_KEY,
         language: 'en-US',
         sort_by: 'popularity.desc',
-        include_adult: false,
         include_video: false,
         page,
         with_genres: genreId,
@@ -70,14 +68,12 @@ app.get('/api/tvshows/genre/:genreId', async (req, res) => {
   try {
     const { genreId } = req.params;
     const { page = 1 } = req.query;
-    const API_KEY = process.env.TMDB_API_KEY;
 
-    const response = await axios.get('https://api.themoviedb.org/3/discover/tv', {
+    const response = await axios.get(`${API_BASE_URL}/discover/tv`, {
       params: {
         api_key: API_KEY,
         language: 'en-US',
         sort_by: 'popularity.desc',
-        include_adult: false,
         include_video: false,
         page,
         with_genres: genreId,
@@ -95,8 +91,7 @@ app.get('/api/tvshows/genre/:genreId', async (req, res) => {
 app.get('/api/upcoming-movies', async (req, res) => {
   try {
     const { page = 1 } = req.query;
-    const API_KEY = process.env.TMDB_API_KEY;
-    const response = await axios.get('https://api.themoviedb.org/3/movie/upcoming', {
+    const response = await axios.get(`${API_BASE_URL}/movie/upcoming`, {
       params: {
         api_key: API_KEY,
         language: 'en-US',
@@ -115,8 +110,7 @@ app.get('/api/upcoming-movies', async (req, res) => {
 app.get('/api/popular-movies', async (req, res) => {
   try {
     const { page = 1 } = req.query;
-    const API_KEY = process.env.TMDB_API_KEY;
-    const response = await axios.get('https://api.themoviedb.org/3/movie/popular', {
+    const response = await axios.get(`${API_BASE_URL}/movie/popular`, {
       params: {
         api_key: API_KEY,
         language: 'en-US',
@@ -135,8 +129,7 @@ app.get('/api/popular-movies', async (req, res) => {
 app.get('/api/trending-movies', async (req, res) => {
   try {
     const { page = 1 } = req.query;
-    const API_KEY = process.env.TMDB_API_KEY;
-    const response = await axios.get('https://api.themoviedb.org/3/trending/movie/week', {
+    const response = await axios.get(`${API_BASE_URL}/trending/movie/week`, {
       params: {
         api_key: API_KEY,
         page,
@@ -154,9 +147,7 @@ app.get('/api/trending-movies', async (req, res) => {
 app.get('/api/movie/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const API_KEY = process.env.TMDB_API_KEY;
-
-    const response = await axios.get(`https://api.themoviedb.org/3/movie/${id}`, {
+    const response = await axios.get(`${API_BASE_URL}/movie/${id}`, {
       params: {
         api_key: API_KEY,
         language: 'en-US',
@@ -174,8 +165,7 @@ app.get('/api/movie/:id', async (req, res) => {
 app.get('/api/movie/:id/credits', async (req, res) => {
   try {
     const { id } = req.params;
-    const API_KEY = process.env.TMDB_API_KEY;
-    const response = await axios.get(`https://api.themoviedb.org/3/movie/${id}/credits`, {
+    const response = await axios.get(`${API_BASE_URL}/movie/${id}/credits`, {
       params: {
         api_key: API_KEY,
         language: 'en-US',
@@ -198,8 +188,7 @@ app.get('/api/person/:id', async (req, res) => {
       return res.status(400).json({ error: 'Person ID is required' });
     }
 
-    const API_KEY = process.env.TMDB_API_KEY;
-    const response = await axios.get(`https://api.themoviedb.org/3/person/${id}`, {
+    const response = await axios.get(`${API_BASE_URL}/person/${id}`, {
       params: {
         api_key: API_KEY,
         language: 'en-US',
@@ -217,9 +206,7 @@ app.get('/api/person/:id', async (req, res) => {
 app.get('/api/person/:id/movie-credits', async (req, res) => {
   try {
     const { id } = req.params;
-    const API_KEY = process.env.TMDB_API_KEY;
-
-    const response = await axios.get(`https://api.themoviedb.org/3/person/${id}/movie_credits`, {
+    const response = await axios.get(`${API_BASE_URL}/person/${id}/movie_credits`, {
       params: {
         api_key: API_KEY,
         language: 'en-US',
@@ -237,9 +224,7 @@ app.get('/api/person/:id/movie-credits', async (req, res) => {
 app.get('/api/person/:id/tv-credits', async (req, res) => {
   try {
     const { id } = req.params;
-    const API_KEY = process.env.TMDB_API_KEY;
-
-    const response = await axios.get(`https://api.themoviedb.org/3/person/${id}/tv_credits`, {
+    const response = await axios.get(`${API_BASE_URL}/person/${id}/tv_credits`, {
       params: {
         api_key: API_KEY,
         language: 'en-US',
@@ -257,9 +242,7 @@ app.get('/api/person/:id/tv-credits', async (req, res) => {
 app.get('/api/search', async (req, res) => {
   try {
     const { query } = req.query;
-    const API_KEY = process.env.TMDB_API_KEY;
-
-    const response = await axios.get(`https://api.themoviedb.org/3/search/multi`, {
+    const response = await axios.get(`${API_BASE_URL}/search/multi`, {
       params: {
         api_key: API_KEY,
         query,
@@ -278,9 +261,7 @@ app.get('/api/search', async (req, res) => {
 app.get('/api/tv/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const API_KEY = process.env.TMDB_API_KEY;
-
-    const response = await axios.get(`https://api.themoviedb.org/3/tv/${id}`, {
+    const response = await axios.get(`${API_BASE_URL}/tv/${id}`, {
       params: {
         api_key: API_KEY,
         language: 'en-US',
@@ -298,9 +279,7 @@ app.get('/api/tv/:id', async (req, res) => {
 app.get('/api/tv/:id/aggregate_credits', async (req, res) => {
   try {
     const { id } = req.params;
-    const API_KEY = process.env.TMDB_API_KEY;
-
-    const response = await axios.get(`https://api.themoviedb.org/3/tv/${id}/aggregate_credits`, {
+    const response = await axios.get(`${API_BASE_URL}/tv/${id}/aggregate_credits`, {
       params: {
         api_key: API_KEY,
         language: 'en-US',
@@ -318,9 +297,7 @@ app.get('/api/tv/:id/aggregate_credits', async (req, res) => {
 app.get('/api/tv/:id/external_ids', async (req, res) => {
   try {
     const { id } = req.params;
-    const API_KEY = process.env.TMDB_API_KEY;
-
-    const response = await axios.get(`https://api.themoviedb.org/3/tv/${id}/external_ids`, {
+    const response = await axios.get(`${API_BASE_URL}/tv/${id}/external_ids`, {
       params: {
         api_key: API_KEY,
         language: 'en-US',
@@ -338,9 +315,7 @@ app.get('/api/tv/:id/external_ids', async (req, res) => {
 app.get('/api/tv/:tvId/season/:seasonId', async (req, res) => {
   try {
     const { tvId, seasonId } = req.params;
-    const API_KEY = process.env.TMDB_API_KEY;
-
-    const response = await axios.get(`https://api.themoviedb.org/3/tv/${tvId}/season/${seasonId}`, {
+    const response = await axios.get(`${API_BASE_URL}/tv/${tvId}/season/${seasonId}`, {
       params: {
         api_key: API_KEY,
         language: 'en-US',
@@ -358,9 +333,7 @@ app.get('/api/tv/:tvId/season/:seasonId', async (req, res) => {
 app.get('/api/tv/:tvId/season/:seasonId/episode/:episodeId', async (req, res) => {
   try {
     const { tvId, seasonId, episodeId } = req.params;
-    const API_KEY = process.env.TMDB_API_KEY;
-
-    const response = await axios.get(`https://api.themoviedb.org/3/tv/${tvId}/season/${seasonId}/episode/${episodeId}`, {
+    const response = await axios.get(`${API_BASE_URL}/tv/${tvId}/season/${seasonId}/episode/${episodeId}`, {
       params: {
         api_key: API_KEY,
         language: 'en-US',
