@@ -8,7 +8,6 @@ import { getYear, formatVoteAverage } from '../utils/Helper';
 import SpinnerCustom from './ui/SpinnerCustom';
 import ButtonToTop from './ui/ButtonToTop';
 import ToggleTextButton from './ui/ToggleTextButton';
-import Credit from './ui/Credit';
 
 function SingleTvShow() {
   const { id } = useParams();
@@ -134,7 +133,6 @@ function SingleTvShow() {
       </div>
       <div>
         <Peoples credits={credits} creators={creators} />
-        <Credit />
       </div>
       <ButtonToTop />
     </Container>

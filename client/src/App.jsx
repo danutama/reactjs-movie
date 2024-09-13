@@ -5,6 +5,7 @@ import ScrollToTop from './utils/ScrollToTop';
 import Header from './components/ui/Header';
 import Navbar from './components/ui/Navbar';
 import Search from './components/ui/Search';
+import Footer from './components/ui/Footer';
 
 // Lazy load pages
 const Home = lazy(() => import('./pages/Home'));
@@ -51,6 +52,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
+      <Footer />
       <Navbar />
       <Search show={isSearchModalOpen} onClose={handleCloseModal} />
     </Router>

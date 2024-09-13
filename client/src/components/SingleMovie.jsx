@@ -9,7 +9,6 @@ import { getYear, formatVoteAverage } from '../utils/Helper';
 import SpinnerCustom from './ui/SpinnerCustom';
 import ButtonToTop from './ui/ButtonToTop';
 import ToggleTextButton from './ui/ToggleTextButton';
-import Credit from './ui/Credit';
 
 function SingleMovie() {
   const { id } = useParams();
@@ -130,7 +129,6 @@ function SingleMovie() {
       </div>
       <div>
         <Peoples credits={credits} />
-        <Credit />
       </div>
       <ButtonToTop />
     </Container>

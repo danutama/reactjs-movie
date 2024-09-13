@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Card from './ui/Card';
 import SpinnerCustom from './ui/SpinnerCustom';
@@ -7,27 +7,36 @@ const Peoples = ({ credits, creators }) => {
   const [visibleCount, setVisibleCount] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
-
-  const loadMore = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setVisibleCount((prevCount) => prevCount + 10);
-      setIsLoading(false);
-    }, 1000);
-  };
-
-  const handleScroll = () => {
-    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight) {
-      if (visibleCount < credits.length) {
-        loadMore();
-      }
-    }
-  };
+  const loaderRef = useRef(null);
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [visibleCount, credits.length]);
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 1.0,
+    };
+
+    const handleLoadMore = (entries) => {
+      if (entries[0].isIntersecting && !isLoading && visibleCount < credits.length) {
+        setIsLoading(true);
+        setTimeout(() => {
+          setVisibleCount((prevCount) => prevCount + 10);
+          setIsLoading(false);
+        }, 1000);
+      }
+    };
+
+    const observer = new IntersectionObserver(handleLoadMore, options);
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current);
+      }
+    };
+  }, [visibleCount, credits.length, isLoading]);
 
   const directors = credits.filter((person) => person.job === 'Director');
   const writers = credits.filter((person) => person.job === 'Writer' || person.job === 'Novel' || person.department === 'Writing');
@@ -88,11 +97,10 @@ const Peoples = ({ credits, creators }) => {
         ))}
       </div>
 
-      {isLoading && (
-        <div className="d-flex justify-content-center pt-4">
-          <SpinnerCustom />
-        </div>
-      )}
+      {/* Loading indicator */}
+      <div ref={loaderRef} className="d-flex justify-content-center pt-4">
+        {isLoading && <SpinnerCustom />}
+      </div>
     </div>
   );
 };

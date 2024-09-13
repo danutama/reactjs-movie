@@ -8,7 +8,6 @@ import { formatFullDate, formatDate, formatVoteAverage } from '../utils/Helper';
 import ButtonToTop from './ui/ButtonToTop';
 import { FaStar } from 'react-icons/fa';
 import ToggleTextButton from './ui/ToggleTextButton';
-import Credit from './ui/Credit';
 
 const PersonDetail = ({ personId }) => {
   const [person, setPerson] = useState(null);
@@ -231,7 +230,6 @@ const PersonDetail = ({ personId }) => {
           </div>
         </div>
       </div>
-      <Credit />
       <ButtonToTop />
     </Container>
   );

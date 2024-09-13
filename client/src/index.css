@@ -57,7 +57,8 @@ body {
 }
 
 section {
-  padding: 3rem 0 5.5rem 0;
+  padding: 3rem 0 0 0;
+  min-height: 100vh;
 }
 
 .container-box {
@@ -206,7 +207,7 @@ h1 {
 /* =========================== BUTTON TO TOP ========================= */
 .btn-to-top-wrapper {
   position: fixed;
-  bottom: 5.5rem;
+  top: 4rem;
   width: 100%;
   right: 0;
   left: 0;
@@ -585,7 +586,7 @@ header {
 
 @media (max-width: 700px) {
   section {
-    padding: 2.5rem 0 4rem 0;
+    padding: 2.5rem 0 0 0;
   }
 
   .header-title {
@@ -606,10 +607,6 @@ header {
     border: none;
     width: 100%;
     border-radius: 0;
-  }
-
-  .btn-to-top-wrapper {
-    bottom: 4.5rem;
   }
 }
 
