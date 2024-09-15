@@ -4,7 +4,7 @@ import TitlePages from '../utils/TitlePages';
 const NotFound = () => {
   TitlePages('404 Not Found');
   return (
-    <section className="container-md d-flex justify-content-center align-items-center flex-column h-100">
+    <section className="container-md d-flex justify-content-center align-items-center flex-column">
       <p className="text text-center fw-bold display-2 my-2">404</p>
       <p className="text text-center mb-0">Not Found</p>
       <p className="text text-center">Sorry, we can't find that page</p>

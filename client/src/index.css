@@ -245,9 +245,11 @@ h1 {
 
 /* =========================== SKELETON ========================= */
 .skeleton {
-  min-height: 400px;
-  width: 215px;
+  height: 20px;
+  width: 100%;
   position: relative;
+  border-radius: 50px;
+  background-color: var(--background);
   overflow: hidden;
 }
 
@@ -668,11 +670,6 @@ header {
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 200px;
-  }
-
-  .skeleton {
-    min-height: 300px;
-    width: 160px;
   }
 
   .biography {

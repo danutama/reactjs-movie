@@ -96,7 +96,7 @@ const PersonDetail = ({ personId }) => {
       <div className={`${hasProfileImage ? 'd-flex gap-4 justify-content-start align-items-start flex-column flex-md-row' : ''}`}>
         {hasProfileImage && (
           <div className="person-img-wrapper w-100">
-            <LazyLoad height={200} offset={100} placeholder={<img src="/profile.png" alt="loading" className="person-img rounded-4" />}>
+            <LazyLoad height={200} offset={0} placeholder={<img src="/profile.png" alt="loading" className="person-img rounded-4" />}>
               <img className="person-img rounded-4" src={`https://image.tmdb.org/t/p/w500${person.profile_path}`} alt={person.name || 'Profile image'} />
             </LazyLoad>
           </div>
