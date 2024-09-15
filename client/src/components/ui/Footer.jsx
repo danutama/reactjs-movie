@@ -14,9 +14,9 @@ const Footer = () => {
               <FaGithub />
             </a>
           </span>
-          <small className="text-secondary">&copy;{currentYear} Danu Pratama. All rights reserved</small>
+          <small className="text-secondary">&copy;{currentYear} Designed and built by Danu Pratama</small>
           <small className="text-secondary text-center">
-            <span>Designed and built by me, data provided by </span>
+            <span>Data provided by </span>
             <a href="https://www.themoviedb.org/" className="text-secondary fw-normal text-decoration-underline" target="_blank" rel="noopener noreferrer">
               TMDb
             </a>

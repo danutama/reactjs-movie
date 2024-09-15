@@ -165,7 +165,7 @@ const PersonDetail = ({ personId }) => {
                       <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.png'} alt={credit.title || 'Poster'} />
                       <div className="w-100">
                         <div className="mb-2">
-                          <Link to={`/movie/${credit.id}`} className="text fw-normal">
+                          <Link to={`/movie/${credit.id}`} className="person-credit-link text fw-normal">
                             {credit.title || credit.name} <span className="text-secondary">as</span> {credit.job || credit.character || '-'}
                           </Link>
                         </div>
@@ -176,9 +176,9 @@ const PersonDetail = ({ personId }) => {
                             {formatVoteAverage(credit.vote_average)}
                           </small>
                         </div>
-                        <p className="d-sm-block d-none mt-2">
+                        <small className="d-sm-block d-none mt-2">
                           <GenreList genreIds={credit.genre_ids} genres={genres} />
-                        </p>
+                        </small>
                       </div>
                     </div>
                     <div className="hr d-sm-none"></div>
@@ -202,7 +202,7 @@ const PersonDetail = ({ personId }) => {
                       <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.png'} alt={credit.name || 'Poster'} />
                       <div className="w-100">
                         <div className="mb-2">
-                          <Link to={`/tv/${credit.id}`} className="text fw-normal">
+                          <Link to={`/tv/${credit.id}`} className="person-credit-link text fw-normal">
                             {credit.name || credit.title} <span className="text-secondary">as</span> {credit.job || credit.character || '-'}
                           </Link>
                         </div>
@@ -213,9 +213,9 @@ const PersonDetail = ({ personId }) => {
                             {formatVoteAverage(credit.vote_average)}
                           </small>
                         </div>
-                        <p className="d-sm-block d-none mt-2">
+                        <small className="d-sm-block d-none mt-2">
                           <GenreList genreIds={credit.genre_ids} genres={genres} />
-                        </p>
+                        </small>
                       </div>
                     </div>
                     <div className="hr d-sm-none"></div>

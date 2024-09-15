@@ -683,6 +683,10 @@ header {
     width: 60px;
   }
 
+  .person-credit-link {
+    font-size: 15px;
+  }
+
   /* ======= PERSON PAGE - CREDITS NAV TABS ======= */
   .nav-tabs {
     justify-content: space-between;
