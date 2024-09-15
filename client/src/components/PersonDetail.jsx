@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import LazyLoad from 'react-lazyload';
 import { fetchPersonById, fetchGenres, fetchPersonMovieCredits, fetchPersonTVCredits } from '../service/api';
 import GenreList from './Genre';
 import Container from './ui/Container';
@@ -95,7 +96,9 @@ const PersonDetail = ({ personId }) => {
       <div className={`${hasProfileImage ? 'd-flex gap-4 justify-content-start align-items-start flex-column flex-md-row' : ''}`}>
         {hasProfileImage && (
           <div className="person-img-wrapper w-100">
-            <img className="person-img rounded-4" src={`https://image.tmdb.org/t/p/w500${person.profile_path}`} alt={person.name || 'Profile image'} />
+            <LazyLoad height={200} offset={100} placeholder={<img src="/profile.png" alt="loading" className="person-img rounded-4" />}>
+              <img className="person-img rounded-4" src={`https://image.tmdb.org/t/p/w500${person.profile_path}`} alt={person.name || 'Profile image'} />
+            </LazyLoad>
           </div>
         )}
         <div className="w-100">
@@ -162,7 +165,9 @@ const PersonDetail = ({ personId }) => {
                 movieCredits.map((credit, index) => (
                   <div key={`${credit.id}-movie-${index}`} className="col-lg-4 col-sm-6 my-sm-2 my-0">
                     <div className="d-flex gap-3 justify-content-start align-items-start">
-                      <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.png'} alt={credit.title || 'Poster'} />
+                      <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.png" alt="loading" className="credit-poster rounded-1" />}>
+                        <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.png'} alt={credit.title || 'Poster'} />
+                      </LazyLoad>
                       <div className="w-100">
                         <div className="mb-2">
                           <Link to={`/movie/${credit.id}`} className="person-credit-link text fw-normal">
@@ -199,7 +204,9 @@ const PersonDetail = ({ personId }) => {
                 tvCredits.map((credit, index) => (
                   <div key={`${credit.id}-tv-${index}`} className="col-lg-4 col-sm-6 my-sm-2 my-0">
                     <div className="d-flex gap-3 justify-content-start align-items-start">
-                      <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.png'} alt={credit.name || 'Poster'} />
+                      <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.png" alt="loading" className="credit-poster rounded-1" />}>
+                        <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.png'} alt={credit.name || 'Poster'} />
+                      </LazyLoad>
                       <div className="w-100">
                         <div className="mb-2">
                           <Link to={`/tv/${credit.id}`} className="person-credit-link text fw-normal">

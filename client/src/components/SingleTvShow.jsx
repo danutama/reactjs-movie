@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import LazyLoad from 'react-lazyload';
 import { fetchTvShowById, fetchTvShowCredits, fetchTVGenres, fetchExternalIdsTv } from '../service/api';
 import Peoples from './Peoples';
 import Container from './ui/Container';
@@ -71,7 +72,11 @@ function SingleTvShow() {
   return (
     <Container>
       <div className="row g-3 mb-3">
-        <div className={`${hasBackdropImage ? 'col-lg-5' : ''}`}>{hasBackdropImage && <img src={`https://image.tmdb.org/t/p/w500${tvShow.backdrop_path}`} className="single-image rounded-4 w-100" alt={tvShow.name} />}</div>
+        <div className={`${hasBackdropImage ? 'col-lg-5' : ''}`}>
+          <LazyLoad height={200} offset={100} placeholder={<img src="/default-backdrop.png" alt="loading" className="single-image rounded-4 w-100" />}>
+            {hasBackdropImage && <img src={`https://image.tmdb.org/t/p/w500${tvShow.backdrop_path}`} className="single-image rounded-4 w-100" alt={tvShow.name} />}
+          </LazyLoad>
+        </div>
         <div className={`${hasBackdropImage ? 'col-lg-7' : 'col-12'}`}>
           <div className="d-flex justify-content-md-start justify-content-between align-items-center mb-3">
             <div className="d-flex me-md-3">

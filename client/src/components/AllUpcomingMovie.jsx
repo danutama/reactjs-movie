@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import LazyLoad from 'react-lazyload';
 import { fetchLatestMovies, fetchGenres } from '../service/api';
 import Container from './ui/Container';
 import Card from './ui/Card';
@@ -108,7 +109,9 @@ const AllLatestMovie = () => {
             {movies.map((movie) => (
               <div key={movie.id} className="col-lg-2 col-md-4 col-6">
                 <Card>
-                  <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/default-poster.png'} className="card-img-top" alt={movie.title} />
+                  <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.png" alt="loading" className="card-img-top" />}>
+                    <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/default-poster.png'} className="card-img-top" alt={movie.title} />
+                  </LazyLoad>
                   <div className="card-body pb-4">
                     <div className="d-flex justify-content-between align-items-center gap-3 mb-3">
                       <small className="text-secondary">{getYear(movie.release_date)}</small>

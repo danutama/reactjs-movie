@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import LazyLoad from 'react-lazyload';
 import { fetchMovieById, fetchGenres, fetchMovieCredits } from '../service/api';
 import Peoples from './Peoples';
 import GenreList from './Genre';
@@ -66,7 +67,11 @@ function SingleMovie() {
   return (
     <Container>
       <div className="row g-3 mb-3">
-        <div className={`${hasBackdropImage ? 'col-lg-5' : ''}`}>{hasBackdropImage && <img src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`} className="single-image rounded-4 w-100" alt={movie.title} />}</div>
+        <div className={`${hasBackdropImage ? 'col-lg-5' : ''}`}>
+          <LazyLoad height={200} offset={100} placeholder={<img src="/default-backdrop.png" alt="loading" className="single-image rounded-4 w-100" />}>
+            {hasBackdropImage && <img src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`} className="single-image rounded-4 w-100" alt={movie.title} />}
+          </LazyLoad>
+        </div>
         <div className={`${hasBackdropImage ? 'col-lg-7' : 'col-12'}`}>
           <div className="d-flex justify-content-md-start justify-content-between align-items-center mb-3">
             <div className="d-flex me-md-3">

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import LazyLoad from 'react-lazyload';
 import Card from './ui/Card';
 import SpinnerCustom from './ui/SpinnerCustom';
 
@@ -78,7 +79,9 @@ const Peoples = ({ credits, creators }) => {
         {credits.slice(0, visibleCount).map((person, index) => (
           <div key={`${person.id}-${index}`} className="col-lg-2 col-md-3 col-sm-4 col-6">
             <Card>
-              <img src={person.profile_path ? `https://image.tmdb.org/t/p/w200${person.profile_path}` : '/profile.png'} className="card-img-top" alt={person.name || 'Default profile'} />
+              <LazyLoad height={200} offset={100} placeholder={<img src="/profile.png" alt="loading" className="card-img-top" />}>
+                <img src={person.profile_path ? `https://image.tmdb.org/t/p/w200${person.profile_path}` : '/profile.png'} className="card-img-top" alt={person.name || 'Default profile'} />
+              </LazyLoad>
               <div className="card-body">
                 <div className="title-wrapper">
                   <Link to={`/person/${person.id}`} className="btn-link">
