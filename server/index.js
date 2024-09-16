@@ -179,6 +179,24 @@ app.get('/api/movie/:id/credits', async (req, res) => {
   }
 });
 
+// POPULAR PEOPLE
+app.get('/api/popular-people', async (req, res) => {
+  try {
+    const { page = 1 } = req.query;
+    const response = await axios.get(`${API_BASE_URL}/person/popular`, {
+      params: {
+        api_key: API_KEY,
+        language: 'en-US',
+        page,
+      },
+    });
+    res.json(response.data.results);
+  } catch (error) {
+    console.error('Error fetching popular people:', error);
+    res.status(500).json({ error: 'Error fetching popular people' });
+  }
+});
+
 // PERSON
 app.get('/api/person/:id', async (req, res) => {
   try {
@@ -254,6 +272,100 @@ app.get('/api/search', async (req, res) => {
   } catch (error) {
     console.error('Error searching TMDB:', error);
     res.status(500).json({ error: 'Error searching TMDB' });
+  }
+});
+
+// TRENDING TV SHOWS
+app.get('/api/trending-tv', async (req, res) => {
+  try {
+    const { page = 1 } = req.query;
+    const response = await axios.get(`${API_BASE_URL}/trending/tv/week`, {
+      params: {
+        api_key: API_KEY,
+        page,
+      },
+    });
+
+    res.json(response.data.results);
+  } catch (error) {
+    console.error('Error fetching trending TV shows:', error);
+    res.status(500).json({ error: 'Error fetching trending TV shows' });
+  }
+});
+
+// TV SHOWS AIRING TODAY
+app.get('/api/tvshows/airing-today', async (req, res) => {
+  try {
+    const { page = 1 } = req.query;
+    const response = await axios.get(`${API_BASE_URL}/tv/airing_today`, {
+      params: {
+        api_key: API_KEY,
+        language: 'en-US',
+        page,
+      },
+    });
+
+    res.json(response.data.results);
+  } catch (error) {
+    console.error('Error fetching TV shows airing today:', error);
+    res.status(500).json({ error: 'Error fetching TV shows airing today' });
+  }
+});
+
+// TV SHOWS ON THE AIR
+app.get('/api/tvshows/on-the-air', async (req, res) => {
+  try {
+    const { page = 1 } = req.query;
+    const response = await axios.get(`${API_BASE_URL}/tv/on_the_air`, {
+      params: {
+        api_key: API_KEY,
+        language: 'en-US',
+        page,
+      },
+    });
+
+    res.json(response.data.results);
+  } catch (error) {
+    console.error('Error fetching TV shows on the air:', error);
+    res.status(500).json({ error: 'Error fetching TV shows on the air' });
+  }
+});
+
+// POPULAR TV SHOWS
+app.get('/api/tvshows/popular', async (req, res) => {
+  try {
+    const { page = 1 } = req.query;
+    const response = await axios.get(`${API_BASE_URL}/tv/popular`, {
+      params: {
+        api_key: API_KEY,
+        language: 'en-US',
+        page,
+      },
+    });
+
+    res.json(response.data.results);
+  } catch (error) {
+    console.error('Error fetching popular TV shows:', error);
+    res.status(500).json({ error: 'Error fetching popular TV shows' });
+  }
+});
+
+// TOP RATED TV SHOWS
+app.get('/api/tvshows/top-rated', async (req, res) => {
+  try {
+    const { page = 1 } = req.query;
+    const response = await axios.get(`${API_BASE_URL}/tv/top_rated`, {
+      params: {
+        api_key: API_KEY,
+        language: 'en-US',
+        page,
+      },
+    });
+
+    res.json(response.data.results);
+  } catch (error) {
+    console.error('Error fetching top-rated TV shows:', error);
+    res.status(500).json({ error: 'Error fetching top-rated TV shows' });
   }
 });
 

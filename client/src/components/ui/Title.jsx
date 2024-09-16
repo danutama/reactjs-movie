@@ -22,12 +22,30 @@ const Title = () => {
     switch (true) {
       case path === '/':
         return getGreeting();
+      case path === '/popular-people':
+        return 'Popular People';
+      case path === '/movies':
+        return 'Movies';
       case path === '/upcoming-movie':
         return 'Upcoming Movies';
       case path === '/trending-movies':
         return 'Trending Movies';
       case path === '/popular-movies':
         return 'Popular Movies';
+      // ================ TV ================= //
+      case path === '/tvshow':
+        return 'TV Shows';
+      case path === '/trending-tv-shows':
+        return 'Trending TV Shows';
+      case path === '/popular-tv-shows':
+        return 'Popular TV Shows';
+      case path === '/top-rated-tv':
+        return 'Top Rated TV Shows';
+      case path === '/tv-on-the-air':
+        return 'TV Shows On The Air';
+      case path === '/tv-airing-today':
+        return 'TV Shows Airing Today';
+      // ================ TV ================= //
       case path.startsWith('/movie/'):
         return 'Movie Details';
       case path.startsWith('/tv/'):

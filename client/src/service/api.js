@@ -100,6 +100,20 @@ export const fetchMovieCredits = async (id) => {
   }
 };
 
+export const fetchPopularPeople = async (page = 1) => {
+  try {
+    const response = await axios.get('/api/popular-people', {
+      params: {
+        page,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    // Handle error silently
+    return [];
+  }
+};
+
 export const fetchPersonById = async (id) => {
   try {
     const response = await axios.get(`/api/person/${id}`);
@@ -139,6 +153,66 @@ export const searchTMDB = async (query) => {
   } catch (error) {
     // Handle error silently
     return { results: [] };
+  }
+};
+
+export const fetchTrendingTVShows = async (page) => {
+  try {
+    const response = await axios.get('/api/trending-tv', {
+      params: { page },
+    });
+    return response.data;
+  } catch (error) {
+    // Handle error silently
+    return [];
+  }
+};
+
+export const fetchTVAiringToday = async (page = 1) => {
+  try {
+    const response = await axios.get('/api/tvshows/airing-today', {
+      params: { page },
+    });
+    return response.data;
+  } catch (error) {
+    // Handle error silently
+    return [];
+  }
+};
+
+export const fetchTVOnTheAir = async (page = 1) => {
+  try {
+    const response = await axios.get('/api/tvshows/on-the-air', {
+      params: { page },
+    });
+    return response.data;
+  } catch (error) {
+    // Handle error silently
+    return [];
+  }
+};
+
+export const fetchPopularTVShows = async (page = 1) => {
+  try {
+    const response = await axios.get('/api/tvshows/popular', {
+      params: { page },
+    });
+    return response.data;
+  } catch (error) {
+    // Handle error silently
+    return [];
+  }
+};
+
+export const fetchTopRatedTVShows = async (page = 1) => {
+  try {
+    const response = await axios.get('/api/tvshows/top-rated', {
+      params: { page },
+    });
+    return response.data;
+  } catch (error) {
+    // Handle error silently
+    return [];
   }
 };
 

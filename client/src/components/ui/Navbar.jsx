@@ -1,7 +1,8 @@
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { HiOutlineClock, HiClock, HiOutlineUserGroup, HiUserGroup, HiOutlineStar, HiStar } from "react-icons/hi2";
-import { GoHome, GoHomeFill } from 'react-icons/go';
+import { HiOutlineUserGroup, HiUserGroup } from 'react-icons/hi2';
+import { BiMovie, BiSolidMovie, BiSolidTv, BiTv } from 'react-icons/bi';
+import { RiHome5Line, RiHome5Fill } from 'react-icons/ri';
 
 const Navbar = () => {
   const location = useLocation();
@@ -34,36 +35,36 @@ const Navbar = () => {
         <div className="nav-link-wrapper" onClick={createRipple}>
           <Link to="/" className={`nav-item ${pathname === '/' ? 'active' : ''}`}>
             <div className="nav-btn">
-              <GoHomeFill className="fill" />
-              <GoHome className="outline" />
+              <RiHome5Fill className="fill" />
+              <RiHome5Line className="outline" />
               <p>Home</p>
             </div>
           </Link>
         </div>
         <div className="nav-link-wrapper" onClick={createRipple}>
-          <Link to="/upcoming-movie" className={`nav-item ${pathname === '/upcoming-movie' ? 'active' : ''}`}>
+          <Link to="/movies" className={`nav-item ${pathname === '/movies' ? 'active' : ''}`}>
             <div className="nav-btn">
-              <HiClock className="fill" />
-              <HiOutlineClock className="outline" />
-              <p>Upcoming</p>
+              <BiSolidMovie className="fill" />
+              <BiMovie className="outline" />
+              <p>Movies</p>
             </div>
           </Link>
         </div>
         <div className="nav-link-wrapper" onClick={createRipple}>
-          <Link to="/trending-movies" className={`nav-item ${pathname === '/trending-movies' ? 'active' : ''}`}>
+          <Link to="/tvshow" className={`nav-item ${pathname === '/tvshow' ? 'active' : ''}`}>
+            <div className="nav-btn">
+              <BiSolidTv className="fill" />
+              <BiTv className="outline" />
+              <p>TV Shows</p>
+            </div>
+          </Link>
+        </div>
+        <div className="nav-link-wrapper" onClick={createRipple}>
+          <Link to="/popular-people" className={`nav-item ${pathname === '/popular-people' ? 'active' : ''}`}>
             <div className="nav-btn">
               <HiUserGroup className="fill" />
               <HiOutlineUserGroup className="outline" />
-              <p>Trending</p>
-            </div>
-          </Link>
-        </div>
-        <div className="nav-link-wrapper" onClick={createRipple}>
-          <Link to="/popular-movies" className={`nav-item ${pathname === '/popular-movies' ? 'active' : ''}`}>
-            <div className="nav-btn">
-              <HiStar className="fill" />
-              <HiOutlineStar className="outline" />
-              <p>Popular</p>
+              <p>People</p>
             </div>
           </Link>
         </div>

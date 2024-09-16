@@ -107,14 +107,6 @@ section {
   margin: 10px 0;
 }
 
-.spinner-primary {
-  color: var(--blue-primary) !important;
-}
-
-.spinner-secondary {
-  color: var(--gray) !important;
-}
-
 .text {
   color: var(--dark-light);
 }
