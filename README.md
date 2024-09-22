@@ -2,6 +2,11 @@
 
 Welcome to the React Movie App! This web application allows users to discover movies, TV shows, actors, and actresses using data from the TMDB API.
 
+<p align="left">
+  <img src="https://drive.google.com/uc?export=view&id=1lsjY34rOHWWxLZ_KXHBFatmsdqmugYvT" alt="Preview" width="45%"/>
+  <img src="https://drive.google.com/uc?export=view&id=1luwFb5Z8jaxW0PqsmG2meEMN7MfdH5Nl" alt="Preview" width="45%"/>
+</p>
+
 ## Live Demos
 
 - [View Live Demo](https://dibimovie.vercel.app/)
