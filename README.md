@@ -2,7 +2,7 @@
 
 Welcome to the React Movie App! This web application allows users to discover movies, TV shows, actors, and actresses using data from the TMDB API.
 
-![Preview](https://drive.google.com/uc?export=view&id=1m_sig--mPbUM_pTQ-bO-n9eu_1D_Abgd)
+![Preview](client/public/preview.webp)
 
 ## Live Demo
 
