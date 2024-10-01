@@ -17,7 +17,7 @@ const Footer = () => {
           <small className="text-secondary">&copy;{currentYear} Designed and built by Danu Pratama</small>
           <small className="text-secondary text-center">
             <span>Data provided by </span>
-            <a href="https://www.themoviedb.org/" className="text-secondary fw-normal text-decoration-underline" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.themoviedb.org/" className="text-secondary fw-normal" target="_blank" rel="noopener noreferrer">
               TMDb
             </a>
           </small>
