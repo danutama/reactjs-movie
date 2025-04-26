@@ -1,5 +1,25 @@
 import axios from 'axios';
 
+export const fetchMovieTrailer = async (id) => {
+  try {
+    const response = await axios.get(`/api/movie-trailer/${id}`);
+    return response.data;
+  } catch (error) {
+    return [];
+  }
+};
+
+export const fetchTVTrailer = async (id) => {
+  try {
+    const response = await axios.get(`/api/tv-trailer/${id}`);
+    const trailers = response.data;
+
+    return trailers;
+  } catch (error) {
+    return [];
+  }
+};
+
 export const fetchGenres = async () => {
   try {
     const response = await axios.get('/api/movie-genres');

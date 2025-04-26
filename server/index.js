@@ -7,6 +7,46 @@ const PORT = 5001;
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 const API_KEY = process.env.TMDB_API_KEY;
 
+app.get('/api/movie-trailer/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await axios.get(`${API_BASE_URL}/movie/${id}/videos`, {
+      params: {
+        api_key: API_KEY,
+        language: 'en-US',
+      },
+    });
+
+    const trailers = response.data.results;
+    res.json(trailers.length > 0 ? trailers : []);
+  } catch (error) {
+    console.error('Error fetching trailer:', error.message);
+    res.json([]);
+  }
+});
+
+// TV trailer
+app.get('/api/tv-trailer/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await axios.get(`${API_BASE_URL}/tv/${id}/videos`, {
+      params: {
+        api_key: API_KEY,
+        language: 'en-US',
+      },
+    });
+
+    const trailers = response.data.results || [];
+    const filtered = trailers.filter((video) => video.site === 'YouTube' && video.official === true && (video.type === 'Trailer' || video.type === 'Teaser')).sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+
+    res.json(filtered);
+  } catch (error) {
+    console.error('Error fetching TV show trailer:', error.message);
+    res.json([]);
+  }
+});
+
 // GENRE MOVIE
 app.get('/api/movie-genres', async (req, res) => {
   try {

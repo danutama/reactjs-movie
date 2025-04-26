@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { fetchTvShowById, fetchTvShowCredits, fetchTVGenres, fetchExternalIdsTv } from '../service/api';
+import { fetchTvShowById, fetchTvShowCredits, fetchTVGenres, fetchExternalIdsTv, fetchTVTrailer } from '../service/api';
+import TVTrailer from './TVTrailer';
 import Peoples from './Peoples';
 import Container from './ui/Container';
 import { FaStar } from 'react-icons/fa';
@@ -17,6 +18,7 @@ function SingleTvShow() {
   const [genres, setGenres] = useState([]);
   const [credits, setCredits] = useState([]);
   const [creators, setCreators] = useState([]);
+  const [trailerKey, setTrailerKey] = useState(null);
   const [showFullOverview, setShowFullOverview] = useState(false);
   const [externalIds, setExternalIds] = useState(null);
 
@@ -31,12 +33,19 @@ function SingleTvShow() {
         const creditsData = await fetchTvShowCredits(id);
         const genresData = await fetchTVGenres();
         const externalIdsData = await fetchExternalIdsTv(id);
+        const trailers = await fetchTVTrailer(id);
 
         setTvShow(tvShowData);
         setGenres(genresData);
         setCredits(creditsData.cast.concat(creditsData.crew));
         setCreators(tvShowData.created_by || []);
         setExternalIds(externalIdsData);
+        
+        if (trailers && trailers.length > 0) {
+          const topTrailer = trailers[0];
+          setTrailerKey(topTrailer.key);
+        }
+
         document.title = `React TV Show | ${tvShowData.name}`;
       } catch (error) {
         navigate('/404');
@@ -138,6 +147,7 @@ function SingleTvShow() {
           </div>
         </div>
       </div>
+      {trailerKey && <TVTrailer trailerKey={trailerKey} />}
       <div>
         <Peoples credits={credits} creators={creators} />
       </div>

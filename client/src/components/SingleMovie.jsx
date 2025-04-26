@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { fetchMovieById, fetchGenres, fetchMovieCredits } from '../service/api';
+import { fetchMovieById, fetchGenres, fetchMovieCredits, fetchMovieTrailer } from '../service/api';
+import MovieTrailer from './MovieTrailer';
 import Peoples from './Peoples';
 import GenreList from './Genre';
 import Container from './ui/Container';
@@ -17,6 +18,7 @@ function SingleMovie() {
   const [movie, setMovie] = useState(null);
   const [genres, setGenres] = useState([]);
   const [credits, setCredits] = useState([]);
+  const [trailerKey, setTrailerKey] = useState(null);
   const [showFullOverview, setShowFullOverview] = useState(false);
 
   useEffect(() => {
@@ -27,11 +29,22 @@ function SingleMovie() {
           navigate('/404');
           return;
         }
+        
+        // Fetch genres and credits
         const genreData = await fetchGenres();
         const creditsData = await fetchMovieCredits(id);
+        
+        // Set state with fetched data
         setMovie(movieData);
         setGenres(genreData);
         setCredits(creditsData.cast.concat(creditsData.crew));
+
+        // Fetch trailer for the movie
+        const trailers = await fetchMovieTrailer(id);
+        if (trailers.length > 0) {
+          setTrailerKey(trailers[0].key);
+        }
+
         document.title = `React Movie | ${movieData.title}`;
       } catch (error) {
         navigate('/404');
@@ -134,6 +147,7 @@ function SingleMovie() {
           </div>
         </div>
       </div>
+      {trailerKey && <MovieTrailer trailerKey={trailerKey} />}
       <div>
         <Peoples credits={credits} />
       </div>
