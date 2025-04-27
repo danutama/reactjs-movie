@@ -1,5 +1,5 @@
 import React from 'react';
-import SingleTvShow from '../components/SingleTvShow';
+import SingleTvShow from '../components/details/SingleTvShow';
 
 const SingleTv = () => {
   return (

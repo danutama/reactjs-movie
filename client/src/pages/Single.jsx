@@ -1,5 +1,5 @@
 import React from 'react';
-import SingleMovie from '../components/SingleMovie';
+import SingleMovie from '../components/details/SingleMovie';
 
 const Single = () => {
   return (

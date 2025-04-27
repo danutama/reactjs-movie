@@ -4,7 +4,6 @@ import { searchTMDB } from '../../service/api';
 import { IoCloseOutline } from 'react-icons/io5';
 import { FaRegUser, FaHashtag } from 'react-icons/fa';
 import { BiMoviePlay } from 'react-icons/bi';
-// import { IoSearchOutline } from 'react-icons/io5';
 import { MdLiveTv } from 'react-icons/md';
 
 const Search = ({ show, onClose }) => {
@@ -127,7 +126,7 @@ const Search = ({ show, onClose }) => {
           <div className="modal-header d-grid border-0">
             <div className="d-flex justify-content-between align-items-center mb-4">
               <p className="fs-5 modal-title text" id="searchModalLabel">
-                dibimovie
+                Explore
               </p>
               <button type="button" className="text-secondary bg-transparent border-0" data-bs-dismiss="modal" aria-label="Close">
                 <IoCloseOutline className="icon fs-1" />
@@ -135,7 +134,7 @@ const Search = ({ show, onClose }) => {
             </div>
 
             <div>
-              <input type="text" className="form-control form-input-custom py-3 rounded-3" placeholder="Search TMDB ..." value={query} onChange={(e) => setQuery(e.target.value)} />
+              <input type="text" className="form-control form-input-custom py-3 rounded-3" placeholder="Type to search..." value={query} onChange={(e) => setQuery(e.target.value)} />
             </div>
           </div>
           <div className="modal-body scrollbar-custom" style={{ maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
@@ -174,9 +173,8 @@ const Search = ({ show, onClose }) => {
               {!loading && query && results.length === 0 && <p className="text-center">No results found.</p>}
               {!query && (
                 <div className="text-center">
-                  {/* <IoSearchOutline className="fs-1 text-secondary mb-2" /> */}
-                  <img src="/search.svg" alt="Search TMDB" className="w-50 my-4" />
-                  <p className="text-secondary">Start typing to search for movies, people, or TV shows</p>
+                  <img src="/movie.svg" alt="Search" className="w-75 mt-5 mb-4" />
+                  <p className="text-secondary">Search movies, people, or TV shows</p>
                 </div>
               )}
             </div>
