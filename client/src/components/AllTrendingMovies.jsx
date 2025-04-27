@@ -133,7 +133,7 @@ const AllTrendingMovies = () => {
 
           {hasMore && (
             <div className="text-center mt-4">
-              <ButtonSeeMore onClick={loadMoreMovies} text="Load More" />
+              <ButtonSeeMore onClick={loadMoreMovies} />
             </div>
           )}
         </>

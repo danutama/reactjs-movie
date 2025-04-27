@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
 import { fetchMovieById, fetchGenres, fetchMovieCredits, fetchMovieTrailer } from '../service/api';
-import MovieTrailer from './MovieTrailer';
+import MovieTrailer from './trailers/MovieTrailer';
 import Peoples from './Peoples';
 import GenreList from './Genre';
 import Container from './ui/Container';
@@ -24,6 +24,11 @@ function SingleMovie() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setMovie(null);
+        setTrailerKey(null);
+        setGenres([]);
+        setCredits([]);
+
         const movieData = await fetchMovieById(id);
         if (!movieData || !movieData.title) {
           navigate('/404');

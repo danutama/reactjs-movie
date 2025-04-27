@@ -113,7 +113,7 @@ const AllPeoplePopular = () => {
 
           {hasMore && (
             <div className="text-center mt-4">
-              <ButtonSeeMore onClick={loadMorePeople} text="Load More" />
+              <ButtonSeeMore onClick={loadMorePeople} />
             </div>
           )}
         </>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
 import { fetchTvShowById, fetchTvShowCredits, fetchTVGenres, fetchExternalIdsTv, fetchTVTrailer } from '../service/api';
-import TVTrailer from './TVTrailer';
+import TVTrailer from './trailers/TVTrailer';
 import Peoples from './Peoples';
 import Container from './ui/Container';
 import { FaStar } from 'react-icons/fa';
@@ -25,6 +25,13 @@ function SingleTvShow() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setTvShow(null);
+        setTrailerKey(null);
+        setGenres([]);
+        setCredits([]);
+        setCreators([]);
+        setExternalIds(null);
+
         const tvShowData = await fetchTvShowById(id);
         if (!tvShowData || !tvShowData.name) {
           navigate('/404');
@@ -42,8 +49,7 @@ function SingleTvShow() {
         setExternalIds(externalIdsData);
         
         if (trailers && trailers.length > 0) {
-          const topTrailer = trailers[0];
-          setTrailerKey(topTrailer.key);
+          setTrailerKey(trailers[0].key);
         }
 
         document.title = `React TV Show | ${tvShowData.name}`;

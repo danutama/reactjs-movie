@@ -140,7 +140,7 @@ const TVShowsByGenre = () => {
 
           {hasMore && (
             <div className="text-center mt-4">
-              <ButtonSeeMore onClick={loadMoreTVShows} text="Load More" />
+              <ButtonSeeMore onClick={loadMoreTVShows} />
             </div>
           )}
         </>

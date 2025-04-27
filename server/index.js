@@ -7,6 +7,7 @@ const PORT = 5001;
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 const API_KEY = process.env.TMDB_API_KEY;
 
+// MOVIE TRAILER
 app.get('/api/movie-trailer/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -25,7 +26,7 @@ app.get('/api/movie-trailer/:id', async (req, res) => {
   }
 });
 
-// TV trailer
+// TV TRAILER
 app.get('/api/tv-trailer/:id', async (req, res) => {
   const { id } = req.params;
 
