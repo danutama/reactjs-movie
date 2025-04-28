@@ -1,5 +1,5 @@
 import React from 'react';
-import TVShowsByGenre from '../components/TVShowsByGenre';
+import TVShowsByGenre from '../components/tv/TVShowsByGenre';
 
 const TvGenre = () => {
   return (

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { fetchPopularPeople } from '../service/api';
-import Container from './ui/Container';
-import Card from './ui/Card';
-import ButtonSeeMore from './ui/ButtonSeeMore';
-import SpinnerCustom from './ui/SpinnerCustom';
+import { fetchPopularPeople } from '../../service/api';
+import Container from '../ui/Container';
+import Card from '../ui/Card';
+import ButtonSeeMore from '../ui/ButtonSeeMore';
+import SpinnerCustom from '../ui/SpinnerCustom';
 
 const AllPeoplePopular = () => {
   const [people, setPeople] = useState([]);

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { fetchPersonById, fetchGenres, fetchPersonMovieCredits, fetchPersonTVCredits } from '../service/api';
-import GenreList from './Genre';
-import Container from './ui/Container';
-import SpinnerCustom from './ui/SpinnerCustom';
-import { formatFullDate, formatDate, formatVoteAverage } from '../utils/Helper';
-import ButtonToTop from './ui/ButtonToTop';
+import { fetchPersonById, fetchGenres, fetchPersonMovieCredits, fetchPersonTVCredits } from '../../service/api';
+import GenreList from '../../utils/Genre';
+import Container from '../ui/Container';
+import SpinnerCustom from '../ui/SpinnerCustom';
+import { formatFullDate, formatDate, formatVoteAverage } from '../../utils/Helper';
+import ButtonToTop from '../ui/ButtonToTop';
 import { FaStar } from 'react-icons/fa';
-import ToggleTextButton from './ui/ToggleTextButton';
+import ToggleTextButton from '../ui/ToggleTextButton';
 
 const PersonDetail = ({ personId }) => {
   const [person, setPerson] = useState(null);

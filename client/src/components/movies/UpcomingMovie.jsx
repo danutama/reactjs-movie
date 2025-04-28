@@ -1,21 +1,21 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { fetchPopularMovies, fetchGenres } from '../service/api';
-import Container from './ui/Container';
-import Card from './ui/Card';
-import Skeleton from './ui/Skeleton';
+import { fetchLatestMovies, fetchGenres } from '../../service/api';
+import Container from '../ui/Container';
+import Card from '../ui/Card';
+import Skeleton from '../ui/Skeleton';
 import { FaStar } from 'react-icons/fa';
-import { getYear, formatVoteAverage } from '../utils/Helper';
+import { getYear, formatVoteAverage } from '../../utils/Helper';
 
-function PopularMovies() {
+function UpcomingMovie() {
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const [genreData, movieData] = await Promise.all([fetchGenres(), fetchPopularMovies()]);
+      const [genreData, movieData] = await Promise.all([fetchGenres(), fetchLatestMovies()]);
       setGenres(genreData);
       setMovies(movieData);
       setLoading(false);
@@ -26,8 +26,8 @@ function PopularMovies() {
   return (
     <Container>
       <div className="d-flex justify-content-between align-items-baseline mb-3">
-        <p className="h5 text m-0">Popular Movies</p>
-        <Link to="/popular-movies" className="btn-link">
+        <p className="h5 text m-0">Upcoming Movies</p>
+        <Link to="/upcoming-movie" className="btn-link">
           <small>Explore</small>
         </Link>
       </div>
@@ -66,4 +66,4 @@ function PopularMovies() {
   );
 }
 
-export default PopularMovies;
+export default UpcomingMovie;

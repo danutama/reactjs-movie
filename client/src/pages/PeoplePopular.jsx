@@ -1,6 +1,6 @@
 import React from 'react';
 import TitlePages from '../utils/TitlePages';
-import AllPeoplePopular from '../components/AllPeoplePopular';
+import AllPeoplePopular from '../components/people/AllPeoplePopular';
 
 const PeoplePopular = () => {
   TitlePages('Popular People');

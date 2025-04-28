@@ -1,66 +1,62 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { fetchMoviesByGenre, fetchGenres } from '../service/api';
-import Container from './ui/Container';
-import Card from './ui/Card';
+import { fetchTrendingMovies, fetchGenres } from '../../service/api';
+import Container from '../ui/Container';
+import Card from '../ui/Card';
 import { FaStar } from 'react-icons/fa';
-import { getYear, formatVoteAverage } from '../utils/Helper';
-import ButtonSeeMore from './ui/ButtonSeeMore';
-import SpinnerCustom from './ui/SpinnerCustom';
+import { getYear, formatVoteAverage } from '../../utils/Helper';
+import ButtonSeeMore from '../ui/ButtonSeeMore';
+import SpinnerCustom from '../ui/SpinnerCustom';
 
-const MovieByGenre = () => {
-  const { genreId } = useParams();
-  const navigate = useNavigate();
+const AllTrendingMovies = () => {
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
-  const [genreName, setGenreName] = useState('');
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
 
+  // Menentukan kunci penyimpanan berdasarkan halaman
+  const storageKeyPrefix = 'trending';
+  const moviesKey = `${storageKeyPrefix}Movies`;
+  const genresKey = `${storageKeyPrefix}Genres`;
+  const pageKey = `${storageKeyPrefix}Page`;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [genreData, movieData] = await Promise.all([fetchGenres(), fetchMoviesByGenre(genreId, page)]);
+        const [genreData, movieData] = await Promise.all([fetchGenres(), fetchTrendingMovies(page)]);
 
-        const currentGenre = genreData.find((genre) => genre.id === parseInt(genreId, 10));
-        if (!currentGenre) {
-          navigate('/404');
-          return;
-        }
-
-        const uniqueMovies = Array.from(new Map(movieData.map((movie) => [movie.id, movie])).values());
+        // Filter out duplicate movies by ID
+        const uniqueMovies = Array.from(new Map([...movies, ...movieData].map((movie) => [movie.id, movie])).values());
 
         setGenres(genreData);
         setMovies(uniqueMovies);
         setLoading(false);
         setHasMore(movieData.length > 0);
 
-        const name = currentGenre.name;
-        setGenreName(name);
-
-        document.title = name ? `React Movie | ${name}` : 'React Movie';
-
-        sessionStorage.setItem(`genre-${genreId}Movies`, JSON.stringify(uniqueMovies));
-        sessionStorage.setItem(`genre-${genreId}Page`, page.toString());
+        sessionStorage.setItem(moviesKey, JSON.stringify(uniqueMovies));
+        sessionStorage.setItem(genresKey, JSON.stringify(genreData));
+        sessionStorage.setItem(pageKey, page.toString());
       } catch (error) {
         console.error('Error fetching data:', error);
-        navigate('/404');
       }
     };
 
-    const savedMovies = sessionStorage.getItem(`genre-${genreId}Movies`);
-    const savedPage = sessionStorage.getItem(`genre-${genreId}Page`);
+    const savedMovies = sessionStorage.getItem(moviesKey);
+    const savedGenres = sessionStorage.getItem(genresKey);
+    const savedPage = sessionStorage.getItem(pageKey);
 
-    if (savedMovies) {
+    if (savedMovies && savedGenres) {
       setMovies(JSON.parse(savedMovies));
+      setGenres(JSON.parse(savedGenres));
       setPage(Number(savedPage));
       setLoading(false);
     } else {
       fetchData();
     }
 
+    // Simpan posisi scroll
     const saveScrollPos = () => {
       sessionStorage.setItem('scrollPosition', window.scrollY.toString());
     };
@@ -69,29 +65,26 @@ const MovieByGenre = () => {
     return () => {
       window.removeEventListener('beforeunload', saveScrollPos);
     };
-  }, [genreId, page, navigate]);
-
-  useEffect(() => {
-    document.title = genreName ? `React Movie | ${genreName}` : 'React Movie';
-  }, [genreName]);
+  }, [page]);
 
   const loadMoreMovies = async () => {
     const nextPage = page + 1;
     try {
-      const movieData = await fetchMoviesByGenre(genreId, nextPage);
+      const movieData = await fetchTrendingMovies(nextPage);
 
       if (movieData.length === 0) {
         setHasMore(false);
         return;
       }
 
+      // Filter out duplicate movies by ID
       const updatedMovies = Array.from(new Map([...movies, ...movieData].map((movie) => [movie.id, movie])).values());
 
       setMovies(updatedMovies);
       setPage(nextPage);
 
-      sessionStorage.setItem(`genre-${genreId}Movies`, JSON.stringify(updatedMovies));
-      sessionStorage.setItem(`genre-${genreId}Page`, nextPage.toString());
+      sessionStorage.setItem(moviesKey, JSON.stringify(updatedMovies));
+      sessionStorage.setItem(pageKey, nextPage.toString());
     } catch (error) {
       console.error('Error loading more movies:', error);
     }
@@ -149,4 +142,4 @@ const MovieByGenre = () => {
   );
 };
 
-export default MovieByGenre;
+export default AllTrendingMovies;

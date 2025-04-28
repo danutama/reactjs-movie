@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
 import { fetchTvShowById, fetchTvShowCredits, fetchTVGenres, fetchExternalIdsTv, fetchTVTrailer } from '../../service/api';
 import TVTrailer from '../trailers/TVTrailer';
-import Peoples from '../Peoples';
+import CastAndCrew from './CastAndCrew';
 import Container from '../ui/Container';
 import { FaStar } from 'react-icons/fa';
 import { getYear, formatVoteAverage } from '../../utils/Helper';
@@ -155,7 +155,7 @@ function SingleTvShow() {
       </div>
       {trailerKey && <TVTrailer trailerKey={trailerKey} />}
       <div>
-        <Peoples credits={credits} creators={creators} />
+        <CastAndCrew credits={credits} creators={creators} />
       </div>
       <ButtonToTop />
     </Container>

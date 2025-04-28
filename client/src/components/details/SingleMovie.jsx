@@ -3,8 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
 import { fetchMovieById, fetchGenres, fetchMovieCredits, fetchMovieTrailer } from '../../service/api';
 import MovieTrailer from '../trailers/MovieTrailer';
-import Peoples from '../Peoples';
-import GenreList from '../Genre';
+import CastAndCrew from './CastAndCrew';
 import Container from '../ui/Container';
 import { FaStar } from 'react-icons/fa';
 import { getYear, formatVoteAverage } from '../../utils/Helper';
@@ -34,11 +33,11 @@ function SingleMovie() {
           navigate('/404');
           return;
         }
-        
+
         // Fetch genres and credits
         const genreData = await fetchGenres();
         const creditsData = await fetchMovieCredits(id);
-        
+
         // Set state with fetched data
         setMovie(movieData);
         setGenres(genreData);
@@ -154,7 +153,7 @@ function SingleMovie() {
       </div>
       {trailerKey && <MovieTrailer trailerKey={trailerKey} />}
       <div>
-        <Peoples credits={credits} />
+        <CastAndCrew credits={credits} />
       </div>
       <ButtonToTop />
     </Container>

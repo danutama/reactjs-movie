@@ -1,8 +1,8 @@
 import React from 'react';
 import TitlePages from '../utils/TitlePages';
-import PopularMovies from '../components/PopularMovies';
-import TrendingMovies from '../components/TrendingMovies';
-import UpcomingMovie from '../components/UpcomingMovie';
+import PopularMovies from '../components/movies/PopularMovies';
+import TrendingMovies from '../components/movies/TrendingMovies';
+import UpcomingMovie from '../components/movies/UpcomingMovie';
 
 const Movie = () => {
   TitlePages('Movies');

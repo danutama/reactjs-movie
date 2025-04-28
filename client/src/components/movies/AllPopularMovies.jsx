@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { fetchLatestMovies, fetchGenres } from '../service/api';
-import Container from './ui/Container';
-import Card from './ui/Card';
+import { fetchPopularMovies, fetchGenres } from '../../service/api';
+import Container from '../ui/Container';
+import Card from '../ui/Card';
 import { FaStar } from 'react-icons/fa';
-import { getYear, formatVoteAverage } from '../utils/Helper';
-import ButtonSeeMore from './ui/ButtonSeeMore';
-import SpinnerCustom from './ui/SpinnerCustom';
+import { getYear, formatVoteAverage } from '../../utils/Helper';
+import ButtonSeeMore from '../ui/ButtonSeeMore';
+import SpinnerCustom from '../ui/SpinnerCustom';
 
-const AllLatestMovie = () => {
+const AllPopularMovies = () => {
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [page, setPage] = useState(1);
@@ -17,7 +17,7 @@ const AllLatestMovie = () => {
   const [hasMore, setHasMore] = useState(true);
 
   // Menentukan kunci penyimpanan berdasarkan halaman
-  const storageKeyPrefix = 'latest';
+  const storageKeyPrefix = 'popular';
   const moviesKey = `${storageKeyPrefix}Movies`;
   const genresKey = `${storageKeyPrefix}Genres`;
   const pageKey = `${storageKeyPrefix}Page`;
@@ -25,9 +25,8 @@ const AllLatestMovie = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [genreData, movieData] = await Promise.all([fetchGenres(), fetchLatestMovies(page)]);
+        const [genreData, movieData] = await Promise.all([fetchGenres(), fetchPopularMovies(page)]);
 
-        // Filter out duplicate movies by ID
         const uniqueMovies = Array.from(new Map(movieData.map((movie) => [movie.id, movie])).values());
 
         setGenres(genreData);
@@ -70,14 +69,13 @@ const AllLatestMovie = () => {
   const loadMoreMovies = async () => {
     const nextPage = page + 1;
     try {
-      const movieData = await fetchLatestMovies(nextPage);
+      const movieData = await fetchPopularMovies(nextPage);
 
       if (movieData.length === 0) {
         setHasMore(false);
         return;
       }
 
-      // Filter out duplicate movies by ID
       const updatedMovies = Array.from(new Map([...movies, ...movieData].map((movie) => [movie.id, movie])).values());
 
       setMovies(updatedMovies);
@@ -107,7 +105,7 @@ const AllLatestMovie = () => {
         <>
           <div className="row g-2">
             {movies.map((movie) => (
-              <div key={movie.id} className="col-lg-2 col-md-4 col-6">
+              <div key={`${movie.id}-${page}`} className="col-lg-2 col-md-4 col-6">
                 <Card>
                   <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.png" alt="loading" className="card-img-top" />}>
                     <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/default-poster.png'} className="card-img-top" alt={movie.title} />
@@ -130,7 +128,6 @@ const AllLatestMovie = () => {
               </div>
             ))}
           </div>
-
           {hasMore && (
             <div className="text-center mt-4">
               <ButtonSeeMore onClick={loadMoreMovies} />
@@ -142,4 +139,4 @@ const AllLatestMovie = () => {
   );
 };
 
-export default AllLatestMovie;
+export default AllPopularMovies;

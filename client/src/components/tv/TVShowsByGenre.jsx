@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { fetchTVShowsByGenre, fetchTVGenres } from '../service/api';
-import Container from './ui/Container';
-import Card from './ui/Card';
+import { fetchTVShowsByGenre, fetchTVGenres } from '../../service/api';
+import Container from '../ui/Container';
+import Card from '../ui/Card';
 import { FaStar } from 'react-icons/fa';
-import { getYear, formatVoteAverage } from '../utils/Helper';
-import ButtonSeeMore from './ui/ButtonSeeMore';
-import SpinnerCustom from './ui/SpinnerCustom';
+import { getYear, formatVoteAverage } from '../../utils/Helper';
+import ButtonSeeMore from '../ui/ButtonSeeMore';
+import SpinnerCustom from '../ui/SpinnerCustom';
 
 const TVShowsByGenre = () => {
   const { genreId } = useParams();

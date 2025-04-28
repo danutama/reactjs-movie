@@ -1,5 +1,5 @@
 import React from 'react';
-import MovieByGenre from '../components/MovieByGenre';
+import MovieByGenre from '../components/movies/MovieByGenre';
 
 const MovieGenre = () => {
   return (

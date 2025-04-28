@@ -1,6 +1,6 @@
 import React from 'react';
 import TitlePages from '../utils/TitlePages';
-import AllTrendingMovies from '../components/AllTrendingMovies';
+import AllTrendingMovies from '../components/movies/AllTrendingMovies';
 
 const Trending = () => {
   TitlePages('Trending');

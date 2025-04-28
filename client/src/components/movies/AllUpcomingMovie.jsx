@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { fetchTrendingMovies, fetchGenres } from '../service/api';
-import Container from './ui/Container';
-import Card from './ui/Card';
+import { fetchLatestMovies, fetchGenres } from '../../service/api';
+import Container from '../ui/Container';
+import Card from '../ui/Card';
 import { FaStar } from 'react-icons/fa';
-import { getYear, formatVoteAverage } from '../utils/Helper';
-import ButtonSeeMore from './ui/ButtonSeeMore';
-import SpinnerCustom from './ui/SpinnerCustom';
+import { getYear, formatVoteAverage } from '../../utils/Helper';
+import ButtonSeeMore from '../ui/ButtonSeeMore';
+import SpinnerCustom from '../ui/SpinnerCustom';
 
-const AllTrendingMovies = () => {
+const AllLatestMovie = () => {
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [page, setPage] = useState(1);
@@ -17,7 +17,7 @@ const AllTrendingMovies = () => {
   const [hasMore, setHasMore] = useState(true);
 
   // Menentukan kunci penyimpanan berdasarkan halaman
-  const storageKeyPrefix = 'trending';
+  const storageKeyPrefix = 'latest';
   const moviesKey = `${storageKeyPrefix}Movies`;
   const genresKey = `${storageKeyPrefix}Genres`;
   const pageKey = `${storageKeyPrefix}Page`;
@@ -25,10 +25,10 @@ const AllTrendingMovies = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [genreData, movieData] = await Promise.all([fetchGenres(), fetchTrendingMovies(page)]);
+        const [genreData, movieData] = await Promise.all([fetchGenres(), fetchLatestMovies(page)]);
 
         // Filter out duplicate movies by ID
-        const uniqueMovies = Array.from(new Map([...movies, ...movieData].map((movie) => [movie.id, movie])).values());
+        const uniqueMovies = Array.from(new Map(movieData.map((movie) => [movie.id, movie])).values());
 
         setGenres(genreData);
         setMovies(uniqueMovies);
@@ -70,7 +70,7 @@ const AllTrendingMovies = () => {
   const loadMoreMovies = async () => {
     const nextPage = page + 1;
     try {
-      const movieData = await fetchTrendingMovies(nextPage);
+      const movieData = await fetchLatestMovies(nextPage);
 
       if (movieData.length === 0) {
         setHasMore(false);
@@ -142,4 +142,4 @@ const AllTrendingMovies = () => {
   );
 };
 
-export default AllTrendingMovies;
+export default AllLatestMovie;

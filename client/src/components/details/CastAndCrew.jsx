@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import Card from './ui/Card';
-import SpinnerCustom from './ui/SpinnerCustom';
+import Card from '../ui/Card';
+import SpinnerCustom from '../ui/SpinnerCustom';
 
-const Peoples = ({ credits, creators }) => {
+const CastAndCrew = ({ credits, creators }) => {
   const [visibleCount, setVisibleCount] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
@@ -108,4 +108,4 @@ const Peoples = ({ credits, creators }) => {
   );
 };
 
-export default Peoples;
+export default CastAndCrew;
