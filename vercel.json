@@ -10,25 +10,29 @@
       "use": "@vercel/node"
     }
   ],
-  "redirects": [
-    {
-      "source": "/(.*)",
-      "destination": "https://dibimovie.vercel.app/$1",
-      "permanent": true
-    }
-  ],
   "rewrites": [
     {
-      "source": "/api/(.*)",
+      "source": "/api/:match*",
       "destination": "/server/index.js"
     },
     {
-      "source": "/(.*)",
-      "destination": "/client/dist/$1"
+      "source": "/:file*",
+      "destination": "/client/dist/:file*"
     },
     {
       "source": "/(.*)",
       "destination": "/client/dist/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        }
+      ]
     }
   ]
 }
