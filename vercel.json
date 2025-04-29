@@ -10,6 +10,13 @@
       "use": "@vercel/node"
     }
   ],
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://dibimovie.vercel.app/$1",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/(.*)",
