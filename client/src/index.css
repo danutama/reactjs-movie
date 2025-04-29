@@ -710,6 +710,10 @@ header {
     opacity: 0 !important;
   }
 
+  .col-sm-custom {
+    max-width: 180px;
+  }
+
   /* scrollbar-custom*/
   .scrollbar-custom::-webkit-scrollbar {
     display: none;
@@ -727,4 +731,10 @@ header {
     border-radius: 10px;
   } */
   /* end */
+}
+
+@media (max-width: 400px) {
+  .col-sm-custom {
+    max-width: 148px;
+  }
 }

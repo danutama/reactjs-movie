@@ -24,7 +24,7 @@ const Skeleton = () => {
     <div className="overflow-auto scrollbar-custom">
       <div className="d-flex gap-2 justify-content-start">
         {Array.from({ length: count }).map((_, index) => (
-          <div key={index} className="col-lg-2 col-md-4 col-6 mb-2">
+          <div key={index} className="col-sm-custom col-lg-2 col-md-4 col-6 mb-2">
             <Card>
               <img src="/default-poster.png" alt="loading" />
               <div className="card-body pb-4">
