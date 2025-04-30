@@ -545,9 +545,9 @@ header {
 .person-img-wrapper {
   background-color: var(--background);
   border: 1px solid var(--border);
-  padding: 1rem;
+  padding: .5rem;
   border-radius: 25px;
-  background-image: url(/bg-person.jpeg);
+  background-image: url(/banner-person.webp);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
