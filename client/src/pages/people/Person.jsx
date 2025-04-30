@@ -1,8 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import PersonDetail from '../components/people/PersonDetail';
+import PersonDetail from '../../components/people/PersonDetail';
 
-const PgPerson = () => {
+const Person = () => {
   const { personId } = useParams();
 
   return (
@@ -12,4 +12,4 @@ const PgPerson = () => {
   );
 };
 
-export default PgPerson;
+export default Person;
