@@ -2,7 +2,7 @@ import React from 'react';
 import TitlePages from '../utils/TitlePages';
 import AllPopularMovies from '../components/movies/AllPopularMovies';
 
-const Popular = () => {
+const PgMoviePopular = () => {
   TitlePages('Popular');
   return (
     <section>
@@ -11,4 +11,4 @@ const Popular = () => {
   );
 };
 
-export default Popular;
+export default PgMoviePopular;

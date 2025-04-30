@@ -6,7 +6,7 @@ import TvPopular from '../components/tv/TvPopular';
 import TvTopRated from '../components/tv/TvTopRated';
 import TvTrending from '../components/tv/TvTrending';
 
-const TvShow = () => {
+const PgTvShow = () => {
   TitlePages('Tv Show');
   return (
     <section>
@@ -19,4 +19,4 @@ const TvShow = () => {
   );
 };
 
-export default TvShow;
+export default PgTvShow;

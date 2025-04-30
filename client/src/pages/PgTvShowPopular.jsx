@@ -2,7 +2,7 @@ import React from 'react';
 import TitlePages from '../utils/TitlePages';
 import AllTVPopular from '../components/tv/AllTVPopular';
 
-const TvShowPopular = () => {
+const PgTvShowPopular = () => {
   TitlePages('Popular TV Shows');
   return (
     <section>
@@ -11,4 +11,4 @@ const TvShowPopular = () => {
   );
 };
 
-export default TvShowPopular;
+export default PgTvShowPopular;

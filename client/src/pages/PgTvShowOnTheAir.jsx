@@ -2,7 +2,7 @@ import React from 'react';
 import TitlePages from '../utils/TitlePages';
 import AllTVOnTheAir from '../components/tv/AllTVOnTheAir';
 
-const TvShowOnTheAir = () => {
+const PgTvShowOnTheAir = () => {
   TitlePages('TV Shows On The Air');
   return (
     <section>
@@ -11,4 +11,4 @@ const TvShowOnTheAir = () => {
   );
 };
 
-export default TvShowOnTheAir;
+export default PgTvShowOnTheAir;

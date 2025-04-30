@@ -1,7 +1,7 @@
 import React from 'react';
 import TVShowsByGenre from '../components/tv/TVShowsByGenre';
 
-const TvGenre = () => {
+const PgTvByGenre = () => {
   return (
     <section>
       <TVShowsByGenre />
@@ -9,4 +9,4 @@ const TvGenre = () => {
   );
 };
 
-export default TvGenre;
+export default PgTvByGenre;

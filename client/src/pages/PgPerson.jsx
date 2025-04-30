@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import PersonDetail from '../components/people/PersonDetail';
 
-const Person = () => {
+const PgPerson = () => {
   const { personId } = useParams();
 
   return (
@@ -12,4 +12,4 @@ const Person = () => {
   );
 };
 
-export default Person;
+export default PgPerson;

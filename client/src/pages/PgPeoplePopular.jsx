@@ -2,7 +2,7 @@ import React from 'react';
 import TitlePages from '../utils/TitlePages';
 import AllPeoplePopular from '../components/people/AllPeoplePopular';
 
-const PeoplePopular = () => {
+const PgPeoplePopular = () => {
   TitlePages('Popular People');
   return (
     <section>
@@ -11,4 +11,4 @@ const PeoplePopular = () => {
   );
 };
 
-export default PeoplePopular;
+export default PgPeoplePopular;

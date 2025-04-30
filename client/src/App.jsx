@@ -8,24 +8,24 @@ import Search from './components/ui/Search';
 import Footer from './components/ui/Footer';
 
 // Lazy load pages
-const Home = lazy(() => import('./pages/Home'));
-const Movie = lazy(() => import('./pages/Movie'));
-const Latest = lazy(() => import('./pages/Upcoming'));
-const Trending = lazy(() => import('./pages/Trending'));
-const Popular = lazy(() => import('./pages/Popular'));
-const TvShow = lazy(() => import('./pages/TvShow'));
-const TvShowTopRated = lazy(() => import('./pages/TvShowTopRated'));
-const TvShowAiringToday = lazy(() => import('./pages/TvShowAiringToday'));
-const TvShowPopular = lazy(() => import('./pages/TvShowPopular'));
-const TvShowOnTheAir = lazy(() => import('./pages/TvShowOnTheAir'));
-const TvShowTrending = lazy(() => import('./pages/TvShowTrending'));
-const Single = lazy(() => import('./pages/Single'));
-const SingleTv = lazy(() => import('./pages/SingleTv'));
-const PeoplePopular = lazy(() => import('./pages/PeoplePopular'));
-const Person = lazy(() => import('./pages/Person'));
-const MovieGenre = lazy(() => import('./pages/MovieGenre'));
-const TvGenre = lazy(() => import('./pages/TvGenre'));
-const NotFound = lazy(() => import('./pages/404'));
+const PgHome = lazy(() => import('./pages/PgHome'));
+const PgMovie = lazy(() => import('./pages/PgMovie'));
+const PgMovieUpcoming = lazy(() => import('./pages/PgMovieUpcoming'));
+const PgMovieTrending = lazy(() => import('./pages/PgMovieTrending'));
+const PgMoviePopular = lazy(() => import('./pages/PgMoviePopular'));
+const PgTvShow = lazy(() => import('./pages/PgTvShow'));
+const PgTvShowTopRated = lazy(() => import('./pages/PgTvShowTopRated'));
+const PgTvShowAiringToday = lazy(() => import('./pages/PgTvShowAiringToday'));
+const PgTvShowPopular = lazy(() => import('./pages/PgTvShowPopular'));
+const PgTvShowOnTheAir = lazy(() => import('./pages/PgTvShowOnTheAir'));
+const PgTvShowTrending = lazy(() => import('./pages/PgTvShowTrending'));
+const PgSingleMovie = lazy(() => import('./pages/PgSingleMovie'));
+const PgSingleTv = lazy(() => import('./pages/PgSingleTv'));
+const PgPeoplePopular = lazy(() => import('./pages/PgPeoplePopular'));
+const PgPerson = lazy(() => import('./pages/PgPerson'));
+const PgMovieByGenre = lazy(() => import('./pages/PgMovieByGenre'));
+const PgTvByGenre = lazy(() => import('./pages/PgTvByGenre'));
+const NotFound = lazy(() => import('./pages/Pg404'));
 
 function App() {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
@@ -47,26 +47,26 @@ function App() {
       <ScrollToTop />
       <Suspense fallback={null}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<PgHome />} />
           {/* TV SHOWS */}
-          <Route path="/tvshow" element={<TvShow />} />
-          <Route path="/trending-tv-shows" element={<TvShowTrending />} />
-          <Route path="/popular-tv-shows" element={<TvShowPopular />} />
-          <Route path="/tv-on-the-air" element={<TvShowOnTheAir />} />
-          <Route path="/top-rated-tv" element={<TvShowTopRated />} />
-          <Route path="/tv-airing-today" element={<TvShowAiringToday />} />
-          <Route path="/tv-genre/:genreId" element={<TvGenre />} />
-          <Route path="/tv/:id" element={<SingleTv />} />
+          <Route path="/tvshow" element={<PgTvShow />} />
+          <Route path="/trending-tv-shows" element={<PgTvShowTrending />} />
+          <Route path="/popular-tv-shows" element={<PgTvShowPopular />} />
+          <Route path="/tv-on-the-air" element={<PgTvShowOnTheAir />} />
+          <Route path="/top-rated-tv" element={<PgTvShowTopRated />} />
+          <Route path="/tv-airing-today" element={<PgTvShowAiringToday />} />
+          <Route path="/tv-genre/:genreId" element={<PgTvByGenre />} />
+          <Route path="/tv/:id" element={<PgSingleTv />} />
           {/* MOVIES */}
-          <Route path="/movies" element={<Movie />} />
-          <Route path="/upcoming-movie" element={<Latest />} />
-          <Route path="/trending-movies" element={<Trending />} />
-          <Route path="/popular-movies" element={<Popular />} />
-          <Route path="/movie/:id" element={<Single />} />
-          <Route path="/person/:personId" element={<Person />} />
-          <Route path="/movie-genre/:genreId" element={<MovieGenre />} />
+          <Route path="/movies" element={<PgMovie />} />
+          <Route path="/upcoming-movie" element={<PgMovieUpcoming />} />
+          <Route path="/trending-movies" element={<PgMovieTrending />} />
+          <Route path="/popular-movies" element={<PgMoviePopular />} />
+          <Route path="/movie/:id" element={<PgSingleMovie />} />
+          <Route path="/person/:personId" element={<PgPerson />} />
+          <Route path="/movie-genre/:genreId" element={<PgMovieByGenre />} />
           {/* PEOPLE */}
-          <Route path="/popular-people" element={<PeoplePopular />} />
+          <Route path="/popular-people" element={<PgPeoplePopular />} />
           {/* fallback 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>

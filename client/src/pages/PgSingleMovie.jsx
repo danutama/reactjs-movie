@@ -1,7 +1,7 @@
 import React from 'react';
 import SingleMovie from '../components/details/SingleMovie';
 
-const Single = () => {
+const PgSingleMovie = () => {
   return (
     <section>
       <SingleMovie />
@@ -9,4 +9,4 @@ const Single = () => {
   );
 };
 
-export default Single;
+export default PgSingleMovie;

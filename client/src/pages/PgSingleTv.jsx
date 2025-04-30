@@ -1,7 +1,7 @@
 import React from 'react';
 import SingleTvShow from '../components/details/SingleTvShow';
 
-const SingleTv = () => {
+const PgSingleTv = () => {
   return (
     <section>
       <SingleTvShow />
@@ -9,4 +9,4 @@ const SingleTv = () => {
   );
 };
 
-export default SingleTv;
+export default PgSingleTv;

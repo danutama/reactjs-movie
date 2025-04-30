@@ -2,7 +2,7 @@ import React from 'react';
 import TitlePages from '../utils/TitlePages';
 import AllTVTrending from '../components/tv/AllTVTrending';
 
-const TvShowTrending = () => {
+const PgTvShowTrending = () => {
   TitlePages('Trending TV Shows');
   return (
     <section>
@@ -11,4 +11,4 @@ const TvShowTrending = () => {
   );
 };
 
-export default TvShowTrending;
+export default PgTvShowTrending;

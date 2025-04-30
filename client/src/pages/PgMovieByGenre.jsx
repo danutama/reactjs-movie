@@ -1,7 +1,7 @@
 import React from 'react';
 import MovieByGenre from '../components/movies/MovieByGenre';
 
-const MovieGenre = () => {
+const PgMovieByGenre = () => {
   return (
     <section>
       <MovieByGenre />
@@ -9,4 +9,4 @@ const MovieGenre = () => {
   );
 };
 
-export default MovieGenre;
+export default PgMovieByGenre;

@@ -2,7 +2,7 @@ import React from 'react';
 import TitlePages from '../utils/TitlePages';
 import AllTrendingMovies from '../components/movies/AllTrendingMovies';
 
-const Trending = () => {
+const PgMovieTrending = () => {
   TitlePages('Trending');
   return (
     <section>
@@ -11,4 +11,4 @@ const Trending = () => {
   );
 };
 
-export default Trending;
+export default PgMovieTrending;

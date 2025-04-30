@@ -3,7 +3,7 @@ import TitlePages from '../utils/TitlePages';
 import TrendingMovies from '../components/movies/TrendingMovies';
 import TvTrending from '../components/tv/TvTrending';
 
-const Home = () => {
+const PgHome = () => {
   TitlePages('Welcome');
   return (
     <section>
@@ -13,4 +13,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default PgHome;

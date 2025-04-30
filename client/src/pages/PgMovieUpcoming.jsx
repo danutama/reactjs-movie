@@ -2,7 +2,7 @@ import React from 'react';
 import TitlePages from '../utils/TitlePages';
 import AllUpcomingMovie from '../components/movies/AllUpcomingMovie';
 
-const Latest = () => {
+const PgMovieUpcoming = () => {
   TitlePages('Upcoming');
   return (
     <section>
@@ -11,4 +11,4 @@ const Latest = () => {
   );
 };
 
-export default Latest;
+export default PgMovieUpcoming;

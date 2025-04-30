@@ -4,7 +4,7 @@ import PopularMovies from '../components/movies/PopularMovies';
 import TrendingMovies from '../components/movies/TrendingMovies';
 import UpcomingMovie from '../components/movies/UpcomingMovie';
 
-const Movie = () => {
+const PgMovie = () => {
   TitlePages('Movies');
   return (
     <section>
@@ -15,4 +15,4 @@ const Movie = () => {
   );
 };
 
-export default Movie;
+export default PgMovie;
