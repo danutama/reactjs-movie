@@ -5,6 +5,7 @@
   --background: hsl(225, 20%, 96%);
   --background-secondary: #ffffff;
   --background-3: #ffffff;
+  --background-4: hsl(225, 20%, 96%);
   --light-dark: #ffffff;
   --dark-light: #000000;
   --dark-light-secondary: #1a1a1a;
@@ -27,6 +28,7 @@
   --background: #0a0e13;
   --background-secondary: #12161c;
   --background-3: #0a0e13;
+  --background-4: #1c222b;
   --light-dark: #000000;
   --dark-light: #ffffff;
   --dark-light-secondary: #e0e0e0;
@@ -146,6 +148,7 @@ section {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: var(--gray) !important;
 }
 
 .card-title {
@@ -557,6 +560,10 @@ header {
   width: 30%;
 }
 
+.btn-genre {
+  background-color: var(--background-4) !important;
+}
+
 .btn-genre,
 .company-name {
   background-color: var(--background);
@@ -569,7 +576,7 @@ header {
 .btn-genre:focus {
   background-color: var(--background) !important;
   color: var(--blue-secondary) !important;
-  border: 1px solid var(--blue-secondary);
+  border: 1px solid var(--border) !important;
 }
 
 .credit-poster {
