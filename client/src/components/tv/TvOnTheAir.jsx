@@ -27,7 +27,7 @@ function TvOnTheAir() {
     <Container>
       <div className="d-flex justify-content-between align-items-baseline mb-3">
         <p className="h5 text m-0">TV Shows On The Air</p>
-        <Link to="/tv-on-the-air" className="btn-link">
+        <Link to="/tv-shows/on-the-air" className="btn-link">
           <small>Explore</small>
         </Link>
       </div>
@@ -51,7 +51,7 @@ function TvOnTheAir() {
                       </small>
                     </div>
                     <div className="title-wrapper">
-                      <Link to={`/tv/${show.id}`} className="card-title text">
+                      <Link to={`/tv-shows/${show.id}`} className="card-title text">
                         {show.name}
                       </Link>
                     </div>

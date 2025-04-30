@@ -65,25 +65,25 @@ function App() {
 
           {/* MOVIES */}
           <Route path="/movies" element={<Movies.Index />} />
-          <Route path="/upcoming-movie" element={<Movies.Upcoming />} />
-          <Route path="/trending-movies" element={<Movies.Trending />} />
-          <Route path="/popular-movies" element={<Movies.Popular />} />
-          <Route path="/movie-genre/:genreId" element={<Movies.ByGenre />} />
-          <Route path="/movie/:id" element={<Movies.Single />} />
+          <Route path="/movies/upcoming" element={<Movies.Upcoming />} />
+          <Route path="/movies/trending" element={<Movies.Trending />} />
+          <Route path="/movies/popular" element={<Movies.Popular />} />
+          <Route path="/movies/genre/:genreId" element={<Movies.ByGenre />} />
+          <Route path="/movies/:id" element={<Movies.Single />} />
 
           {/* TV SHOWS */}
-          <Route path="/tvshow" element={<TvShows.Index />} />
-          <Route path="/trending-tv-shows" element={<TvShows.Trending />} />
-          <Route path="/popular-tv-shows" element={<TvShows.Popular />} />
-          <Route path="/top-rated-tv" element={<TvShows.TopRated />} />
-          <Route path="/tv-airing-today" element={<TvShows.AiringToday />} />
-          <Route path="/tv-on-the-air" element={<TvShows.OnTheAir />} />
-          <Route path="/tv-genre/:genreId" element={<TvShows.ByGenre />} />
-          <Route path="/tv/:id" element={<TvShows.Single />} />
+          <Route path="/tv-shows" element={<TvShows.Index />} />
+          <Route path="/tv-shows/trending" element={<TvShows.Trending />} />
+          <Route path="/tv-shows/popular" element={<TvShows.Popular />} />
+          <Route path="/tv-shows/top-rated" element={<TvShows.TopRated />} />
+          <Route path="/tv-shows/airing-today" element={<TvShows.AiringToday />} />
+          <Route path="/tv-shows/on-the-air" element={<TvShows.OnTheAir />} />
+          <Route path="/tv-shows/genre/:genreId" element={<TvShows.ByGenre />} />
+          <Route path="/tv-shows/:id" element={<TvShows.Single />} />
 
           {/* PEOPLE */}
-          <Route path="/popular-people" element={<People.Popular />} />
-          <Route path="/person/:personId" element={<People.Person />} />
+          <Route path="/people/popular" element={<People.Popular />} />
+          <Route path="/people/:personId" element={<People.Person />} />
 
           {/* 404 */}
           <Route path="*" element={<NotFound />} />

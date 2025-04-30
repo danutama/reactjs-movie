@@ -27,7 +27,7 @@ function TrendingMovies() {
     <Container>
       <div className="d-flex justify-content-between align-items-baseline mb-3">
         <p className="h5 text m-0">Trending Movies</p>
-        <Link to="/trending-movies" className="btn-link">
+        <Link to="/movies/trending" className="btn-link">
           <small>Explore</small>
         </Link>
       </div>
@@ -51,7 +51,7 @@ function TrendingMovies() {
                       </small>
                     </div>
                     <div className="title-wrapper">
-                      <Link to={`/movie/${movie.id}`} className="card-title text">
+                      <Link to={`/movies/${movie.id}`} className="card-title text">
                         {movie.title}
                       </Link>
                     </div>

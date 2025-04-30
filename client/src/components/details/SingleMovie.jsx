@@ -126,7 +126,7 @@ function SingleMovie() {
             {hasGenres && (
               <div className="d-sm-flex gap-1 mt-3">
                 {movie.genres.map((genre) => (
-                  <Link key={genre.id} to={`/movie-genre/${genre.id}`} className="btn btn-sm btn-genre fw-normal text rounded-5 py-1 px-3 mb-sm-0 mb-1 me-sm-0 me-1">
+                  <Link key={genre.id} to={`/movies/genre/${genre.id}`} className="btn btn-sm btn-genre fw-normal text rounded-5 py-1 px-3 mb-sm-0 mb-1 me-sm-0 me-1">
                     {genre.name}
                   </Link>
                 ))}

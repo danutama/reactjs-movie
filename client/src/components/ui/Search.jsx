@@ -147,11 +147,11 @@ const Search = ({ show, onClose }) => {
                     let linkTo = '';
 
                     if (result.media_type === 'movie') {
-                      linkTo = `/movie/${result.id}`;
+                      linkTo = `/movies/${result.id}`;
                     } else if (result.media_type === 'tv') {
-                      linkTo = `/tv/${result.id}`;
+                      linkTo = `/tv-shows/${result.id}`;
                     } else if (result.media_type === 'person') {
-                      linkTo = `/person/${result.id}`;
+                      linkTo = `/people/${result.id}`;
                     } else if (result.media_type === 'keyword') {
                       linkTo = `/keyword/${result.id}`;
                     }

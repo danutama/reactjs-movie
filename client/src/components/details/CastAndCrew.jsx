@@ -84,7 +84,7 @@ const CastAndCrew = ({ credits, creators }) => {
               </LazyLoad>
               <div className="card-body">
                 <div className="title-wrapper">
-                  <Link to={`/person/${person.id}`} className="btn-link">
+                  <Link to={`/people/${person.id}`} className="btn-link">
                     {person.name || '-'}
                   </Link>
                 </div>

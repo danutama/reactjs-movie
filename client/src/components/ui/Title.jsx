@@ -17,57 +17,43 @@ const Title = () => {
     return 'Good evening';
   };
 
-  // Menentukan judul berdasarkan path
   const getPageTitle = () => {
-    switch (true) {
-      case path === '/':
-        return getGreeting();
-      case path === '/popular-people':
-        return 'Popular People';
-      case path === '/movies':
-        return 'Movies';
-      case path === '/upcoming-movie':
-        return 'Upcoming Movies';
-      case path === '/trending-movies':
-        return 'Trending Movies';
-      case path === '/popular-movies':
-        return 'Popular Movies';
-      // ================ TV ================= //
-      case path === '/tvshow':
-        return 'TV Shows';
-      case path === '/trending-tv-shows':
-        return 'Trending TV Shows';
-      case path === '/popular-tv-shows':
-        return 'Popular TV Shows';
-      case path === '/top-rated-tv':
-        return 'Top Rated TV Shows';
-      case path === '/tv-on-the-air':
-        return 'TV Shows On The Air';
-      case path === '/tv-airing-today':
-        return 'TV Shows Airing Today';
-      // ================ TV ================= //
-      case path.startsWith('/movie/'):
-        return 'Movie Details';
-      case path.startsWith('/tv/'):
-        return 'TV Details';
-      case path.startsWith('/person/'):
-        return 'Person';
-      case path.startsWith('/movie-genre/'):
-        return `Movie ${genreName || ''}`;
-      case path.startsWith('/tv-genre/'):
-        return `TV ${genreName || ''}`;
-      default:
-        return 'React Movie';
-    }
+    const staticTitles = {
+      '/': getGreeting(),
+      '/movies': 'Movies',
+      '/movies/upcoming': 'Upcoming Movies',
+      '/movies/trending': 'Trending Movies',
+      '/movies/popular': 'Popular Movies',
+      '/tv-shows': 'TV Shows',
+      '/tv-shows/trending': 'Trending TV Shows',
+      '/tv-shows/popular': 'Popular TV Shows',
+      '/tv-shows/top-rated': 'Top Rated TV Shows',
+      '/tv-shows/on-the-air': 'TV Shows On The Air',
+      '/tv-shows/airing-today': 'TV Shows Airing Today',
+      '/people/popular': 'Popular People',
+    };
+
+    if (staticTitles[path]) return staticTitles[path];
+
+    if (path.startsWith('/movies/genre/')) return `Movie ${genreName || ''}`;
+    if (path.startsWith('/movies/')) return 'Movie Details';
+
+    if (path.startsWith('/tv-shows/genre/')) return `TV ${genreName || ''}`;
+    if (path.startsWith('/tv-shows/')) return 'TV Show Details';
+
+    if (path.startsWith('/people/')) return 'Person';
+
+    return 'React Movie';
   };
 
   useEffect(() => {
     const fetchGenreName = async () => {
-      const genreId = path.split('/')[2];
+      const segments = path.split('/');
+      const genreId = segments[3];
+
       if (genreId) {
         try {
-          const genres = path.startsWith('/movie-genre/') ? await fetchGenres() : await fetchTVGenres();
-
+          const genres = path.includes('/movies/genre/') ? await fetchGenres() : await fetchTVGenres();
           const genre = genres.find((g) => g.id === parseInt(genreId, 10));
           setGenreName(genre ? genre.name : '');
         } catch (error) {
@@ -77,7 +63,7 @@ const Title = () => {
       }
     };
 
-    if (path.startsWith('/movie-genre/') || path.startsWith('/tv-genre/')) {
+    if (path.startsWith('/movies/genre/') || path.startsWith('/tv-shows/genre/')) {
       fetchGenreName();
     } else {
       setGenreName('');

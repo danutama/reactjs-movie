@@ -128,7 +128,7 @@ const MovieByGenre = () => {
                       </small>
                     </div>
                     <div className="title-wrapper">
-                      <Link to={`/movie/${movie.id}`} className="card-title text">
+                      <Link to={`/movies/${movie.id}`} className="card-title text">
                         {movie.title}
                       </Link>
                     </div>

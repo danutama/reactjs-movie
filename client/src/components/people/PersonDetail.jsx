@@ -170,7 +170,7 @@ const PersonDetail = ({ personId }) => {
                       </LazyLoad>
                       <div className="w-100">
                         <div className="mb-2">
-                          <Link to={`/movie/${credit.id}`} className="person-credit-link text fw-normal">
+                          <Link to={`/movies/${credit.id}`} className="person-credit-link text fw-normal">
                             {credit.title || credit.name} <span className="text-secondary">as</span> {credit.job || credit.character || '-'}
                           </Link>
                         </div>
@@ -209,7 +209,7 @@ const PersonDetail = ({ personId }) => {
                       </LazyLoad>
                       <div className="w-100">
                         <div className="mb-2">
-                          <Link to={`/tv/${credit.id}`} className="person-credit-link text fw-normal">
+                          <Link to={`/tv-shows/${credit.id}`} className="person-credit-link text fw-normal">
                             {credit.name || credit.title} <span className="text-secondary">as</span> {credit.job || credit.character || '-'}
                           </Link>
                         </div>

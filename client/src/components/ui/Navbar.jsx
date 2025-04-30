@@ -8,6 +8,11 @@ const Navbar = () => {
   const location = useLocation();
   const { pathname } = location;
 
+  const isActive = (base) => {
+    const isDetailPage = /^\/movies\/\d+$/.test(pathname) || /^\/tv-shows\/\d+$/.test(pathname) || /^\/people\/\d+$/.test(pathname);
+    return pathname.startsWith(base) && !isDetailPage;
+  };
+
   const createRipple = (event) => {
     const button = event.currentTarget;
 
@@ -21,10 +26,7 @@ const Navbar = () => {
     circle.classList.add('ripple');
 
     const ripple = button.getElementsByClassName('ripple')[0];
-
-    if (ripple) {
-      ripple.remove();
-    }
+    if (ripple) ripple.remove();
 
     button.appendChild(circle);
   };
@@ -42,7 +44,7 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="nav-link-wrapper" onClick={createRipple}>
-          <Link to="/movies" className={`nav-item ${pathname === '/movies' ? 'active' : ''}`}>
+          <Link to="/movies" className={`nav-item ${isActive('/movies') ? 'active' : ''}`}>
             <div className="nav-btn">
               <BiSolidMovie className="fill" />
               <BiMovie className="outline" />
@@ -51,7 +53,7 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="nav-link-wrapper" onClick={createRipple}>
-          <Link to="/tvshow" className={`nav-item ${pathname === '/tvshow' ? 'active' : ''}`}>
+          <Link to="/tv-shows" className={`nav-item ${isActive('/tv-shows') ? 'active' : ''}`}>
             <div className="nav-btn">
               <BiSolidTv className="fill" />
               <BiTv className="outline" />
@@ -60,7 +62,7 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="nav-link-wrapper" onClick={createRipple}>
-          <Link to="/popular-people" className={`nav-item ${pathname === '/popular-people' ? 'active' : ''}`}>
+          <Link to="/people/popular" className={`nav-item ${isActive('/people') ? 'active' : ''}`}>
             <div className="nav-btn">
               <HiUserGroup className="fill" />
               <HiOutlineUserGroup className="outline" />

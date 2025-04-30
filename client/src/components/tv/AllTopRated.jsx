@@ -116,7 +116,7 @@ const AllTopRated = () => {
                       </small>
                     </div>
                     <div className="title-wrapper">
-                      <Link to={`/tv/${show.id}`} className="card-title text">
+                      <Link to={`/tv-shows/${show.id}`} className="card-title text">
                         {show.name}
                       </Link>
                     </div>

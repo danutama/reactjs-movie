@@ -27,7 +27,7 @@ function PopularMovies() {
     <Container>
       <div className="d-flex justify-content-between align-items-baseline mb-3">
         <p className="h5 text m-0">Popular Movies</p>
-        <Link to="/popular-movies" className="btn-link">
+        <Link to="/movies/popular" className="btn-link">
           <small>Explore</small>
         </Link>
       </div>
@@ -51,7 +51,7 @@ function PopularMovies() {
                       </small>
                     </div>
                     <div className="title-wrapper">
-                      <Link to={`/movie/${movie.id}`} className="card-title text">
+                      <Link to={`/movies/${movie.id}`} className="card-title text">
                         {movie.title}
                       </Link>
                     </div>

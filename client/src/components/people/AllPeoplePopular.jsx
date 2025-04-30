@@ -101,7 +101,7 @@ const AllPeoplePopular = () => {
                   </LazyLoad>
                   <div className="card-body pb-4">
                     <div className="title-wrapper">
-                      <Link to={`/person/${person.id}`} className="card-title text">
+                      <Link to={`/people/${person.id}`} className="card-title text">
                         {person.name}
                       </Link>
                     </div>

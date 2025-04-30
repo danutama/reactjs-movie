@@ -128,7 +128,7 @@ function SingleTvShow() {
             {hasTvGenre && (
               <div className="d-sm-flex gap-1 mt-3">
                 {tvShow.genres.map((genre) => (
-                  <Link key={genre.id} to={`/tv-genre/${genre.id}`} className="btn btn-sm btn-genre fw-normal text rounded-5 py-1 px-3 mb-sm-0 mb-1 me-sm-0 me-1">
+                  <Link key={genre.id} to={`/tv-shows/genre/${genre.id}`} className="btn btn-sm btn-genre fw-normal text rounded-5 py-1 px-3 mb-sm-0 mb-1 me-sm-0 me-1">
                     {genre.name}
                   </Link>
                 ))}
