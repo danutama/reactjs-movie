@@ -13,7 +13,6 @@ const MovieByGenre = () => {
   const { genreId } = useParams();
   const navigate = useNavigate();
   const [movies, setMovies] = useState([]);
-  const [genres, setGenres] = useState([]);
   const [genreName, setGenreName] = useState('');
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -32,7 +31,6 @@ const MovieByGenre = () => {
 
         const uniqueMovies = Array.from(new Map(movieData.map((movie) => [movie.id, movie])).values());
 
-        setGenres(genreData);
         setMovies(uniqueMovies);
         setLoading(false);
         setHasMore(movieData.length > 0);

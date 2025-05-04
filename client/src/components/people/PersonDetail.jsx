@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { fetchPersonById, fetchGenres, fetchPersonMovieCredits, fetchPersonTVCredits } from '../../service/api';
-import GenreList from '../../utils/Genre';
+import { fetchPersonById, fetchPersonMovieCredits, fetchPersonTVCredits } from '../../service/api';
 import Container from '../ui/Container';
 import SpinnerCustom from '../ui/SpinnerCustom';
 import { formatFullDate, formatDate, formatVoteAverage } from '../../utils/Helper';
@@ -14,7 +13,6 @@ const PersonDetail = ({ personId }) => {
   const [person, setPerson] = useState(null);
   const [movieCredits, setMovieCredits] = useState([]);
   const [tvCredits, setTvCredits] = useState([]);
-  const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showFullBiography, setShowFullBiography] = useState(false);
   const navigate = useNavigate();
@@ -30,9 +28,7 @@ const PersonDetail = ({ personId }) => {
           return;
         }
 
-        const genreData = await fetchGenres();
         setPerson(personData);
-        setGenres(genreData);
 
         const movieCreditsData = await fetchPersonMovieCredits(personId);
         const tvCreditsData = await fetchPersonTVCredits(personId);
@@ -181,9 +177,6 @@ const PersonDetail = ({ personId }) => {
                             {formatVoteAverage(credit.vote_average)}
                           </small>
                         </div>
-                        <small className="d-sm-block d-none mt-2">
-                          <GenreList genreIds={credit.genre_ids} genres={genres} />
-                        </small>
                       </div>
                     </div>
                     <div className="hr d-sm-none"></div>
@@ -220,9 +213,6 @@ const PersonDetail = ({ personId }) => {
                             {formatVoteAverage(credit.vote_average)}
                           </small>
                         </div>
-                        <small className="d-sm-block d-none mt-2">
-                          <GenreList genreIds={credit.genre_ids} genres={genres} />
-                        </small>
                       </div>
                     </div>
                     <div className="hr d-sm-none"></div>

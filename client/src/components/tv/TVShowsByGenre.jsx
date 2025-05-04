@@ -13,7 +13,6 @@ const TVShowsByGenre = () => {
   const { genreId } = useParams();
   const navigate = useNavigate();
   const [tvShows, setTVShows] = useState([]);
-  const [genres, setGenres] = useState([]);
   const [genreName, setGenreName] = useState('');
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -24,20 +23,19 @@ const TVShowsByGenre = () => {
       try {
         const [genreData, tvShowData] = await Promise.all([fetchTVGenres(), fetchTVShowsByGenre(genreId, page)]);
 
-        if (!genreData.find((genre) => genre.id === parseInt(genreId, 10))) {
+        const currentGenre = genreData.find((genre) => genre.id === parseInt(genreId, 10));
+        if (!currentGenre) {
           navigate('/404');
           return;
         }
 
         const uniqueTVShows = Array.from(new Map(tvShowData.map((show) => [show.id, show])).values());
 
-        setGenres(genreData);
         setTVShows(uniqueTVShows);
         setLoading(false);
         setHasMore(tvShowData.length > 0);
 
-        const currentGenre = genreData.find((genre) => genre.id === parseInt(genreId, 10));
-        const name = currentGenre ? currentGenre.name : '';
+        const name = currentGenre.name;
         setGenreName(name);
 
         document.title = name ? `React TV Shows | ${name}` : 'React TV Shows';

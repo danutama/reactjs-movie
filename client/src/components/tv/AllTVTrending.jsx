@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { fetchTrendingTVShows, fetchTVGenres } from '../../service/api';
+import { fetchTrendingTVShows } from '../../service/api';
 import Container from '../ui/Container';
 import Card from '../ui/Card';
 import ButtonSeeMore from '../ui/ButtonSeeMore';
@@ -11,29 +11,25 @@ import { FaStar } from 'react-icons/fa';
 
 const AllTVTrending = () => {
   const [tvShows, setTVShows] = useState([]);
-  const [genres, setGenres] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
 
   const storageKeyPrefix = 'trendingTV';
   const tvShowsKey = `${storageKeyPrefix}Shows`;
-  const genresKey = `${storageKeyPrefix}Genres`;
   const pageKey = `${storageKeyPrefix}Page`;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [genreData, tvData] = await Promise.all([fetchTVGenres(), fetchTrendingTVShows(page)]);
+        const tvData = await fetchTrendingTVShows(page);
         const uniqueTVShows = Array.from(new Map(tvData.map((show) => [show.id, show])).values());
 
-        setGenres(genreData);
         setTVShows(uniqueTVShows);
         setLoading(false);
         setHasMore(tvData.length > 0);
 
         sessionStorage.setItem(tvShowsKey, JSON.stringify(uniqueTVShows));
-        sessionStorage.setItem(genresKey, JSON.stringify(genreData));
         sessionStorage.setItem(pageKey, page.toString());
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -41,12 +37,10 @@ const AllTVTrending = () => {
     };
 
     const savedTVShows = sessionStorage.getItem(tvShowsKey);
-    const savedGenres = sessionStorage.getItem(genresKey);
     const savedPage = sessionStorage.getItem(pageKey);
 
-    if (savedTVShows && savedGenres) {
+    if (savedTVShows) {
       setTVShows(JSON.parse(savedTVShows));
-      setGenres(JSON.parse(savedGenres));
       setPage(Number(savedPage));
       setLoading(false);
     } else {

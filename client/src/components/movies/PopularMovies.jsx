@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { fetchPopularMovies, fetchGenres } from '../../service/api';
+import { fetchPopularMovies } from '../../service/api';
 import Container from '../ui/Container';
 import Card from '../ui/Card';
 import Skeleton from '../ui/Skeleton';
@@ -10,13 +10,11 @@ import { getYear, formatVoteAverage } from '../../utils/Helper';
 
 function PopularMovies() {
   const [movies, setMovies] = useState([]);
-  const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const [genreData, movieData] = await Promise.all([fetchGenres(), fetchPopularMovies()]);
-      setGenres(genreData);
+      const movieData = await fetchPopularMovies();
       setMovies(movieData);
       setLoading(false);
     };
@@ -36,7 +34,7 @@ function PopularMovies() {
       ) : (
         <div className="overflow-auto scrollbar-custom">
           <div className="d-flex gap-2 justify-content-start">
-            {movies.slice(0).map((movie) => (
+            {movies.map((movie) => (
               <div key={movie.id} className="col-sm-custom col-lg-2 col-md-4 col-6 mb-2">
                 <Card>
                   <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.png" alt="loading" className="card-img-top" />}>

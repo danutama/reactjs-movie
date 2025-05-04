@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { fetchLatestMovies, fetchGenres } from '../../service/api';
+import { fetchLatestMovies } from '../../service/api';
 import Container from '../ui/Container';
 import Card from '../ui/Card';
 import { FaStar } from 'react-icons/fa';
@@ -11,32 +11,26 @@ import SpinnerCustom from '../ui/SpinnerCustom';
 
 const AllLatestMovie = () => {
   const [movies, setMovies] = useState([]);
-  const [genres, setGenres] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
 
-  // Menentukan kunci penyimpanan berdasarkan halaman
   const storageKeyPrefix = 'latest';
   const moviesKey = `${storageKeyPrefix}Movies`;
-  const genresKey = `${storageKeyPrefix}Genres`;
   const pageKey = `${storageKeyPrefix}Page`;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [genreData, movieData] = await Promise.all([fetchGenres(), fetchLatestMovies(page)]);
+        const movieData = await fetchLatestMovies(page);
 
-        // Filter out duplicate movies by ID
         const uniqueMovies = Array.from(new Map(movieData.map((movie) => [movie.id, movie])).values());
 
-        setGenres(genreData);
         setMovies(uniqueMovies);
         setLoading(false);
         setHasMore(movieData.length > 0);
 
         sessionStorage.setItem(moviesKey, JSON.stringify(uniqueMovies));
-        sessionStorage.setItem(genresKey, JSON.stringify(genreData));
         sessionStorage.setItem(pageKey, page.toString());
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -44,19 +38,16 @@ const AllLatestMovie = () => {
     };
 
     const savedMovies = sessionStorage.getItem(moviesKey);
-    const savedGenres = sessionStorage.getItem(genresKey);
     const savedPage = sessionStorage.getItem(pageKey);
 
-    if (savedMovies && savedGenres) {
+    if (savedMovies) {
       setMovies(JSON.parse(savedMovies));
-      setGenres(JSON.parse(savedGenres));
       setPage(Number(savedPage));
       setLoading(false);
     } else {
       fetchData();
     }
 
-    // Simpan posisi scroll
     const saveScrollPos = () => {
       sessionStorage.setItem('scrollPosition', window.scrollY.toString());
     };
