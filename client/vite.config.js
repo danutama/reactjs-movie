@@ -18,7 +18,7 @@ export default defineConfig({
       manifest: {
         name: 'Dibimovie',
         short_name: 'Dibimovie',
-        description: 'A Progressive Web App for browsing and discovering movies or TV shows. Built with React, Vite, and powered by the TMDB API. Created with love by danutama.github.io',
+        description: 'A PWA for browsing and discovering movies or TV shows.',
         theme_color: '#ffffff',
         display: 'standalone',
         scope: '/',
@@ -48,5 +48,9 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:5001',
     },
+  },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
   },
 });
