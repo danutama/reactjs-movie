@@ -3,9 +3,9 @@ const axios = require('axios');
 require('dotenv').config();
 
 const app = express();
-const PORT = 5001;
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 const API_KEY = process.env.TMDB_API_KEY;
+app.use(express.json());
 
 // MOVIE TRAILER
 app.get('/api/movie-trailer/:id', async (req, res) => {
@@ -464,43 +464,13 @@ app.get('/api/tv/:id/external_ids', async (req, res) => {
   }
 });
 
-// FETCH TV SEASON BY ID
-app.get('/api/tv/:tvId/season/:seasonId', async (req, res) => {
-  try {
-    const { tvId, seasonId } = req.params;
-    const response = await axios.get(`${API_BASE_URL}/tv/${tvId}/season/${seasonId}`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-      },
-    });
+// LOCAL
+if (require.main === module) {
+  const PORT = process.env.PORT || 5001;
+  app.listen(PORT, () => {
+    console.log(`Server running locally at http://localhost:${PORT}`);
+  });
+}
 
-    res.json(response.data);
-  } catch (error) {
-    console.error(`Error fetching TV season data for TV ID ${tvId} and Season ID ${seasonId}:`, error);
-    res.status(500).json({ error: `Error fetching TV season data for TV ID ${tvId} and Season ID ${seasonId}` });
-  }
-});
-
-// FETCH TV EPISODE BY ID
-app.get('/api/tv/:tvId/season/:seasonId/episode/:episodeId', async (req, res) => {
-  try {
-    const { tvId, seasonId, episodeId } = req.params;
-    const response = await axios.get(`${API_BASE_URL}/tv/${tvId}/season/${seasonId}/episode/${episodeId}`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-      },
-    });
-
-    res.json(response.data);
-  } catch (error) {
-    console.error(`Error fetching TV episode data for TV ID ${tvId}, Season ID ${seasonId}, and Episode ID ${episodeId}:`, error);
-    res.status(500).json({ error: `Error fetching TV episode data for TV ID ${tvId}, Season ID ${seasonId}, and Episode ID ${episodeId}` });
-  }
-});
-
-// SERVER
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// VERCEL
+module.exports = app;
