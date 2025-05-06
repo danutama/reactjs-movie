@@ -7,460 +7,254 @@ const API_BASE_URL = 'https://api.themoviedb.org/3';
 const API_KEY = process.env.TMDB_API_KEY;
 app.use(express.json());
 
-// MOVIE TRAILER
+const fetchFromTMDB = async (endpoint, params = {}) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}${endpoint}`, {
+      params: {
+        api_key: API_KEY,
+        language: 'en-US',
+        ...params,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching ${endpoint}:`, error.message);
+    throw error;
+  }
+};
+
+// Middleware to handle default page query
+const withPage = (req, res, next) => {
+  req.query.page = req.query.page || 1;
+  next();
+};
+
+// Routes
 app.get('/api/movie-trailer/:id', async (req, res) => {
-  const { id } = req.params;
   try {
-    const response = await axios.get(`${API_BASE_URL}/movie/${id}/videos`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-      },
-    });
-
-    const trailers = response.data.results;
-    res.json(trailers.length > 0 ? trailers : []);
-  } catch (error) {
-    console.error('Error fetching trailer:', error.message);
+    const data = await fetchFromTMDB(`/movie/${req.params.id}/videos`);
+    res.json(data.results || []);
+  } catch {
     res.json([]);
   }
 });
 
-// TV TRAILER
 app.get('/api/tv-trailer/:id', async (req, res) => {
-  const { id } = req.params;
-
   try {
-    const response = await axios.get(`${API_BASE_URL}/tv/${id}/videos`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-      },
-    });
-
-    const trailers = response.data.results || [];
-    const filtered = trailers.filter((video) => video.site === 'YouTube' && video.official === true && (video.type === 'Trailer' || video.type === 'Teaser')).sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
-
+    const data = await fetchFromTMDB(`/tv/${req.params.id}/videos`);
+    const filtered = (data.results || []).filter((video) => video.site === 'YouTube' && video.official && ['Trailer', 'Teaser'].includes(video.type)).sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
     res.json(filtered);
-  } catch (error) {
-    console.error('Error fetching TV show trailer:', error.message);
+  } catch {
     res.json([]);
   }
 });
 
-// GENRE MOVIE
 app.get('/api/movie-genres', async (req, res) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/genre/movie/list`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-      },
-    });
-    res.json(response.data.genres);
-  } catch (error) {
-    console.error('Error fetching genres:', error);
+    const data = await fetchFromTMDB('/genre/movie/list');
+    res.json(data.genres);
+  } catch {
     res.status(500).json({ error: 'Error fetching genres' });
   }
 });
 
-// GENRE TV
 app.get('/api/tv-genres', async (req, res) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/genre/tv/list`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-      },
-    });
-    res.json(response.data.genres);
-  } catch (error) {
-    console.error('Error fetching TV genres:', error);
+    const data = await fetchFromTMDB('/genre/tv/list');
+    res.json(data.genres);
+  } catch {
     res.status(500).json({ error: 'Error fetching TV genres' });
   }
 });
 
-// FETCH MOVIES BY GENRE
-app.get('/api/movies/genre/:genreId', async (req, res) => {
+app.get('/api/movies/genre/:genreId', withPage, async (req, res) => {
   try {
-    const { genreId } = req.params;
-    const { page = 1 } = req.query;
-
-    const response = await axios.get(`${API_BASE_URL}/discover/movie`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-        sort_by: 'popularity.desc',
-        include_video: false,
-        page,
-        with_genres: genreId,
-      },
+    const data = await fetchFromTMDB('/discover/movie', {
+      sort_by: 'popularity.desc',
+      include_video: false,
+      page: req.query.page,
+      with_genres: req.params.genreId,
     });
-
-    res.json(response.data.results);
-  } catch (error) {
-    console.error(`Error fetching movies for genre ID ${genreId}:`, error);
-    res.status(500).json({ error: `Error fetching movies for genre ID ${genreId}` });
+    res.json(data.results);
+  } catch {
+    res.status(500).json({ error: `Error fetching movies for genre ID ${req.params.genreId}` });
   }
 });
 
-// FETCH TV SHOWS BY GENRE
-app.get('/api/tvshows/genre/:genreId', async (req, res) => {
+app.get('/api/tvshows/genre/:genreId', withPage, async (req, res) => {
   try {
-    const { genreId } = req.params;
-    const { page = 1 } = req.query;
-
-    const response = await axios.get(`${API_BASE_URL}/discover/tv`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-        sort_by: 'popularity.desc',
-        include_video: false,
-        page,
-        with_genres: genreId,
-      },
+    const data = await fetchFromTMDB('/discover/tv', {
+      sort_by: 'popularity.desc',
+      include_video: false,
+      page: req.query.page,
+      with_genres: req.params.genreId,
     });
-
-    res.json(response.data.results);
-  } catch (error) {
-    console.error(`Error fetching TV shows for genre ID ${genreId}:`, error);
-    res.status(500).json({ error: `Error fetching TV shows for genre ID ${genreId}` });
+    res.json(data.results);
+  } catch {
+    res.status(500).json({ error: `Error fetching TV shows for genre ID ${req.params.genreId}` });
   }
 });
 
-// UPCOMING/LATEST MOVIE
-app.get('/api/upcoming-movies', async (req, res) => {
+app.get('/api/upcoming-movies', withPage, async (req, res) => {
   try {
-    const { page = 1 } = req.query;
-    const response = await axios.get(`${API_BASE_URL}/movie/upcoming`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-        page,
-      },
-    });
-
-    res.json(response.data.results);
-  } catch (error) {
-    console.error('Error fetching upcoming movies:', error);
+    const data = await fetchFromTMDB('/movie/upcoming', { page: req.query.page });
+    res.json(data.results);
+  } catch {
     res.status(500).json({ error: 'Error fetching upcoming movies' });
   }
 });
 
-// POPULAR MOVIES
-app.get('/api/popular-movies', async (req, res) => {
+app.get('/api/popular-movies', withPage, async (req, res) => {
   try {
-    const { page = 1 } = req.query;
-    const response = await axios.get(`${API_BASE_URL}/movie/popular`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-        page,
-      },
-    });
-
-    res.json(response.data.results);
-  } catch (error) {
-    console.error('Error fetching popular movies:', error);
+    const data = await fetchFromTMDB('/movie/popular', { page: req.query.page });
+    res.json(data.results);
+  } catch {
     res.status(500).json({ error: 'Error fetching popular movies' });
   }
 });
 
-// TRENDING MOVIES
-app.get('/api/trending-movies', async (req, res) => {
+app.get('/api/trending-movies', withPage, async (req, res) => {
   try {
-    const { page = 1 } = req.query;
-    const response = await axios.get(`${API_BASE_URL}/trending/movie/week`, {
-      params: {
-        api_key: API_KEY,
-        page,
-      },
-    });
-
-    res.json(response.data.results);
-  } catch (error) {
-    console.error('Error fetching trending movies:', error);
+    const data = await fetchFromTMDB('/trending/movie/week', { page: req.query.page });
+    res.json(data.results);
+  } catch {
     res.status(500).json({ error: 'Error fetching trending movies' });
   }
 });
 
-// DETAIL MOVIE
 app.get('/api/movie/:id', async (req, res) => {
   try {
-    const { id } = req.params;
-    const response = await axios.get(`${API_BASE_URL}/movie/${id}`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-      },
-    });
-
-    res.json(response.data);
-  } catch (error) {
-    console.error(`Error fetching movie details for ID ${id}:`, error);
-    res.status(500).json({ error: `Error fetching movie details for ID ${id}` });
+    const data = await fetchFromTMDB(`/movie/${req.params.id}`);
+    res.json(data);
+  } catch {
+    res.status(500).json({ error: `Error fetching movie details for ID ${req.params.id}` });
   }
 });
 
-// CAST AND CREW
 app.get('/api/movie/:id/credits', async (req, res) => {
   try {
-    const { id } = req.params;
-    const response = await axios.get(`${API_BASE_URL}/movie/${id}/credits`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-      },
-    });
-
-    res.json(response.data);
-  } catch (error) {
-    console.error('Error fetching movie credits:', error);
+    const data = await fetchFromTMDB(`/movie/${req.params.id}/credits`);
+    res.json(data);
+  } catch {
     res.status(500).json({ error: 'Error fetching movie credits' });
   }
 });
 
-// POPULAR PEOPLE
-app.get('/api/popular-people', async (req, res) => {
+app.get('/api/popular-people', withPage, async (req, res) => {
   try {
-    const { page = 1 } = req.query;
-    const response = await axios.get(`${API_BASE_URL}/person/popular`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-        page,
-      },
-    });
-    res.json(response.data.results);
-  } catch (error) {
-    console.error('Error fetching popular people:', error);
+    const data = await fetchFromTMDB('/person/popular', { page: req.query.page });
+    res.json(data.results);
+  } catch {
     res.status(500).json({ error: 'Error fetching popular people' });
   }
 });
 
-// PERSON
 app.get('/api/person/:id', async (req, res) => {
   try {
-    const { id } = req.params;
-
-    if (!id) {
-      return res.status(400).json({ error: 'Person ID is required' });
-    }
-
-    const response = await axios.get(`${API_BASE_URL}/person/${id}`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-      },
-    });
-
-    res.json(response.data);
-  } catch (error) {
-    console.error(`Error fetching person details for ID ${req.params.id}:`, error);
+    if (!req.params.id) return res.status(400).json({ error: 'Person ID is required' });
+    const data = await fetchFromTMDB(`/person/${req.params.id}`);
+    res.json(data);
+  } catch {
     res.status(500).json({ error: 'Error fetching person details' });
   }
 });
 
-// MOVIE CREDITS FOR A PERSON
 app.get('/api/person/:id/movie-credits', async (req, res) => {
   try {
-    const { id } = req.params;
-    const response = await axios.get(`${API_BASE_URL}/person/${id}/movie_credits`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-      },
-    });
-
-    res.json(response.data);
-  } catch (error) {
-    console.error(`Error fetching movie credits for person ID ${id}:`, error);
-    res.status(500).json({ error: `Error fetching movie credits for person ID ${id}` });
+    const data = await fetchFromTMDB(`/person/${req.params.id}/movie_credits`);
+    res.json(data);
+  } catch {
+    res.status(500).json({ error: `Error fetching movie credits for person ID ${req.params.id}` });
   }
 });
 
-// TV SHOW CREDITS FOR A PERSON
 app.get('/api/person/:id/tv-credits', async (req, res) => {
   try {
-    const { id } = req.params;
-    const response = await axios.get(`${API_BASE_URL}/person/${id}/tv_credits`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-      },
-    });
-
-    res.json(response.data);
-  } catch (error) {
-    console.error(`Error fetching TV show credits for person ID ${id}:`, error);
-    res.status(500).json({ error: `Error fetching TV show credits for person ID ${id}` });
+    const data = await fetchFromTMDB(`/person/${req.params.id}/tv_credits`);
+    res.json(data);
+  } catch {
+    res.status(500).json({ error: `Error fetching TV show credits for person ID ${req.params.id}` });
   }
 });
 
-// SEARCHING
 app.get('/api/search', async (req, res) => {
   try {
-    const { query } = req.query;
-    const response = await axios.get(`${API_BASE_URL}/search/multi`, {
-      params: {
-        api_key: API_KEY,
-        query,
-        language: 'en-US',
-      },
-    });
-
-    res.json(response.data);
-  } catch (error) {
-    console.error('Error searching TMDB:', error);
+    const data = await fetchFromTMDB('/search/multi', { query: req.query.query });
+    res.json(data);
+  } catch {
     res.status(500).json({ error: 'Error searching TMDB' });
   }
 });
 
-// TRENDING TV SHOWS
-app.get('/api/trending-tv', async (req, res) => {
+app.get('/api/trending-tv', withPage, async (req, res) => {
   try {
-    const { page = 1 } = req.query;
-    const response = await axios.get(`${API_BASE_URL}/trending/tv/week`, {
-      params: {
-        api_key: API_KEY,
-        page,
-      },
-    });
-
-    res.json(response.data.results);
-  } catch (error) {
-    console.error('Error fetching trending TV shows:', error);
+    const data = await fetchFromTMDB('/trending/tv/week', { page: req.query.page });
+    res.json(data.results);
+  } catch {
     res.status(500).json({ error: 'Error fetching trending TV shows' });
   }
 });
 
-// TV SHOWS AIRING TODAY
-app.get('/api/tvshows/airing-today', async (req, res) => {
+app.get('/api/tvshows/airing-today', withPage, async (req, res) => {
   try {
-    const { page = 1 } = req.query;
-    const response = await axios.get(`${API_BASE_URL}/tv/airing_today`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-        page,
-      },
-    });
-
-    res.json(response.data.results);
-  } catch (error) {
-    console.error('Error fetching TV shows airing today:', error);
+    const data = await fetchFromTMDB('/tv/airing_today', { page: req.query.page });
+    res.json(data.results);
+  } catch {
     res.status(500).json({ error: 'Error fetching TV shows airing today' });
   }
 });
 
-// TV SHOWS ON THE AIR
-app.get('/api/tvshows/on-the-air', async (req, res) => {
+app.get('/api/tvshows/on-the-air', withPage, async (req, res) => {
   try {
-    const { page = 1 } = req.query;
-    const response = await axios.get(`${API_BASE_URL}/tv/on_the_air`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-        page,
-      },
-    });
-
-    res.json(response.data.results);
-  } catch (error) {
-    console.error('Error fetching TV shows on the air:', error);
+    const data = await fetchFromTMDB('/tv/on_the_air', { page: req.query.page });
+    res.json(data.results);
+  } catch {
     res.status(500).json({ error: 'Error fetching TV shows on the air' });
   }
 });
 
-// POPULAR TV SHOWS
-app.get('/api/tvshows/popular', async (req, res) => {
+app.get('/api/tvshows/popular', withPage, async (req, res) => {
   try {
-    const { page = 1 } = req.query;
-    const response = await axios.get(`${API_BASE_URL}/tv/popular`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-        page,
-      },
-    });
-
-    res.json(response.data.results);
-  } catch (error) {
-    console.error('Error fetching popular TV shows:', error);
+    const data = await fetchFromTMDB('/tv/popular', { page: req.query.page });
+    res.json(data.results);
+  } catch {
     res.status(500).json({ error: 'Error fetching popular TV shows' });
   }
 });
 
-// TOP RATED TV SHOWS
-app.get('/api/tvshows/top-rated', async (req, res) => {
+app.get('/api/tvshows/top-rated', withPage, async (req, res) => {
   try {
-    const { page = 1 } = req.query;
-    const response = await axios.get(`${API_BASE_URL}/tv/top_rated`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-        page,
-      },
-    });
-
-    res.json(response.data.results);
-  } catch (error) {
-    console.error('Error fetching top-rated TV shows:', error);
+    const data = await fetchFromTMDB('/tv/top_rated', { page: req.query.page });
+    res.json(data.results);
+  } catch {
     res.status(500).json({ error: 'Error fetching top-rated TV shows' });
   }
 });
 
-// FETCH TV SHOW BY ID
 app.get('/api/tv/:id', async (req, res) => {
   try {
-    const { id } = req.params;
-    const response = await axios.get(`${API_BASE_URL}/tv/${id}`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-      },
-    });
-
-    res.json(response.data);
-  } catch (error) {
-    console.error('Error fetching TV show data from TMDB:', error);
+    const data = await fetchFromTMDB(`/tv/${req.params.id}`);
+    res.json(data);
+  } catch {
     res.status(500).json({ error: 'Error fetching TV show data from TMDB' });
   }
 });
 
-// FETCH TV SHOW AGGREGAT CREDITS BY ID
 app.get('/api/tv/:id/aggregate_credits', async (req, res) => {
   try {
-    const { id } = req.params;
-    const response = await axios.get(`${API_BASE_URL}/tv/${id}/aggregate_credits`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-      },
-    });
-
-    res.json(response.data);
-  } catch (error) {
-    console.error('Error fetching TV show credits from TMDB:', error);
+    const data = await fetchFromTMDB(`/tv/${req.params.id}/aggregate_credits`);
+    res.json(data);
+  } catch {
     res.status(500).json({ error: 'Error fetching TV show credits from TMDB' });
   }
 });
 
-// FETCH TV EXTERNAL ID BY TV ID
 app.get('/api/tv/:id/external_ids', async (req, res) => {
   try {
-    const { id } = req.params;
-    const response = await axios.get(`${API_BASE_URL}/tv/${id}/external_ids`, {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-      },
-    });
-
-    res.json(response.data);
-  } catch (error) {
-    console.error(`Error fetching external IDs for TV show ID ${id}:`, error);
-    res.status(500).json({ error: `Error fetching external IDs for TV show ID ${id}` });
+    const data = await fetchFromTMDB(`/tv/${req.params.id}/external_ids`);
+    res.json(data);
+  } catch {
+    res.status(500).json({ error: `Error fetching external IDs for TV show ID ${req.params.id}` });
   }
 });
 

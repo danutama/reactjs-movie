@@ -37,8 +37,8 @@ function TvTopRated() {
             {tvShows.map((show) => (
               <div key={show.id} className="col-sm-custom col-lg-2 col-md-4 col-6 mb-2">
                 <Card>
-                  <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.png" alt="loading" className="card-img-top" />}>
-                    <img src={show.poster_path ? `https://image.tmdb.org/t/p/w500${show.poster_path}` : '/default-poster.png'} className="card-img-top" alt={show.name} />
+                  <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.webp" alt="loading" className="card-img-top" />}>
+                    <img src={show.poster_path ? `https://image.tmdb.org/t/p/w500${show.poster_path}` : '/default-poster.webp'} className="card-img-top" alt={show.name} />
                   </LazyLoad>
                   <div className="card-body pb-4">
                     <div className="d-flex justify-content-between align-items-center gap-3 mb-3">

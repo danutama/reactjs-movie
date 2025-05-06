@@ -6,6 +6,7 @@
   --background-secondary: #ffffff;
   --background-3: #ffffff;
   --background-4: hsl(225, 20%, 96%);
+  --background-card: #ffffff;
   --light-dark: #ffffff;
   --dark-light: #000000;
   --dark-light-secondary: #1a1a1a;
@@ -29,6 +30,7 @@
   --background-secondary: #12161c;
   --background-3: #0a0e13;
   --background-4: #1c222b;
+  --background-card: #1c222b;
   --light-dark: #000000;
   --dark-light: #ffffff;
   --dark-light-secondary: #e0e0e0;
@@ -156,7 +158,7 @@ section {
 }
 
 .box-wrapper {
-  background-color: var(--background-secondary) !important;
+  background-color: var(--background-card) !important;
   border: 1px solid var(--border) !important;
 }
 

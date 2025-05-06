@@ -37,7 +37,7 @@ function UpcomingMovie() {
             {movies.map((movie) => (
               <div key={movie.id} className="col-sm-custom col-lg-2 col-md-4 col-6 mb-2">
                 <Card>
-                  <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.png" alt="loading" className="card-img-top" />}>
+                  <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.webp" alt="loading" className="card-img-top" />}>
                     <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} className="card-img-top" alt={movie.title} />
                   </LazyLoad>
                   <div className="card-body pb-4">

@@ -161,8 +161,8 @@ const PersonDetail = ({ personId }) => {
                 movieCredits.map((credit, index) => (
                   <div key={`${credit.id}-movie-${index}`} className="col-lg-4 col-sm-6 my-sm-2 my-0">
                     <div className="d-flex gap-3 justify-content-start align-items-start">
-                      <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.png" alt="loading" className="credit-poster rounded-1" />}>
-                        <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.png'} alt={credit.title || 'Poster'} />
+                      <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.webp" alt="loading" className="credit-poster rounded-1" />}>
+                        <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.webp'} alt={credit.title || 'Poster'} />
                       </LazyLoad>
                       <div className="w-100">
                         <div className="mb-2">
@@ -197,8 +197,8 @@ const PersonDetail = ({ personId }) => {
                 tvCredits.map((credit, index) => (
                   <div key={`${credit.id}-tv-${index}`} className="col-lg-4 col-sm-6 my-sm-2 my-0">
                     <div className="d-flex gap-3 justify-content-start align-items-start">
-                      <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.png" alt="loading" className="credit-poster rounded-1" />}>
-                        <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.png'} alt={credit.name || 'Poster'} />
+                      <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.webp" alt="loading" className="credit-poster rounded-1" />}>
+                        <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.webp'} alt={credit.name || 'Poster'} />
                       </LazyLoad>
                       <div className="w-100">
                         <div className="mb-2">

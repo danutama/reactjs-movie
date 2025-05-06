@@ -86,7 +86,7 @@ function SingleMovie() {
       <div className="row g-3 mb-3">
         <div className={`${hasBackdropImage ? 'col-lg-5' : ''}`}>
           {hasBackdropImage && (
-            <LazyLoad height={200} offset={0} placeholder={<img src="/default-backdrop.png" alt="loading" className="single-image rounded-4 w-100" />}>
+            <LazyLoad height={200} offset={0} placeholder={<img src="/default-backdrop.webp" alt="loading" className="single-image rounded-4 w-100" />}>
               <img src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`} className="single-image rounded-4 w-100" alt={movie.title} />
             </LazyLoad>
           )}
