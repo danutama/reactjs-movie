@@ -27,8 +27,8 @@ const Skeleton = () => {
           <div key={index} className="col-sm-custom col-lg-2 col-md-4 col-6 mb-2">
             <Card>
               <img src="/default-poster.webp" alt="loading" />
-              <div className="card-body pb-4">
-                <div className="skeleton mb-3"></div>
+              <div className="card-body pt-3">
+                <div className="skeleton mb-2"></div>
                 <div className="skeleton"></div>
               </div>
             </Card>

@@ -30,7 +30,7 @@
   --background-secondary: #12161c;
   --background-3: #0a0e13;
   --background-4: #1c222b;
-  --background-card: #1c222b;
+  --background-card: #1b1f26;
   --light-dark: #000000;
   --dark-light: #ffffff;
   --dark-light-secondary: #e0e0e0;
@@ -155,6 +155,11 @@ section {
 
 .card-title {
   font-weight: bold;
+  font-size: .9rem;
+}
+
+.card-body {
+  padding-bottom: 1.2rem;
 }
 
 .box-wrapper {
@@ -176,6 +181,7 @@ section {
 .scrollbar-custom::-webkit-scrollbar-thumb {
   background-color: var(--blue-primary);
   border-radius: 10px;
+  cursor: grab;
 }
 /* --- end --- */
 /* ============== GLOBAL CLASS END ============ */

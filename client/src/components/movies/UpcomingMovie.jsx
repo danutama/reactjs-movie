@@ -40,8 +40,8 @@ function UpcomingMovie() {
                   <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.webp" alt="loading" className="card-img-top" />}>
                     <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} className="card-img-top" alt={movie.title} />
                   </LazyLoad>
-                  <div className="card-body pb-4">
-                    <div className="d-flex justify-content-between align-items-center gap-3 mb-3">
+                  <div className="card-body">
+                    <div className="d-flex justify-content-between align-items-center gap-3 mb-2">
                       <small className="text-secondary">{getYear(movie.release_date)}</small>
                       <small className="text-secondary d-flex align-items-center">
                         <FaStar className="star-icon text-yellow me-1" />

@@ -94,12 +94,12 @@ const AllPeoplePopular = () => {
         <>
           <div className="row g-2">
             {people.map((person) => (
-              <div key={person.id} className="col-lg-2 col-md-4 col-6">
+              <div key={person.id} className="col-lg-2 col-md-3 col-4">
                 <Card>
                   <LazyLoad height={200} offset={100} placeholder={<img src="/profile.png" alt="loading" className="card-img-top" />}>
                     <img src={person.profile_path ? `https://image.tmdb.org/t/p/w500${person.profile_path}` : '/profile.png'} className="card-img-top" alt={person.name} />
                   </LazyLoad>
-                  <div className="card-body pb-4">
+                  <div className="card-body px-2 pb-3">
                     <div className="title-wrapper">
                       <Link to={`/people/${person.id}`} className="card-title text">
                         {person.name}
