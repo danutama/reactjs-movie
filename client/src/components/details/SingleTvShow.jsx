@@ -135,7 +135,7 @@ function SingleTvShow() {
               </div>
             )}
           </div>
-          <h4 className="card-title text lh-base mb-3">{tvShow.name}</h4>
+          <h4 className="text fw-bold lh-base mb-3">{tvShow.name}</h4>
           <p className="card-text text-tertiary lh-lg mb-0">
             {displayedText}
             <ToggleTextButton isLongText={isLongText} showFullOverview={showFullOverview} handleToggleOverview={handleToggleOverview} />
