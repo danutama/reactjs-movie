@@ -4,6 +4,7 @@ import LazyLoad from 'react-lazyload';
 import { fetchTVOnTheAir } from '../../service/api';
 import Container from '../ui/Container';
 import Card from '../ui/Card';
+import SeeMoreCard from '../ui/SeeMoreCard';
 import Skeleton from '../ui/Skeleton';
 import { FaStar } from 'react-icons/fa';
 import { getYear, formatVoteAverage } from '../../utils/Helper';
@@ -57,6 +58,9 @@ function TvOnTheAir() {
                 </Card>
               </div>
             ))}
+            <div className="col-sm-custom col-lg-2 col-md-4 col-6 mb-2">
+              <SeeMoreCard to="/tv-shows/on-the-air" />
+            </div>
           </div>
         </div>
       )}

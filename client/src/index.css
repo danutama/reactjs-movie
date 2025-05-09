@@ -162,6 +162,17 @@ section {
   padding-bottom: 1.2rem;
 }
 
+.see-more-card {
+  background-color: var(--background-4);
+  color: var(--blue-primary) !important;
+  border: 1px solid var(--border);
+}
+
+.see-more-card:hover {
+  background-color: var(--background);
+  transition: .4s;
+}
+
 .box-wrapper {
   background-color: var(--background-card) !important;
   border: 1px solid var(--border) !important;
