@@ -8,7 +8,12 @@ import SpinnerCustom from '../ui/SpinnerCustom';
 import { FaStar } from 'react-icons/fa';
 import { getYear, formatVoteAverage } from '../../utils/Helper';
 
-const MediaGridPage = ({ fetchFunction, itemType = 'movie', storageKeyPrefix }) => {
+const MediaGridPage = ({ fetchFunction, itemType, storageKeyPrefix }) => {
+  useEffect(() => {
+    if (!itemType) {
+      console.warn('⚠️ Prop "itemType" is required but was not provided.');
+    }
+  }, []);
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
