@@ -16,6 +16,14 @@
       "destination": "/server/index.js"
     },
     {
+      "source": "/sitemap.xml",
+      "destination": "/client/dist/sitemap.xml"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "/client/dist/robots.txt"
+    },
+    {
       "source": "/:file*",
       "destination": "/client/dist/:file*"
     },
@@ -25,6 +33,20 @@
     }
   ],
   "headers": [
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" },
+        { "key": "Content-Type", "value": "application/xml" }
+      ]
+    },
+    {
+      "source": "/robots.txt",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" },
+        { "key": "Content-Type", "value": "text/plain" }
+      ]
+    },
     {
       "source": "/(.*)",
       "headers": [
