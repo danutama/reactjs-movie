@@ -6,7 +6,7 @@ Welcome to the React Movie App! This web application allows users to discover mo
 
 ## Live Demo
 
-- [View Live Demo](https://dibimovie.vercel.app/)
+- [https://dibimovie.vercel.app](https://dibimovie.vercel.app/)
 
 ## Features
 
