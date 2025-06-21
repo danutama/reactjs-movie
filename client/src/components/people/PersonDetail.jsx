@@ -62,7 +62,7 @@ const PersonDetail = ({ personId }) => {
 
   useEffect(() => {
     if (person?.name) {
-      document.title = `React Movie | ${person.name}`;
+      document.title = `Dibimovie | ${person.name}`;
     }
   }, [person]);
 

@@ -68,7 +68,7 @@ const MediaByGenrePage = ({ fetchItemsByGenre, fetchGenres, itemType, storageKey
   }, [genreId, page, fetchGenres, fetchItemsByGenre, storageKeyPrefix, navigate, itemType]);
 
   useEffect(() => {
-    document.title = genreName ? `React ${itemType === 'movie' ? 'Movie' : 'TV Show'} | ${genreName}` : 'React App';
+    document.title = genreName ? `${itemType === 'movie' ? 'Movie Genre' : 'TV Show Genre'} | ${genreName}` : 'Dibimovie';
   }, [genreName, itemType]);
 
   const loadMoreItems = async () => {

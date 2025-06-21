@@ -52,7 +52,7 @@ function SingleTvShow() {
           setTrailerKey(trailers[0].key);
         }
 
-        document.title = `React TV Show | ${tvShowData.name}`;
+        document.title = `Dibimovie | ${tvShowData.name}`;
       } catch (error) {
         navigate('/404');
       }

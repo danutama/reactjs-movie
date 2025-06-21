@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 const TitlePages = (title) => {
   useEffect(() => {
-    document.title = `React Movie | ${title}`;
+    document.title = `Dibimovie | ${title}`;
   }, [title]);
 
   return title;

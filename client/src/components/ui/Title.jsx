@@ -43,7 +43,7 @@ const Title = () => {
 
     if (path.startsWith('/people/')) return 'Person';
 
-    return 'React Movie';
+    return 'Dibimovie';
   };
 
   useEffect(() => {

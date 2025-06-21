@@ -49,7 +49,7 @@ function SingleMovie() {
           setTrailerKey(trailers[0].key);
         }
 
-        document.title = `React Movie | ${movieData.title}`;
+        document.title = `Dibimovie | ${movieData.title}`;
       } catch (error) {
         navigate('/404');
       }
