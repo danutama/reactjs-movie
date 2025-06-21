@@ -12,16 +12,16 @@
   ],
   "rewrites": [
     {
-      "source": "/api/:match*",
-      "destination": "/server/index.js"
-    },
-    {
       "source": "/sitemap.xml",
       "destination": "/client/dist/sitemap.xml"
     },
     {
       "source": "/robots.txt",
       "destination": "/client/dist/robots.txt"
+    },
+    {
+      "source": "/api/:match*",
+      "destination": "/server/index.js"
     },
     {
       "source": "/:file*",

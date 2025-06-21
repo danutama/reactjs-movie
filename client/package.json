@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postbuild": "cp public/sitemap.xml dist/ && cp public/robots.txt dist/"
   },
   "dependencies": {
     "axios": "^1.7.3",
