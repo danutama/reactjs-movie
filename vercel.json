@@ -34,6 +34,15 @@
   ],
   "headers": [
     {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        }
+      ]
+    },
+    {
       "source": "/sitemap.xml",
       "headers": [
         { "key": "Cache-Control", "value": "no-store" },
