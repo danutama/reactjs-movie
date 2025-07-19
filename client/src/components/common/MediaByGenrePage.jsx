@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
 import Container from '../ui/Container';
@@ -11,96 +11,124 @@ import { getYear, formatVoteAverage } from '../../utils/Helper';
 const MediaByGenrePage = ({ fetchItemsByGenre, fetchGenres, itemType, storageKeyPrefix, detailPathPrefix }) => {
   const { genreId } = useParams();
   const navigate = useNavigate();
+
+  // State management
   const [items, setItems] = useState([]);
   const [genreName, setGenreName] = useState('');
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const isFetchingRef = useRef(false); // Prevent multiple fetches simultaneously
 
+  // Keys for sessionStorage
+  const itemsKey = `genre-${genreId}${storageKeyPrefix}`;
+  const pageKey = `genre-${genreId}Page`;
+
+  // Fetch genre name and initial items
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [genreData, itemsData] = await Promise.all([fetchGenres(), fetchItemsByGenre(genreId, page)]);
+    const savedItems = sessionStorage.getItem(itemsKey);
+    const savedPage = sessionStorage.getItem(pageKey);
 
-        const currentGenre = genreData.find((genre) => genre.id === parseInt(genreId, 10));
-        if (!currentGenre) {
-          navigate('/404');
-          return;
-        }
-
-        const uniqueItems = Array.from(new Map(itemsData.map((item) => [item.id, item])).values());
-
-        setItems(uniqueItems);
-        setLoading(false);
-        setHasMore(itemsData.length > 0);
-
-        setGenreName(currentGenre.name);
-
-        document.title = `React ${itemType === 'movie' ? 'Movie' : 'TV Show'} | ${currentGenre.name}`;
-
-        sessionStorage.setItem(`genre-${genreId}${storageKeyPrefix}`, JSON.stringify(uniqueItems));
-        sessionStorage.setItem(`genre-${genreId}Page`, page.toString());
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        navigate('/404');
-      }
-    };
-
-    const savedItems = sessionStorage.getItem(`genre-${genreId}${storageKeyPrefix}`);
-    const savedPage = sessionStorage.getItem(`genre-${genreId}Page`);
-
-    if (savedItems) {
+    if (savedItems && savedPage) {
+      // Load from session storage if available
       setItems(JSON.parse(savedItems));
       setPage(Number(savedPage));
       setLoading(false);
     } else {
+      // Fetch genres and items if not cached
+      const fetchData = async () => {
+        try {
+          const [genreData, itemsData] = await Promise.all([fetchGenres(), fetchItemsByGenre(genreId, 1)]);
+
+          // Find the selected genre
+          const currentGenre = genreData.find((g) => g.id === parseInt(genreId, 10));
+          if (!currentGenre) {
+            navigate('/404');
+            return;
+          }
+
+          // Remove duplicates
+          const unique = Array.from(new Map(itemsData.map((item) => [item.id, item])).values());
+
+          setGenreName(currentGenre.name);
+          setItems(unique);
+          setPage(1);
+          setHasMore(itemsData.length > 0);
+          setLoading(false);
+
+          sessionStorage.setItem(itemsKey, JSON.stringify(unique));
+          sessionStorage.setItem(pageKey, '1');
+        } catch (err) {
+          console.error('Initial fetch error:', err);
+          navigate('/404');
+        }
+      };
+
       fetchData();
     }
 
-    const saveScrollPos = () => {
+    // Save scroll position before navigating away
+    const saveScroll = () => {
       sessionStorage.setItem('scrollPosition', window.scrollY.toString());
     };
-    window.addEventListener('beforeunload', saveScrollPos);
+
+    window.addEventListener('beforeunload', saveScroll);
+    window.addEventListener('pagehide', saveScroll);
 
     return () => {
-      window.removeEventListener('beforeunload', saveScrollPos);
+      window.removeEventListener('beforeunload', saveScroll);
+      window.removeEventListener('pagehide', saveScroll);
     };
-  }, [genreId, page, fetchGenres, fetchItemsByGenre, storageKeyPrefix, navigate, itemType]);
+  }, [genreId, fetchGenres, fetchItemsByGenre, storageKeyPrefix, navigate]);
 
+  // Restore scroll position
   useEffect(() => {
-    document.title = genreName ? `${itemType === 'movie' ? 'Movie Genre' : 'TV Show Genre'} | ${genreName}` : 'Dibimovie';
+    const pos = sessionStorage.getItem('scrollPosition');
+    if (pos) window.scrollTo(0, parseInt(pos, 10));
+  }, []);
+
+  // Update page title with genre name
+  useEffect(() => {
+    if (genreName) {
+      document.title = `${itemType === 'movie' ? 'Movie Genre' : 'TV Show Genre'} | ${genreName}`;
+    }
   }, [genreName, itemType]);
 
+  // Load more items with debounce logic using ref
   const loadMoreItems = async () => {
+    if (isFetchingRef.current || !hasMore) return;
+
+    isFetchingRef.current = true;
+    setLoadingMore(true);
+
     const nextPage = page + 1;
     try {
       const newData = await fetchItemsByGenre(genreId, nextPage);
       if (newData.length === 0) {
         setHasMore(false);
-        return;
+      } else {
+        // Combine and remove duplicates
+        const combined = [...items, ...newData];
+        const unique = Array.from(new Map(combined.map((item) => [item.id, item])).values());
+        setItems(unique);
+        setPage(nextPage);
+
+        sessionStorage.setItem(itemsKey, JSON.stringify(unique));
+        sessionStorage.setItem(pageKey, nextPage.toString());
       }
-
-      const updatedItems = Array.from(new Map([...items, ...newData].map((item) => [item.id, item])).values());
-      setItems(updatedItems);
-      setPage(nextPage);
-
-      sessionStorage.setItem(`genre-${genreId}${storageKeyPrefix}`, JSON.stringify(updatedItems));
-      sessionStorage.setItem(`genre-${genreId}Page`, nextPage.toString());
-    } catch (error) {
-      console.error('Error loading more items:', error);
+    } catch (err) {
+      console.error('Load more error:', err);
+    } finally {
+      isFetchingRef.current = false;
+      setLoadingMore(false);
     }
   };
-
-  useEffect(() => {
-    const savedScrollPos = sessionStorage.getItem('scrollPosition');
-    if (savedScrollPos) {
-      window.scrollTo(0, parseInt(savedScrollPos, 10));
-    }
-  }, []);
 
   return (
     <Container>
       {loading ? (
+        // Show loading spinner during initial fetch
         <div className="d-flex justify-content-center">
           <SpinnerCustom />
         </div>
@@ -110,10 +138,12 @@ const MediaByGenrePage = ({ fetchItemsByGenre, fetchGenres, itemType, storageKey
             {items.map((item) => (
               <div key={item.id} className="col-lg-2 col-md-4 col-6">
                 <Card>
+                  {/* Lazy load images for better performance */}
                   <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.webp" alt="loading" className="card-img-top" />}>
                     <img src={item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : '/default-poster.webp'} className="card-img-top" alt={item.title || item.name} />
                   </LazyLoad>
                   <div className="card-body">
+                    {/* Release year and rating */}
                     <div className="d-flex justify-content-between align-items-center gap-3 mb-2">
                       <small className="text-secondary">{getYear(item.release_date || item.first_air_date)}</small>
                       <small className="text-secondary d-flex align-items-center">
@@ -121,6 +151,7 @@ const MediaByGenrePage = ({ fetchItemsByGenre, fetchGenres, itemType, storageKey
                         {formatVoteAverage(item.vote_average)}
                       </small>
                     </div>
+                    {/* Item title link */}
                     <div className="title-wrapper">
                       <Link to={`${detailPathPrefix}/${item.id}`} className="card-title text">
                         {item.title || item.name}
@@ -132,9 +163,10 @@ const MediaByGenrePage = ({ fetchItemsByGenre, fetchGenres, itemType, storageKey
             ))}
           </div>
 
+          {/* See more button if there are more items */}
           {hasMore && (
             <div className="text-center mt-4">
-              <ButtonSeeMore onClick={loadMoreItems} />
+              <ButtonSeeMore onClick={loadMoreItems} disabled={loadingMore} />
             </div>
           )}
         </>
