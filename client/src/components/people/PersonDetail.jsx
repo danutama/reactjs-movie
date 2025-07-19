@@ -4,25 +4,28 @@ import LazyLoad from 'react-lazyload';
 import { fetchPersonById, fetchPersonMovieCredits, fetchPersonTVCredits } from '../../service/api';
 import Container from '../ui/Container';
 import SpinnerCustom from '../ui/SpinnerCustom';
-import { formatFullDate, formatDate, formatVoteAverage } from '../../utils/Helper';
 import ButtonToTop from '../ui/ButtonToTop';
-import { FaStar } from 'react-icons/fa';
 import ToggleTextButton from '../ui/ToggleTextButton';
+import { formatFullDate, formatDate, formatVoteAverage } from '../../utils/Helper';
+import { FaStar } from 'react-icons/fa';
 
+// Component to display detailed information about a person (actor, director, etc.)
 const PersonDetail = ({ personId }) => {
-  const [person, setPerson] = useState(null);
-  const [movieCredits, setMovieCredits] = useState([]);
-  const [tvCredits, setTvCredits] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [showFullBiography, setShowFullBiography] = useState(false);
+  const [person, setPerson] = useState(null); // Store person detail
+  const [movieCredits, setMovieCredits] = useState([]); // Movie credits (cast & crew)
+  const [tvCredits, setTvCredits] = useState([]); // TV credits (cast & crew)
+  const [loading, setLoading] = useState(true); // Loading state
+  const [showFullBiography, setShowFullBiography] = useState(false); // Toggle for full biography
   const navigate = useNavigate();
 
+  // Fetch person details and credits when component mounts or personId changes
   useEffect(() => {
     const getPersonDetails = async () => {
       setLoading(true);
       try {
         const personData = await fetchPersonById(personId);
 
+        // Redirect to 404 page if person not found
         if (!personData || !personData.name) {
           navigate('/404');
           return;
@@ -30,9 +33,11 @@ const PersonDetail = ({ personId }) => {
 
         setPerson(personData);
 
+        // Fetch movie and TV credits
         const movieCreditsData = await fetchPersonMovieCredits(personId);
         const tvCreditsData = await fetchPersonTVCredits(personId);
 
+        // Combine cast and crew, then sort by release date
         const combinedMovieCredits = [...(movieCreditsData.cast || []), ...(movieCreditsData.crew || [])];
         const combinedTvCredits = [...(tvCreditsData.cast || []), ...(tvCreditsData.crew || [])];
 
@@ -51,6 +56,7 @@ const PersonDetail = ({ personId }) => {
         setMovieCredits(sortedMovieCredits);
         setTvCredits(sortedTvCredits);
       } catch (error) {
+        // If error occurs (e.g., network or bad ID), redirect to 404
         navigate('/404');
       } finally {
         setLoading(false);
@@ -60,12 +66,14 @@ const PersonDetail = ({ personId }) => {
     getPersonDetails();
   }, [personId, navigate]);
 
+  // Set the document title to include person's name
   useEffect(() => {
     if (person?.name) {
       document.title = `Dibimovie | ${person.name}`;
     }
   }, [person]);
 
+  // Show spinner while loading data
   if (loading) {
     return (
       <div className="d-flex justify-content-center pt-4 position-absolute top-50 start-50 translate-middle ">
@@ -74,6 +82,7 @@ const PersonDetail = ({ personId }) => {
     );
   }
 
+  // If no person data found
   if (!person) {
     return (
       <Container>
@@ -82,24 +91,27 @@ const PersonDetail = ({ personId }) => {
     );
   }
 
-  const hasProfileImage = Boolean(person.profile_path);
+  // Prepare biography text (shortened if too long)
   const biographyText = person.biography || '-';
   const isLongBiography = biographyText.length > 200;
   const displayedBiography = showFullBiography ? biographyText : `${biographyText.substring(0, 200)}`;
 
   return (
     <Container>
-      <div className={`${hasProfileImage ? 'd-flex gap-4 justify-content-start align-items-start flex-column flex-md-row' : ''}`}>
-        {hasProfileImage && (
-          <div className="person-img-wrapper w-100">
-            <LazyLoad height={200} offset={0} placeholder={<img src="/profile.png" alt="loading" className="person-img rounded-4" />}>
-              <img className="person-img rounded-4" src={`https://image.tmdb.org/t/p/w500${person.profile_path}`} alt={person.name || 'Profile image'} />
-            </LazyLoad>
-          </div>
-        )}
+      {/* Person Info Section */}
+      <div className="d-flex gap-4 justify-content-start align-items-start flex-column flex-md-row">
+        {/* Always show profile image, fallback to default if unavailable */}
+        <div className="person-img-wrapper w-100 mb-0">
+          <LazyLoad height={200} offset={0} placeholder={<img src="/profile.png" alt="loading" className="person-img rounded-4" />}>
+            <img className="person-img rounded-4" src={person.profile_path ? `https://image.tmdb.org/t/p/w500${person.profile_path}` : '/profile.png'} alt={person.name || 'Profile image'} />
+          </LazyLoad>
+        </div>
+
+        {/* Person Info Text */}
         <div className="w-100">
           <div className="d-flex justify-content-sm-start justify-content-between align-items-center gap-3 mb-4">
             <p className="h4 text fw-bold m-0">{person.name || '-'}</p>
+            {/* IMDb link if available */}
             {person.imdb_id && (
               <a href={`https://www.imdb.com/name/${person.imdb_id}/`} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-primary border-0 rounded-5 py-1 px-3" style={{ whiteSpace: 'nowrap' }}>
                 View on IMDb
@@ -107,6 +119,7 @@ const PersonDetail = ({ personId }) => {
             )}
           </div>
 
+          {/* Additional Info */}
           <p className="text-secondary">
             Known for: <span className="text-tertiary">{person.known_for_department || '-'}</span>
           </p>
@@ -123,6 +136,8 @@ const PersonDetail = ({ personId }) => {
           )}
         </div>
       </div>
+
+      {/* Biography Section */}
       {biographyText !== '-' && (
         <p className="card-text text-secondary lh-lg mt-md-3">
           Biography:
@@ -134,9 +149,9 @@ const PersonDetail = ({ personId }) => {
         </p>
       )}
 
-      {/* ----------- TAB CREDITS ---------- */}
+      {/* ----------------- Credits Tabs ----------------- */}
       <div className="mt-4">
-        {/* Tabs Navigation */}
+        {/* Tab Headers */}
         <div className="sticky-top py-2">
           <ul className="nav nav-tabs d-flex justify-content-sm-start gap-3" id="credit-tabs" role="tablist">
             <li className="nav-item" role="presentation">
@@ -152,15 +167,15 @@ const PersonDetail = ({ personId }) => {
           </ul>
         </div>
 
-        {/* Tabs Content */}
+        {/* Tab Content: Movie Credits */}
         <div className="tab-content" id="credit-tabs-content">
-          {/* ----------- MOVIE CREDITS ---------- */}
           <div className="tab-pane fade show active" id="movie-credits" role="tabpanel" aria-labelledby="movie-credits-tab">
             <div className="row">
               {movieCredits.length > 0 ? (
                 movieCredits.map((credit, index) => (
                   <div key={`${credit.id}-movie-${index}`} className="col-lg-4 col-sm-6 my-sm-2 my-0">
                     <div className="d-flex gap-3 justify-content-start align-items-start">
+                      {/* Show poster with fallback */}
                       <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.webp" alt="loading" className="credit-poster rounded-1" />}>
                         <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.webp'} alt={credit.title || 'Poster'} />
                       </LazyLoad>
@@ -190,7 +205,7 @@ const PersonDetail = ({ personId }) => {
             </div>
           </div>
 
-          {/* ----------- TV CREDITS ---------- */}
+          {/* Tab Content: TV Credits */}
           <div className="tab-pane fade" id="tv-credits" role="tabpanel" aria-labelledby="tv-credits-tab">
             <div className="row">
               {tvCredits.length > 0 ? (
@@ -227,6 +242,8 @@ const PersonDetail = ({ personId }) => {
           </div>
         </div>
       </div>
+
+      {/* Scroll to top button */}
       <ButtonToTop />
     </Container>
   );
