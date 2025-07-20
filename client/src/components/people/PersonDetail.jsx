@@ -8,9 +8,12 @@ import ButtonToTop from '../ui/ButtonToTop';
 import ToggleTextButton from '../ui/ToggleTextButton';
 import { formatFullDate, formatDate, formatVoteAverage } from '../../utils/Helper';
 import { FaStar } from 'react-icons/fa';
+import { useScrollRestoration } from '../../hooks/useScrollRestoration';
 
 // Component to display detailed information about a person (actor, director, etc.)
 const PersonDetail = ({ personId }) => {
+  useScrollRestoration({});
+
   const [person, setPerson] = useState(null); // Store person detail
   const [movieCredits, setMovieCredits] = useState([]); // Movie credits (cast & crew)
   const [tvCredits, setTvCredits] = useState([]); // TV credits (cast & crew)

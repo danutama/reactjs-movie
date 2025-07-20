@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState, Suspense } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ScrollToTop from './utils/ScrollToTop';
 import Header from './components/ui/Header';
 import Navbar from './components/ui/Navbar';
 import Search from './components/ui/Search';
@@ -26,7 +25,6 @@ function App() {
   return (
     <Router>
       <Header onSearchClick={handleSearchClick} />
-      <ScrollToTop />
       <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<Pages.Home />} />

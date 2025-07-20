@@ -7,8 +7,15 @@ import ButtonSeeMore from '../ui/ButtonSeeMore';
 import SpinnerCustom from '../ui/SpinnerCustom';
 import { FaStar } from 'react-icons/fa';
 import { getYear, formatVoteAverage } from '../../utils/Helper';
+import { useScrollRestoration } from '../../hooks/useScrollRestoration';
 
 const MediaGridPage = ({ fetchFunction, itemType, storageKeyPrefix }) => {
+  // Initialize scroll restoration hook
+  useScrollRestoration({
+    debounceMs: 50,
+    restoreDelay: 100,
+  });
+
   // State management
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
@@ -49,26 +56,7 @@ const MediaGridPage = ({ fetchFunction, itemType, storageKeyPrefix }) => {
       };
       fetchInitial();
     }
-
-    // Save scroll position before unload
-    const saveScroll = () => {
-      sessionStorage.setItem('scrollPosition', window.scrollY.toString());
-    };
-
-    window.addEventListener('beforeunload', saveScroll);
-    window.addEventListener('pagehide', saveScroll);
-
-    return () => {
-      window.removeEventListener('beforeunload', saveScroll);
-      window.removeEventListener('pagehide', saveScroll);
-    };
   }, [fetchFunction, itemsKey, pageKey]);
-
-  // Restore scroll position on mount
-  useEffect(() => {
-    const pos = sessionStorage.getItem('scrollPosition');
-    if (pos) window.scrollTo(0, parseInt(pos, 10));
-  }, []);
 
   // Load more items with pagination and avoid duplicate loading
   const loadMoreItems = async () => {

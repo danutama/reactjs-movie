@@ -7,8 +7,15 @@ import ButtonSeeMore from '../ui/ButtonSeeMore';
 import SpinnerCustom from '../ui/SpinnerCustom';
 import { FaStar } from 'react-icons/fa';
 import { getYear, formatVoteAverage } from '../../utils/Helper';
+import { useScrollRestoration } from '../../hooks/useScrollRestoration';
 
 const MediaByGenrePage = ({ fetchItemsByGenre, fetchGenres, itemType, storageKeyPrefix, detailPathPrefix }) => {
+  // Initialize scroll restoration hook
+  useScrollRestoration({
+    debounceMs: 50,
+    restoreDelay: 100,
+  });
+
   const { genreId } = useParams();
   const navigate = useNavigate();
 
@@ -67,26 +74,7 @@ const MediaByGenrePage = ({ fetchItemsByGenre, fetchGenres, itemType, storageKey
 
       fetchData();
     }
-
-    // Save scroll position before navigating away
-    const saveScroll = () => {
-      sessionStorage.setItem('scrollPosition', window.scrollY.toString());
-    };
-
-    window.addEventListener('beforeunload', saveScroll);
-    window.addEventListener('pagehide', saveScroll);
-
-    return () => {
-      window.removeEventListener('beforeunload', saveScroll);
-      window.removeEventListener('pagehide', saveScroll);
-    };
-  }, [genreId, fetchGenres, fetchItemsByGenre, storageKeyPrefix, navigate]);
-
-  // Restore scroll position
-  useEffect(() => {
-    const pos = sessionStorage.getItem('scrollPosition');
-    if (pos) window.scrollTo(0, parseInt(pos, 10));
-  }, []);
+  }, [genreId, fetchGenres, fetchItemsByGenre, storageKeyPrefix, navigate, itemsKey, pageKey]);
 
   // Update page title with genre name
   useEffect(() => {

@@ -1,8 +1,10 @@
 import React from 'react';
 import TitlePages from '../utils/TitlePages';
+import { useScrollRestoration } from '../hooks/useScrollRestoration';
 
 const NotFound = () => {
   TitlePages('404 Not Found');
+  useScrollRestoration();
   return (
     <section className="container-md d-flex justify-content-center align-items-center flex-column">
       <p className="text text-center fw-bold display-2 my-2">404</p>
