@@ -4,31 +4,30 @@ import LazyLoad from 'react-lazyload';
 import Card from '../ui/Card';
 import SpinnerCustom from '../ui/SpinnerCustom';
 
-// Main component for displaying cast and crew section with lazy loading and infinite scroll
+// Displays cast & crew list with infinite scroll and role highlights
 const CastAndCrew = ({ credits, creators }) => {
-  const [visibleCount, setVisibleCount] = useState(10); // How many cast to display initially
-  const [isLoading, setIsLoading] = useState(false); // Loading state for lazy loading
+  const [visibleCount, setVisibleCount] = useState(10); // Controls how many people are shown
+  const [isLoading, setIsLoading] = useState(false); // Tracks loading state for spinner
+  const location = useLocation(); // Detect current route
+  const loaderRef = useRef(null); // Ref for the spinner that triggers more loading
+  const debounceTimerRef = useRef(null); // Ref to store debounce timeout
+  const observerRef = useRef(null); // Ref for the IntersectionObserver instance
 
-  const location = useLocation();
-  const loaderRef = useRef(null); // Ref for the element to be observed by IntersectionObserver
-  const debounceTimerRef = useRef(null); // Ref to prevent rapid scroll triggering
-  const observerRef = useRef(null); // Ref to store the IntersectionObserver instance
-
-  // Check if the current page is for a TV show
+  // Determine if current page is a TV show (to show creator instead of director)
   const isTVShow = location.pathname.startsWith('/tv/');
 
-  // Load more cast entries when scrolled near the bottom
+  // Load more visible people (adds 10 each time)
   const loadMore = useCallback(() => {
     if (!isLoading && visibleCount < credits.length) {
       setIsLoading(true);
       setTimeout(() => {
-        setVisibleCount((prev) => prev + 10); // Load 10 more
+        setVisibleCount((prev) => prev + 10);
         setIsLoading(false);
-      }, 800);
+      }, 800); // Simulated delay
     }
   }, [isLoading, visibleCount, credits.length]);
 
-  // Debounce wrapper to limit loadMore execution frequency
+  // Debounce loadMore calls to avoid flooding
   const debouncedLoadMore = useCallback(() => {
     if (debounceTimerRef.current) return;
     debounceTimerRef.current = setTimeout(() => {
@@ -37,14 +36,14 @@ const CastAndCrew = ({ credits, creators }) => {
     }, 300);
   }, [loadMore]);
 
-  // Setup IntersectionObserver for infinite scrolling
+  // Setup IntersectionObserver to trigger loadMore when loader is visible
   useEffect(() => {
-    if (observerRef.current) observerRef.current.disconnect();
+    if (observerRef.current) observerRef.current.disconnect(); // Disconnect old observer
 
     observerRef.current = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          debouncedLoadMore();
+          debouncedLoadMore(); // Trigger load if spinner in view
         }
       },
       { root: null, rootMargin: '0px', threshold: 1.0 }
@@ -54,20 +53,21 @@ const CastAndCrew = ({ credits, creators }) => {
     if (currentLoader) observerRef.current.observe(currentLoader);
 
     return () => {
+      // Clean up on component unmount
       if (currentLoader) observerRef.current.unobserve(currentLoader);
       if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
     };
   }, [debouncedLoadMore]);
 
-  // Filter specific roles from credits
+  // Pre-filter important crew roles
   const directors = credits.filter((p) => p.job === 'Director');
   const writers = credits.filter((p) => p.job === 'Writer' || p.job === 'Novel' || p.department === 'Writing');
   const screenplays = credits.filter((p) => p.job === 'Screenplay');
 
   return (
     <div className="peoples">
+      {/* Header section for main credits (director, creator, writers) */}
       <div className="mb-5">
-        {/* Show Director (for movies only) */}
         {!isTVShow && (
           <>
             <small className="text-secondary m-0 lh-lg">
@@ -77,7 +77,6 @@ const CastAndCrew = ({ credits, creators }) => {
           </>
         )}
 
-        {/* Show Creator (for TV shows only) */}
         {isTVShow && creators?.length > 0 && (
           <>
             <small className="text-secondary m-0 lh-lg">
@@ -87,48 +86,51 @@ const CastAndCrew = ({ credits, creators }) => {
           </>
         )}
 
-        {/* Writers */}
         <small className="text-secondary m-0 lh-lg">
           Writers: <span className="text-tertiary">{writers.length > 0 ? writers.map((w) => w.name).join(', ') : '-'}</span>
         </small>
         <div className="hr"></div>
 
-        {/* Screenplay */}
         <small className="text-secondary m-0 lh-lg">
           Screenplay: <span className="text-tertiary">{screenplays.length > 0 ? screenplays.map((s) => s.name).join(', ') : '-'}</span>
         </small>
         <div className="hr"></div>
       </div>
 
-      {/* Cast & Crew Cards */}
+      {/* Cast & crew section title */}
       <p className="h5 text fw-bold mb-3">Cast & Crew</p>
+
+      {/* Grid of cast/crew members */}
       <div className="row g-2">
         {credits.slice(0, visibleCount).map((person, index) => (
           <div key={`${person.id}-${index}`} className="col-lg-2 col-md-3 col-sm-4 col-6">
             <Card>
-              {/* Lazy load image */}
-              <LazyLoad height={200} offset={100} placeholder={<img src="/profile.png" alt="loading" className="card-img-top" />}>
-                <img src={person.profile_path ? `https://image.tmdb.org/t/p/w200${person.profile_path}` : '/profile.png'} className="card-img-top" alt={person.name || 'Default profile'} />
-              </LazyLoad>
+              <Link to={`/people/${person.id}`}>
+                <LazyLoad height={200} offset={100} placeholder={<img src="/profile.png" alt="loading" className="card-img-top" />}>
+                  <img src={person.profile_path ? `https://image.tmdb.org/t/p/w200${person.profile_path}` : '/profile.png'} className="card-img-top" alt={person.name || 'Default profile'} />
+                </LazyLoad>
+              </Link>
 
-              {/* Person info */}
               <div className="card-body">
+                {/* Name with ellipsis support */}
                 <div className="title-wrapper">
-                  <Link to={`/people/${person.id}`} className="btn-link">
-                    {person.name || '-'}
-                  </Link>
+                  <p className="card-title text m-0">{person.name || '-'}</p>
                 </div>
                 <div className="hr"></div>
-                <small className="text m-0">{person.character || person.job || person.roles?.[0]?.character || person.jobs?.[0]?.job || '-'}</small>
+
+                {/* Character or job name */}
+                <small className="text text-secondary m-0">{person.character || person.job || person.roles?.[0]?.character || person.jobs?.[0]?.job || '-'}</small>
                 <div className="hr"></div>
-                <small className="text m-0">{person.department || person.known_for_department || '-'}</small>
+
+                {/* Department name */}
+                <small className="text text-secondary m-0">{person.department || person.known_for_department || '-'}</small>
               </div>
             </Card>
           </div>
         ))}
       </div>
 
-      {/* Loader shown when loading more */}
+      {/* Spinner and loader ref to trigger infinite scroll */}
       <div ref={loaderRef} className="d-flex justify-content-center pt-4">
         {isLoading && <SpinnerCustom />}
       </div>

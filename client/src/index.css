@@ -146,16 +146,20 @@ section {
 }
 
 .title-wrapper {
-  width: 100%;
-  white-space: nowrap;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--gray) !important;
+  white-space: nowrap;
 }
 
 .card-title {
+  display: inline-block;
   font-weight: bold;
-  font-size: .9rem;
+  font-size: 0.9rem;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .card-body {

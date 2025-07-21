@@ -8,37 +8,46 @@ import SpinnerCustom from '../ui/SpinnerCustom';
 import { fetchPopularPeople } from '../../service/api';
 
 const AllPeoplePopular = () => {
-  // State management
-  const [people, setPeople] = useState([]);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
+  const [people, setPeople] = useState([]); // List of popular people
+  const [page, setPage] = useState(1); // Current page for pagination
+  const [loading, setLoading] = useState(true); // Loading state for initial fetch
+  const [hasMore, setHasMore] = useState(true); // Whether more people can be loaded
+  const [loadingMore, setLoadingMore] = useState(false); // Loading state for pagination fetch
 
-  // Keys for session storage
+  // Keys used for sessionStorage caching
   const storageKeyPrefix = 'popularPeople';
   const peopleKey = `${storageKeyPrefix}Items`;
   const pageKey = `${storageKeyPrefix}Page`;
 
-  // Initial data fetch or retrieve from sessionStorage
+  // On component mount, check if data exists in sessionStorage
   useEffect(() => {
     const savedPeople = sessionStorage.getItem(peopleKey);
     const savedPage = sessionStorage.getItem(pageKey);
 
-    if (savedPeople) {
-      // Load data from sessionStorage
-      setPeople(JSON.parse(savedPeople));
-      setPage(Number(savedPage));
+    let parsedPeople = [];
+    try {
+      // Attempt to parse saved people from sessionStorage
+      parsedPeople = savedPeople ? JSON.parse(savedPeople) : [];
+    } catch (err) {
+      console.error('Error parsing saved people from sessionStorage:', err);
+    }
+
+    // If session data is valid, restore state from it
+    if (parsedPeople.length > 0) {
+      setPeople(parsedPeople);
+      setPage(Number(savedPage) || 1);
       setLoading(false);
     } else {
-      // Fetch initial data from API
+      // If no session data, fetch from API
       const fetchInitial = async () => {
         try {
-          const data = await fetchPopularPeople(1);
+          const data = await fetchPopularPeople(1); // Fetch first page
+          // Remove duplicates using Map by ID
           const unique = Array.from(new Map(data.map((p) => [p.id, p])).values());
           setPeople(unique);
           setHasMore(data.length > 0);
           setLoading(false);
+          // Cache result in sessionStorage
           sessionStorage.setItem(peopleKey, JSON.stringify(unique));
           sessionStorage.setItem(pageKey, '1');
         } catch (err) {
@@ -48,42 +57,27 @@ const AllPeoplePopular = () => {
       };
       fetchInitial();
     }
-
-    // Save scroll position on unload
-    const saveScroll = () => {
-      sessionStorage.setItem('scrollPosition', window.scrollY.toString());
-    };
-
-    window.addEventListener('beforeunload', saveScroll);
-    window.addEventListener('pagehide', saveScroll);
-
-    return () => {
-      window.removeEventListener('beforeunload', saveScroll);
-      window.removeEventListener('pagehide', saveScroll);
-    };
   }, []);
 
-  // Restore scroll position on mount
-  useEffect(() => {
-    const pos = sessionStorage.getItem('scrollPosition');
-    if (pos) window.scrollTo(0, parseInt(pos, 10));
-  }, []);
-
-  // Fetch more people on "See More" button click
+  // Load more people when the user clicks "See More"
   const loadMorePeople = async () => {
+    // Prevent concurrent loads or unnecessary fetch
     if (loadingMore || !hasMore) return;
-    setLoadingMore(true);
 
+    setLoadingMore(true);
     const nextPage = page + 1;
+
     try {
       const data = await fetchPopularPeople(nextPage);
       if (data.length === 0) {
-        setHasMore(false);
+        setHasMore(false); // No more data
       } else {
+        // Combine and deduplicate people
         const combined = [...people, ...data];
         const unique = Array.from(new Map(combined.map((p) => [p.id, p])).values());
         setPeople(unique);
         setPage(nextPage);
+        // Update sessionStorage
         sessionStorage.setItem(peopleKey, JSON.stringify(unique));
         sessionStorage.setItem(pageKey, nextPage.toString());
       }
@@ -97,27 +91,23 @@ const AllPeoplePopular = () => {
   return (
     <Container>
       {loading ? (
-        // Show loading spinner while initial data is being fetched
         <div className="d-flex justify-content-center">
           <SpinnerCustom />
         </div>
       ) : (
         <>
-          {/* Display list of popular people */}
           <div className="row g-2">
             {people.map((person) => (
               <div key={person.id} className="col-lg-2 col-md-3 col-4">
                 <Card>
-                  {/* Lazy load profile image */}
-                  <LazyLoad height={200} offset={100} placeholder={<img src="/profile.png" alt="loading" className="card-img-top" />}>
-                    <img src={person.profile_path ? `https://image.tmdb.org/t/p/w500${person.profile_path}` : '/profile.png'} className="card-img-top" alt={person.name} />
-                  </LazyLoad>
+                  <Link to={`/people/${person.id}`}>
+                    <LazyLoad height={200} offset={100} placeholder={<img src="/profile.png" alt="loading" className="card-img-top" />}>
+                      <img src={person.profile_path ? `https://image.tmdb.org/t/p/w500${person.profile_path}` : '/profile.png'} className="card-img-top" alt={person.name} />
+                    </LazyLoad>
+                  </Link>
                   <div className="card-body px-2 pb-3">
-                    {/* Display person's name with link to their detail page */}
                     <div className="title-wrapper">
-                      <Link to={`/people/${person.id}`} className="card-title text">
-                        {person.name}
-                      </Link>
+                      <p className="card-title text m-0">{person.name}</p>
                     </div>
                   </div>
                 </Card>
@@ -125,7 +115,7 @@ const AllPeoplePopular = () => {
             ))}
           </div>
 
-          {/* See more button if more people exist */}
+          {/* "See More" button if more data exists */}
           {hasMore && (
             <div className="text-center mt-4">
               <ButtonSeeMore onClick={loadMorePeople} disabled={loadingMore} />

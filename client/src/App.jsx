@@ -5,7 +5,7 @@ import Header from './components/ui/Header';
 import Navbar from './components/ui/Navbar';
 import Search from './components/ui/Search';
 import Footer from './components/ui/Footer';
-
+import ScrollRestoration from './components/ui/ScrollRestoration';
 import Pages from './pages';
 
 function App() {
@@ -24,6 +24,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollRestoration />
       <Header onSearchClick={handleSearchClick} />
       <Suspense fallback={null}>
         <Routes>

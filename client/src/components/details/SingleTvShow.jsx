@@ -10,11 +10,8 @@ import { getYear, formatVoteAverage } from '../../utils/Helper';
 import SpinnerCustom from '../ui/SpinnerCustom';
 import ButtonToTop from '../ui/ButtonToTop';
 import ToggleTextButton from '../ui/ToggleTextButton';
-import { useScrollRestoration } from '../../hooks/useScrollRestoration';
 
 function SingleTvShow() {
-  useScrollRestoration({});
-
   const { id } = useParams();
   const navigate = useNavigate();
   const [tvShow, setTvShow] = useState(null);

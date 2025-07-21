@@ -1,95 +1,49 @@
-import { useEffect, useRef, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation, useNavigationType } from 'react-router-dom';
 
-export const useScrollRestoration = (options = {}) => {
-  const { debounceMs = 100, restoreDelay = 0, enableAutoSave = true } = options;
-
+export const useScrollRestoration = () => {
   const location = useLocation();
-  const scrollPositions = useRef({});
-  const isRestoringRef = useRef(false);
-  const timeoutRef = useRef(null);
+  const navType = useNavigationType();
+  const key = `scroll-${location.pathname}`;
 
-  // Debounced scroll save
-  const saveScrollPosition = useCallback(() => {
-    const path = location.pathname;
-    if (!isRestoringRef.current) {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-
-      timeoutRef.current = setTimeout(() => {
-        scrollPositions.current[path] = window.scrollY;
-      }, debounceMs);
-    }
-  }, [location.pathname, debounceMs]);
-
-  // Manual save function
-  const saveCurrentPosition = useCallback(() => {
-    scrollPositions.current[location.pathname] = window.scrollY;
-  }, [location.pathname]);
-
-  // Get current saved position
-  const getSavedPosition = useCallback(() => {
-    return scrollPositions.current[location.pathname] || 0;
-  }, [location.pathname]);
-
+  // Save scroll position with debounce
   useEffect(() => {
-    const path = location.pathname;
+    let scrollTimeout;
 
-    // Restore scroll position
-    const savedPosition = scrollPositions.current[path];
-    if (savedPosition !== undefined && savedPosition > 0) {
-      isRestoringRef.current = true;
+    const onScroll = () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        sessionStorage.setItem(key, window.scrollY.toString());
+      }, 100); // debounce: 100ms
+    };
 
-      const restore = () => {
-        window.scrollTo({
-          top: savedPosition,
-          behavior: 'instant',
-        });
+    window.addEventListener('scroll', onScroll, { passive: true });
 
-        // Reset flag setelah restore
-        setTimeout(() => {
-          isRestoringRef.current = false;
-        }, 150);
-      };
+    return () => {
+      clearTimeout(scrollTimeout);
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [key]);
 
-      if (restoreDelay > 0) {
-        setTimeout(restore, restoreDelay);
-      } else {
-        requestAnimationFrame(restore);
+  // Force browser to manual scroll handling
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, []);
+
+  // Restore scroll position on back/forward
+  useEffect(() => {
+    if (navType === 'POP') {
+      const saved = sessionStorage.getItem(key);
+      const savedY = saved ? parseInt(saved, 10) : 0;
+
+      if (!isNaN(savedY)) {
+        window.scrollTo({ top: savedY, behavior: 'instant' });
       }
     } else {
-      isRestoringRef.current = false;
+      // Scroll to top on new navigation
+      window.scrollTo({ top: 0 });
     }
-
-    // Setup event listeners jika auto save enabled
-    if (enableAutoSave) {
-      window.addEventListener('scroll', saveScrollPosition, { passive: true });
-    }
-
-    // Cleanup
-    return () => {
-      if (enableAutoSave) {
-        window.removeEventListener('scroll', saveScrollPosition);
-      }
-
-      // Clear timeout
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-
-      // Save final position saat unmount
-      if (!isRestoringRef.current) {
-        scrollPositions.current[path] = window.scrollY;
-      }
-    };
-  }, [location.pathname, saveScrollPosition, enableAutoSave, restoreDelay]);
-
-  return {
-    saveCurrentPosition,
-    getSavedPosition,
-    clearSavedPosition: useCallback(() => {
-      delete scrollPositions.current[location.pathname];
-    }, [location.pathname]),
-  };
+  }, [location.pathname, navType, key]);
 };
