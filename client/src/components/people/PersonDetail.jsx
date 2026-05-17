@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { fetchPersonById, fetchPersonMovieCredits, fetchPersonTVCredits } from '../../service/api';
+import { fetchPersonById } from '../../service/api';
 import Container from '../ui/Container';
 import SpinnerCustom from '../ui/SpinnerCustom';
 import ButtonToTop from '../ui/ButtonToTop';
@@ -9,54 +9,69 @@ import ToggleTextButton from '../ui/ToggleTextButton';
 import { formatFullDate, formatDate, formatVoteAverage } from '../../utils/Helper';
 import { FaStar } from 'react-icons/fa';
 
-// Component to display detailed information about a person (actor, director, etc.)
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+const sortByDate = (list, dateKey) =>
+  [...list].sort((a, b) => {
+    if (!a[dateKey]) return 1;
+    if (!b[dateKey]) return -1;
+    return new Date(b[dateKey]) - new Date(a[dateKey]);
+  });
+
+const CreditCard = ({ credit, linkTo, dateKey }) => (
+  <div className="col-lg-4 col-sm-6 my-sm-2 my-0">
+    <div className="d-flex gap-3 justify-content-start align-items-start">
+      <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.webp" alt="loading" className="credit-poster rounded-1" />}>
+        <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.webp'} alt={credit.title || credit.name || 'Poster'} />
+      </LazyLoad>
+      <div className="w-100">
+        <div className="mb-2">
+          <Link to={linkTo} className="person-credit-link text fw-normal">
+            {credit.title || credit.name} <span className="text-secondary">as</span> {credit.job || credit.character || '-'}
+          </Link>
+        </div>
+        <div className="d-flex gap-3 justify-content-sm-start justify-content-between align-items-center">
+          <small className="text-secondary">{credit[dateKey] ? formatDate(credit[dateKey]) : '-'}</small>
+          <small className="text d-flex align-items-center">
+            <FaStar className="text-yellow me-1" />
+            {formatVoteAverage(credit.vote_average)}
+          </small>
+        </div>
+      </div>
+    </div>
+    <div className="hr d-sm-none"></div>
+  </div>
+);
+
+// ─── Component ────────────────────────────────────────────────────────────────
 const PersonDetail = ({ personId }) => {
-  const [person, setPerson] = useState(null); // Store person detail
-  const [movieCredits, setMovieCredits] = useState([]); // Movie credits (cast & crew)
-  const [tvCredits, setTvCredits] = useState([]); // TV credits (cast & crew)
-  const [loading, setLoading] = useState(true); // Loading state
-  const [showFullBiography, setShowFullBiography] = useState(false); // Toggle for full biography
+  const [person, setPerson] = useState(null);
+  const [movieCredits, setMovieCredits] = useState([]);
+  const [tvCredits, setTvCredits] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showFullBiography, setShowFullBiography] = useState(false);
   const navigate = useNavigate();
 
-  // Fetch person details and credits when component mounts or personId changes
   useEffect(() => {
     const getPersonDetails = async () => {
       setLoading(true);
       try {
+        // fetchPersonById sudah include movie_credits & tv_credits dari BE
         const personData = await fetchPersonById(personId);
 
-        // Redirect to 404 page if person not found
-        if (!personData || !personData.name) {
+        if (!personData?.name) {
           navigate('/404');
           return;
         }
 
         setPerson(personData);
 
-        // Fetch movie and TV credits
-        const movieCreditsData = await fetchPersonMovieCredits(personId);
-        const tvCreditsData = await fetchPersonTVCredits(personId);
+        // Credits sudah ada di personData
+        const movieData = personData.movie_credits || {};
+        const tvData = personData.tv_credits || {};
 
-        // Combine cast and crew, then sort by release date
-        const combinedMovieCredits = [...(movieCreditsData.cast || []), ...(movieCreditsData.crew || [])];
-        const combinedTvCredits = [...(tvCreditsData.cast || []), ...(tvCreditsData.crew || [])];
-
-        const sortedMovieCredits = combinedMovieCredits.sort((a, b) => {
-          if (!a.release_date) return 1;
-          if (!b.release_date) return -1;
-          return new Date(b.release_date) - new Date(a.release_date);
-        });
-
-        const sortedTvCredits = combinedTvCredits.sort((a, b) => {
-          if (!a.first_air_date) return 1;
-          if (!b.first_air_date) return -1;
-          return new Date(b.first_air_date) - new Date(a.first_air_date);
-        });
-
-        setMovieCredits(sortedMovieCredits);
-        setTvCredits(sortedTvCredits);
-      } catch (error) {
-        // If error occurs (e.g., network or bad ID), redirect to 404
+        setMovieCredits(sortByDate([...(movieData.cast || []), ...(movieData.crew || [])], 'release_date'));
+        setTvCredits(sortByDate([...(tvData.cast || []), ...(tvData.crew || [])], 'first_air_date'));
+      } catch {
         navigate('/404');
       } finally {
         setLoading(false);
@@ -66,23 +81,22 @@ const PersonDetail = ({ personId }) => {
     getPersonDetails();
   }, [personId, navigate]);
 
-  // Set the document title to include person's name
   useEffect(() => {
-    if (person?.name) {
-      document.title = `Dibimovie | ${person.name}`;
-    }
+    if (person?.name) document.title = `Dibimovie | ${person.name}`;
   }, [person]);
 
-  // Show spinner while loading data
+  const biographyText = person?.biography || '-';
+  const isLongBiography = biographyText.length > 200;
+  const displayedBiography = showFullBiography ? biographyText : biographyText.substring(0, 200);
+
   if (loading) {
     return (
-      <div className="d-flex justify-content-center pt-4 position-absolute top-50 start-50 translate-middle ">
+      <div className="d-flex justify-content-center pt-4 position-absolute top-50 start-50 translate-middle">
         <SpinnerCustom />
       </div>
     );
   }
 
-  // If no person data found
   if (!person) {
     return (
       <Container>
@@ -91,27 +105,19 @@ const PersonDetail = ({ personId }) => {
     );
   }
 
-  // Prepare biography text (shortened if too long)
-  const biographyText = person.biography || '-';
-  const isLongBiography = biographyText.length > 200;
-  const displayedBiography = showFullBiography ? biographyText : `${biographyText.substring(0, 200)}`;
-
   return (
     <Container>
-      {/* Person Info Section */}
+      {/* Person Info */}
       <div className="d-flex gap-4 justify-content-start align-items-start flex-column flex-md-row">
-        {/* Always show profile image, fallback to default if unavailable */}
         <div className="person-img-wrapper w-100 mb-0">
           <LazyLoad height={200} offset={0} placeholder={<img src="/profile.png" alt="loading" className="person-img rounded-4" />}>
             <img className="person-img rounded-4" src={person.profile_path ? `https://image.tmdb.org/t/p/w500${person.profile_path}` : '/profile.png'} alt={person.name || 'Profile image'} />
           </LazyLoad>
         </div>
 
-        {/* Person Info Text */}
         <div className="w-100">
           <div className="d-flex justify-content-sm-start justify-content-between align-items-center gap-3 mb-4">
             <p className="h4 text fw-bold m-0">{person.name || '-'}</p>
-            {/* IMDb link if available */}
             {person.imdb_id && (
               <a href={`https://www.imdb.com/name/${person.imdb_id}/`} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-primary border-0 rounded-5 py-1 px-3" style={{ whiteSpace: 'nowrap' }}>
                 View on IMDb
@@ -119,7 +125,6 @@ const PersonDetail = ({ personId }) => {
             )}
           </div>
 
-          {/* Additional Info */}
           <p className="text-secondary">
             Known for: <span className="text-tertiary">{person.known_for_department || '-'}</span>
           </p>
@@ -137,7 +142,7 @@ const PersonDetail = ({ personId }) => {
         </div>
       </div>
 
-      {/* Biography Section */}
+      {/* Biography */}
       {biographyText !== '-' && (
         <p className="card-text text-secondary lh-lg mt-md-3">
           Biography:
@@ -149,9 +154,8 @@ const PersonDetail = ({ personId }) => {
         </p>
       )}
 
-      {/* ----------------- Credits Tabs ----------------- */}
+      {/* Credits Tabs */}
       <div className="mt-4">
-        {/* Tab Headers */}
         <div className="sticky-top py-2">
           <ul className="nav nav-tabs d-flex justify-content-sm-start gap-3" id="credit-tabs" role="tablist">
             <li className="nav-item" role="presentation">
@@ -167,36 +171,12 @@ const PersonDetail = ({ personId }) => {
           </ul>
         </div>
 
-        {/* Tab Content: Movie Credits */}
         <div className="tab-content" id="credit-tabs-content">
+          {/* Movie Credits */}
           <div className="tab-pane fade show active" id="movie-credits" role="tabpanel" aria-labelledby="movie-credits-tab">
             <div className="row">
               {movieCredits.length > 0 ? (
-                movieCredits.map((credit, index) => (
-                  <div key={`${credit.id}-movie-${index}`} className="col-lg-4 col-sm-6 my-sm-2 my-0">
-                    <div className="d-flex gap-3 justify-content-start align-items-start">
-                      {/* Show poster with fallback */}
-                      <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.webp" alt="loading" className="credit-poster rounded-1" />}>
-                        <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.webp'} alt={credit.title || 'Poster'} />
-                      </LazyLoad>
-                      <div className="w-100">
-                        <div className="mb-2">
-                          <Link to={`/movies/${credit.id}`} className="person-credit-link text fw-normal">
-                            {credit.title || credit.name} <span className="text-secondary">as</span> {credit.job || credit.character || '-'}
-                          </Link>
-                        </div>
-                        <div className="d-flex gap-3 justify-content-sm-start justify-content-between align-items-center">
-                          <small className="text-secondary">{credit.release_date ? formatDate(credit.release_date) : '-'}</small>
-                          <small className="text d-flex align-items-center">
-                            <FaStar className="text-yellow me-1" />
-                            {formatVoteAverage(credit.vote_average)}
-                          </small>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="hr d-sm-none"></div>
-                  </div>
-                ))
+                movieCredits.map((credit, index) => <CreditCard key={`${credit.id}-movie-${index}`} credit={credit} linkTo={`/movies/${credit.id}`} dateKey="release_date" />)
               ) : (
                 <div className="text-sm-start text-center pt-3">
                   <small className="text-secondary fst-italic">No movie credits available.</small>
@@ -205,34 +185,11 @@ const PersonDetail = ({ personId }) => {
             </div>
           </div>
 
-          {/* Tab Content: TV Credits */}
+          {/* TV Credits */}
           <div className="tab-pane fade" id="tv-credits" role="tabpanel" aria-labelledby="tv-credits-tab">
             <div className="row">
               {tvCredits.length > 0 ? (
-                tvCredits.map((credit, index) => (
-                  <div key={`${credit.id}-tv-${index}`} className="col-lg-4 col-sm-6 my-sm-2 my-0">
-                    <div className="d-flex gap-3 justify-content-start align-items-start">
-                      <LazyLoad height={200} offset={100} placeholder={<img src="/default-poster.webp" alt="loading" className="credit-poster rounded-1" />}>
-                        <img className="credit-poster rounded-1" src={credit.poster_path ? `https://image.tmdb.org/t/p/w200${credit.poster_path}` : '/default-poster.webp'} alt={credit.name || 'Poster'} />
-                      </LazyLoad>
-                      <div className="w-100">
-                        <div className="mb-2">
-                          <Link to={`/tv-shows/${credit.id}`} className="person-credit-link text fw-normal">
-                            {credit.name || credit.title} <span className="text-secondary">as</span> {credit.job || credit.character || '-'}
-                          </Link>
-                        </div>
-                        <div className="d-flex gap-3 justify-content-sm-start justify-content-between align-items-center">
-                          <small className="text-secondary">{credit.first_air_date ? formatDate(credit.first_air_date) : '-'}</small>
-                          <small className="text d-flex align-items-center">
-                            <FaStar className="text-yellow me-1" />
-                            {formatVoteAverage(credit.vote_average)}
-                          </small>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="hr d-sm-none"></div>
-                  </div>
-                ))
+                tvCredits.map((credit, index) => <CreditCard key={`${credit.id}-tv-${index}`} credit={credit} linkTo={`/tv-shows/${credit.id}`} dateKey="first_air_date" />)
               ) : (
                 <div className="text-sm-start text-center pt-3">
                   <small className="text-secondary fst-italic">No TV credits available.</small>
@@ -243,7 +200,6 @@ const PersonDetail = ({ personId }) => {
         </div>
       </div>
 
-      {/* Scroll to top button */}
       <ButtonToTop />
     </Container>
   );

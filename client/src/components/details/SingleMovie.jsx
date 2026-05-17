@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { fetchMovieById, fetchGenres, fetchMovieCredits, fetchMovieTrailer } from '../../service/api';
+import { fetchMovieById, fetchMovieTrailer } from '../../service/api';
 import MovieTrailer from '../trailers/MovieTrailer';
 import CastAndCrew from './CastAndCrew';
 import Container from '../ui/Container';
@@ -15,7 +15,6 @@ function SingleMovie() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
-  const [genres, setGenres] = useState([]);
   const [credits, setCredits] = useState([]);
   const [trailerKey, setTrailerKey] = useState(null);
   const [showFullOverview, setShowFullOverview] = useState(false);
@@ -25,32 +24,30 @@ function SingleMovie() {
       try {
         setMovie(null);
         setTrailerKey(null);
-        setGenres([]);
         setCredits([]);
 
-        const movieData = await fetchMovieById(id);
-        if (!movieData || !movieData.title) {
+        // fetchMovieById sudah include credits & genres dari BE
+        // fetchMovieTrailer jalan paralel — tidak perlu tunggu movie selesai dulu
+        const [movieData, trailers] = await Promise.all([fetchMovieById(id), fetchMovieTrailer(id)]);
+
+        if (!movieData?.title) {
           navigate('/404');
           return;
         }
 
-        // Fetch genres and credits
-        const genreData = await fetchGenres();
-        const creditsData = await fetchMovieCredits(id);
-
-        // Set state with fetched data
         setMovie(movieData);
-        setGenres(genreData);
-        setCredits(creditsData.cast.concat(creditsData.crew));
 
-        // Fetch trailer for the movie
-        const trailers = await fetchMovieTrailer(id);
-        if (trailers.length > 0) {
+        // Credits sudah ada di movieData.credits dari BE
+        if (movieData.credits) {
+          setCredits([...(movieData.credits.cast || []), ...(movieData.credits.crew || [])]);
+        }
+
+        if (trailers?.length > 0) {
           setTrailerKey(trailers[0].key);
         }
 
         document.title = `Dibimovie | ${movieData.title}`;
-      } catch (error) {
+      } catch {
         navigate('/404');
       }
     };
@@ -60,7 +57,7 @@ function SingleMovie() {
 
   if (!movie) {
     return (
-      <div className="d-flex justify-content-center pt-4 position-absolute top-50 start-50 translate-middle ">
+      <div className="d-flex justify-content-center pt-4 position-absolute top-50 start-50 translate-middle">
         <SpinnerCustom />
       </div>
     );
@@ -69,17 +66,12 @@ function SingleMovie() {
   const hasBackdropImage = Boolean(movie.backdrop_path);
   const hasImdbId = Boolean(movie.imdb_id);
   const hasStatus = Boolean(movie.status);
-  const hasGenres = movie.genres && movie.genres.length > 0;
-  const hasLanguage = movie.spoken_languages && movie.spoken_languages.length > 0;
+  const hasGenres = movie.genres?.length > 0;
+  const hasLanguage = movie.spoken_languages?.length > 0;
 
-  // Handle text truncation and toggle
   const overviewText = movie.overview;
-  const isLongText = overviewText && overviewText.length > 200;
+  const isLongText = overviewText?.length > 200;
   const displayedText = showFullOverview || !isLongText ? overviewText : `${overviewText.slice(0, 200)}...`;
-
-  const handleToggleOverview = () => {
-    setShowFullOverview(!showFullOverview);
-  };
 
   return (
     <Container>
@@ -110,6 +102,7 @@ function SingleMovie() {
               </a>
             )}
           </div>
+
           <div className="mb-3">
             {hasLanguage && (
               <div className="row">
@@ -133,13 +126,15 @@ function SingleMovie() {
               </div>
             )}
           </div>
+
           <h4 className="text fw-bold lh-base mb-3">{movie.title}</h4>
           <p className="card-text text-tertiary lh-lg mb-0">
             {displayedText}
-            <ToggleTextButton isLongText={isLongText} showFullOverview={showFullOverview} handleToggleOverview={handleToggleOverview} />
+            <ToggleTextButton isLongText={isLongText} showFullOverview={showFullOverview} handleToggleOverview={() => setShowFullOverview(!showFullOverview)} />
           </p>
         </div>
       </div>
+
       <div className="mb-2">
         <div className="overflow-auto scrollbar-custom">
           <div className="d-flex gap-2 mb-3">
@@ -151,10 +146,9 @@ function SingleMovie() {
           </div>
         </div>
       </div>
+
       {trailerKey && <MovieTrailer trailerKey={trailerKey} />}
-      <div>
-        <CastAndCrew credits={credits} />
-      </div>
+      <CastAndCrew credits={credits} />
       <ButtonToTop />
     </Container>
   );

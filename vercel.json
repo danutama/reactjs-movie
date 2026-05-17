@@ -1,36 +1,18 @@
 {
   "version": 2,
+  "buildCommand": "cd client && pnpm install && pnpm run build",
+  "outputDirectory": "client/dist",
   "builds": [
-    {
-      "src": "client/dist/**/*",
-      "use": "@vercel/static"
-    },
     {
       "src": "server/index.js",
       "use": "@vercel/node"
     }
   ],
   "rewrites": [
-    {
-      "source": "/sitemap.xml",
-      "destination": "/client/dist/sitemap.xml"
-    },
-    {
-      "source": "/robots.txt",
-      "destination": "/client/dist/robots.txt"
-    },
-    {
-      "source": "/api/:match*",
-      "destination": "/server/index.js"
-    },
-    {
-      "source": "/:file*",
-      "destination": "/client/dist/:file*"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/client/dist/index.html"
-    }
+    { "source": "/api/:match*", "destination": "/server/index.js" },
+    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
+    { "source": "/robots.txt", "destination": "/robots.txt" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
     {
@@ -40,6 +22,14 @@
           "key": "Strict-Transport-Security",
           "value": "max-age=63072000; includeSubDomains; preload"
         }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, OPTIONS" }
       ]
     },
     {

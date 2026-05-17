@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { searchTMDB } from '../../service/api';
 import { IoCloseOutline } from 'react-icons/io5';
@@ -6,58 +6,64 @@ import { FaRegUser, FaHashtag } from 'react-icons/fa';
 import { BiMoviePlay } from 'react-icons/bi';
 import { MdLiveTv } from 'react-icons/md';
 
+const DEBOUNCE_MS = 400;
+
+const iconList = {
+  movie: BiMoviePlay,
+  person: FaRegUser,
+  keyword: FaHashtag,
+  tv: MdLiveTv,
+};
+
+const getLinkTo = (result) => {
+  const map = {
+    movie: `/movies/${result.id}`,
+    tv: `/tv-shows/${result.id}`,
+    person: `/people/${result.id}`,
+    keyword: `/keyword/${result.id}`,
+  };
+  return map[result.media_type] || '';
+};
+
 const Search = ({ show, onClose }) => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const debounceRef = useRef(null);
 
+  // Debounce search — tunggu user berhenti ketik 400ms baru fetch
   useEffect(() => {
-    const fetchResults = async () => {
-      if (query.trim()) {
-        setLoading(true);
-        const data = await searchTMDB(query);
-        setResults(data.results || []);
-        setLoading(false);
-      } else {
-        setResults([]);
-      }
-    };
+    if (debounceRef.current) clearTimeout(debounceRef.current);
 
-    fetchResults();
+    if (!query.trim()) {
+      setResults([]);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    debounceRef.current = setTimeout(async () => {
+      const data = await searchTMDB(query);
+      setResults(data.results || []);
+      setLoading(false);
+    }, DEBOUNCE_MS);
+
+    return () => clearTimeout(debounceRef.current);
   }, [query]);
 
+  // Bootstrap modal handling
   useEffect(() => {
     const modalElement = document.getElementById('searchModal');
+    if (!modalElement) return;
 
-    if (show && modalElement) {
+    if (show) {
       const bootstrapModal = new window.bootstrap.Modal(modalElement);
       bootstrapModal.show();
 
       const handleModalHidden = () => {
         setQuery('');
         setResults([]);
-
-        const backdropElement = document.querySelector('.modal-backdrop');
-        if (backdropElement) {
-          backdropElement.remove();
-        }
-
-        if (document.body && document.body.style) {
-          document.body.style.overflow = '';
-          document.body.style.paddingRight = '';
-          document.body.removeAttribute('data-bs-overflow');
-          document.body.removeAttribute('data-bs-padding-right');
-        }
-
-        if (modalElement) {
-          modalElement.style.display = 'none';
-        }
-
-        const existingBootstrapModal = window.bootstrap.Modal.getInstance(modalElement);
-        if (existingBootstrapModal) {
-          existingBootstrapModal.dispose();
-        }
-
+        cleanupModal(modalElement);
         onClose();
       };
 
@@ -65,58 +71,44 @@ const Search = ({ show, onClose }) => {
 
       return () => {
         modalElement.removeEventListener('hidden.bs.modal', handleModalHidden);
-        const existingBootstrapModal = window.bootstrap.Modal.getInstance(modalElement);
-        if (existingBootstrapModal) {
-          existingBootstrapModal.dispose();
-        }
-
-        const backdropElement = document.querySelector('.modal-backdrop');
-        if (backdropElement) {
-          backdropElement.remove();
-        }
-
-        if (document.body && document.body.style) {
-          document.body.style.overflow = '';
-          document.body.style.paddingRight = '';
-          document.body.removeAttribute('data-bs-overflow');
-          document.body.removeAttribute('data-bs-padding-right');
-        }
+        cleanupModal(modalElement);
       };
-    } else if (modalElement) {
+    } else {
       modalElement.style.display = 'none';
-
-      const backdropElement = document.querySelector('.modal-backdrop');
-      if (backdropElement) {
-        backdropElement.remove();
-      }
+      document.querySelector('.modal-backdrop')?.remove();
     }
   }, [show, onClose]);
+
+  const cleanupModal = (modalElement) => {
+    const instance = window.bootstrap.Modal.getInstance(modalElement);
+    if (instance) instance.dispose();
+
+    document.querySelector('.modal-backdrop')?.remove();
+
+    if (document.body?.style) {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+      document.body.removeAttribute('data-bs-overflow');
+      document.body.removeAttribute('data-bs-padding-right');
+    }
+
+    if (modalElement) modalElement.style.display = 'none';
+  };
 
   const handleClick = () => {
     const modalElement = document.getElementById('searchModal');
     if (modalElement) {
-      const bootstrapModal = window.bootstrap.Modal.getInstance(modalElement);
-      if (bootstrapModal) {
-        bootstrapModal.hide();
-        bootstrapModal.dispose();
+      const instance = window.bootstrap.Modal.getInstance(modalElement);
+      if (instance) {
+        instance.hide();
+        instance.dispose();
       }
       modalElement.style.display = 'none';
-
-      const backdropElement = document.querySelector('.modal-backdrop');
-      if (backdropElement) {
-        backdropElement.remove();
-      }
+      document.querySelector('.modal-backdrop')?.remove();
     }
     setQuery('');
     setResults([]);
     onClose();
-  };
-
-  const iconList = {
-    movie: BiMoviePlay,
-    person: FaRegUser,
-    keyword: FaHashtag,
-    tv: MdLiveTv,
   };
 
   return (
@@ -132,35 +124,20 @@ const Search = ({ show, onClose }) => {
                 <IoCloseOutline className="icon fs-1" />
               </button>
             </div>
-
-            <div>
-              <input type="text" className="form-control form-input-custom py-3 rounded-3" placeholder="Type to search..." value={query} onChange={(e) => setQuery(e.target.value)} />
-            </div>
+            <input type="text" className="form-control form-input-custom py-3 rounded-3" placeholder="Type to search..." value={query} onChange={(e) => setQuery(e.target.value)} />
           </div>
+
           <div className="modal-body scrollbar-custom" style={{ maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
-            {/* Search Suggestions */}
             <div className="search-suggest-body">
               {loading && <p className="text-center text-secondary">Loading...</p>}
+
               {!loading && query && results.length > 0 && (
                 <div>
                   {results.map((result, index) => {
-                    let linkTo = '';
-
-                    if (result.media_type === 'movie') {
-                      linkTo = `/movies/${result.id}`;
-                    } else if (result.media_type === 'tv') {
-                      linkTo = `/tv-shows/${result.id}`;
-                    } else if (result.media_type === 'person') {
-                      linkTo = `/people/${result.id}`;
-                    } else if (result.media_type === 'keyword') {
-                      linkTo = `/keyword/${result.id}`;
-                    }
-
                     const IconComponent = iconList[result.media_type] || FaRegUser;
-
                     return (
                       <React.Fragment key={result.id}>
-                        <Link to={linkTo} className="text d-flex align-items-center" onClick={handleClick}>
+                        <Link to={getLinkTo(result)} className="text d-flex align-items-center" onClick={handleClick}>
                           <IconComponent className="me-2" style={{ fontSize: '1rem', flexShrink: 0 }} />
                           {result.name || result.title || result.keyword}
                         </Link>
@@ -170,7 +147,9 @@ const Search = ({ show, onClose }) => {
                   })}
                 </div>
               )}
+
               {!loading && query && results.length === 0 && <p className="text-center">No results found.</p>}
+
               {!query && (
                 <div className="text-center">
                   <img src="/movie.svg" alt="Search" className="w-75 mt-5 mb-4" />
@@ -179,6 +158,7 @@ const Search = ({ show, onClose }) => {
               )}
             </div>
           </div>
+
           <div className="modal-footer border-0"></div>
         </div>
       </div>
