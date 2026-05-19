@@ -7,6 +7,9 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+pnpm-lock.yaml
+client/pnpm-lock.yaml
+
 node_modules
 client/node_modules
 server/node_modules
