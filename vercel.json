@@ -1,19 +1,46 @@
 {
   "version": 2,
+
   "buildCommand": "cd client && pnpm install && pnpm run build",
-  "outputDirectory": "client/dist",
+
   "builds": [
+    {
+      "src": "client/dist/**/*",
+      "use": "@vercel/static"
+    },
     {
       "src": "server/index.js",
       "use": "@vercel/node"
     }
   ],
+
   "rewrites": [
-    { "source": "/api/:match*", "destination": "/server/index.js" },
-    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
-    { "source": "/robots.txt", "destination": "/robots.txt" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/api/:match*",
+      "destination": "/server/index.js"
+    },
+
+    {
+      "source": "/sitemap.xml",
+      "destination": "/client/dist/sitemap.xml"
+    },
+
+    {
+      "source": "/robots.txt",
+      "destination": "/client/dist/robots.txt"
+    },
+
+    {
+      "source": "/:file*",
+      "destination": "/client/dist/:file*"
+    },
+
+    {
+      "source": "/(.*)",
+      "destination": "/client/dist/index.html"
+    }
   ],
+
   "headers": [
     {
       "source": "/(.*)",
@@ -24,26 +51,50 @@
         }
       ]
     },
+
     {
       "source": "/api/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "no-store" },
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET, OPTIONS" }
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, OPTIONS"
+        }
       ]
     },
+
     {
       "source": "/sitemap.xml",
       "headers": [
-        { "key": "Cache-Control", "value": "no-store" },
-        { "key": "Content-Type", "value": "application/xml" }
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/xml"
+        }
       ]
     },
+
     {
       "source": "/robots.txt",
       "headers": [
-        { "key": "Cache-Control", "value": "no-store" },
-        { "key": "Content-Type", "value": "text/plain" }
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain"
+        }
       ]
     }
   ]
