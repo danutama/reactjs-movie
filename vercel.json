@@ -15,44 +15,19 @@
     }
   ],
 
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/:match*",
-      "destination": "/server/index.js"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ],
-
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Strict-Transport-Security",
-          "value": "max-age=63072000; includeSubDomains; preload"
-        }
-      ]
+      "src": "/api/(.*)",
+      "dest": "/server/index.js"
     },
 
     {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store"
-        },
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET, OPTIONS"
-        }
-      ]
+      "handle": "filesystem"
+    },
+
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
