@@ -2,7 +2,6 @@
   "name": "reactjs-movie",
   "private": true,
   "engines": {
-    "node": ">=20.0.0"
-  },
-  "packageManager": "pnpm@8.15.0"
+    "node": "20.x"
+  }
 }
