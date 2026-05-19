@@ -2,6 +2,12 @@
   "version": 2,
   "buildCommand": "cd client && pnpm install && pnpm run build",
   "outputDirectory": "client/dist",
+  "builds": [
+    {
+      "src": "server/index.js",
+      "use": "@vercel/node"
+    }
+  ],
   "routes": [
     {
       "src": "/api/(.*)",
