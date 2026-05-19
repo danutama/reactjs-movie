@@ -1,15 +1,34 @@
 {
   "version": 2,
-
+  "buildCommand": "cd client && pnpm install && pnpm run build",
   "outputDirectory": "client/dist",
-
-  "rewrites": [
+  "functions": {
+    "server/index.js": {
+      "runtime": "nodejs20.x"
+    }
+  },
+  "routes": [
     {
-      "source": "/api/:match*",
-      "destination": "/server/index.js"
+      "src": "/api/(.*)",
+      "dest": "/server/index.js"
+    },
+    {
+      "src": "/sitemap.xml",
+      "dest": "/sitemap.xml"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/robots.txt"
+    },
+    {
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|webp|svg|ico|woff|woff2|ttf|eot))",
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ],
-
   "headers": [
     {
       "source": "/(.*)",
@@ -20,50 +39,26 @@
         }
       ]
     },
-
     {
       "source": "/api/(.*)",
       "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store"
-        },
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET, OPTIONS"
-        }
+        { "key": "Cache-Control", "value": "no-store" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, OPTIONS" }
       ]
     },
-
     {
       "source": "/sitemap.xml",
       "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store"
-        },
-        {
-          "key": "Content-Type",
-          "value": "application/xml"
-        }
+        { "key": "Cache-Control", "value": "no-store" },
+        { "key": "Content-Type", "value": "application/xml" }
       ]
     },
-
     {
       "source": "/robots.txt",
       "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store"
-        },
-        {
-          "key": "Content-Type",
-          "value": "text/plain"
-        }
+        { "key": "Cache-Control", "value": "no-store" },
+        { "key": "Content-Type", "value": "text/plain" }
       ]
     }
   ]
