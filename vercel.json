@@ -15,29 +15,14 @@
     }
   ],
 
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/server/index.js"
+      "source": "/api/:match*",
+      "destination": "/server/index.js"
     },
-
     {
-      "src": "/sitemap.xml",
-      "dest": "/sitemap.xml"
-    },
-
-    {
-      "src": "/robots.txt",
-      "dest": "/robots.txt"
-    },
-
-    {
-      "handle": "filesystem"
-    },
-
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
 
@@ -66,34 +51,6 @@
         {
           "key": "Access-Control-Allow-Methods",
           "value": "GET, OPTIONS"
-        }
-      ]
-    },
-
-    {
-      "source": "/sitemap.xml",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store"
-        },
-        {
-          "key": "Content-Type",
-          "value": "application/xml"
-        }
-      ]
-    },
-
-    {
-      "source": "/robots.txt",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store"
-        },
-        {
-          "key": "Content-Type",
-          "value": "text/plain"
         }
       ]
     }
