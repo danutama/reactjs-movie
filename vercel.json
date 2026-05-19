@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "cd client && pnpm install && pnpm run build",
+  "buildCommand": "cd client && npm install && npm run build",
   "outputDirectory": "client/dist",
   "routes": [
     {
