@@ -2,11 +2,6 @@
   "version": 2,
   "buildCommand": "cd client && pnpm install && pnpm run build",
   "outputDirectory": "client/dist",
-  "functions": {
-    "server/index.js": {
-      "runtime": "nodejs20.x"
-    }
-  },
   "routes": [
     {
       "src": "/api/(.*)",
