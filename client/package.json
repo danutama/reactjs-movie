@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cp ./dist/sw.js ./public/sw.js && cp ./dist/workbox-*.js ./public/",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
