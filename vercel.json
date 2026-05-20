@@ -12,22 +12,20 @@
     }
   ],
   "routes": [
-  { "src": "/api/(.*)", "dest": "/server/index.js" },
-  { "src": "/sw.js", "dest": "/client/sw.js" },
-{ "src": "/workbox-(.*)", "dest": "/client/workbox-$1" },
-{ "src": "/manifest.webmanifest", "dest": "/client/manifest.webmanifest" },
-{ "src": "/registerSW.js", "dest": "/client/registerSW.js" },
-  { "src": "/sitemap.xml", "dest": "/client/sitemap.xml" },
-{ "src": "/robots.txt", "dest": "/client/robots.txt" },
-  { "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|webp|svg|ico|woff|woff2|ttf|eot))", "dest": "/client/$1" },
-  { "src": "/(.*)", "dest": "/client/index.html" }
-],
+    { "src": "/api/(.*)", "dest": "/server/index.js" },
+    { "src": "/sw.js", "dest": "/client/sw.js" },
+    { "src": "/workbox-(.*)", "dest": "/client/workbox-$1" },
+    { "src": "/manifest.webmanifest", "dest": "/client/manifest.webmanifest" },
+    { "src": "/registerSW.js", "dest": "/client/registerSW.js" },
+    { "src": "/sitemap.xml", "dest": "/client/sitemap.xml" },
+    { "src": "/robots.txt", "dest": "/client/robots.txt" },
+    { "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|webp|svg|ico|woff|woff2|ttf|eot))", "dest": "/client/$1" },
+    { "src": "/(.*)", "dest": "/client/index.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
-      "headers": [
-        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" }
-      ]
+      "headers": [{ "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" }]
     },
     {
       "source": "/api/(.*)",

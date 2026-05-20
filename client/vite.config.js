@@ -9,11 +9,11 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-  outDir: 'dist',
-  injectRegister: 'auto',
-  devOptions: {
-    enabled: true,
-  },
+      outDir: 'dist',
+      injectRegister: 'auto',
+      devOptions: {
+        enabled: true,
+      },
       workbox: {
         skipWaiting: true,
         clientsClaim: true,
