@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cp public/sitemap.xml dist/ && cp public/robots.txt dist/",
+    "build": "vite build && cp ../sitemap.xml ./dist/ && cp ../robots.txt ./dist/",
     "lint": "eslint .",
     "preview": "vite preview"
   },
