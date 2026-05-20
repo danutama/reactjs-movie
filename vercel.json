@@ -17,8 +17,8 @@
   { "src": "/workbox-(.*)", "dest": "/workbox-$1" },
   { "src": "/manifest.webmanifest", "dest": "/manifest.webmanifest" },
   { "src": "/registerSW.js", "dest": "/registerSW.js" },
-  { "src": "/sitemap.xml", "dest": "/sitemap.xml" },
-  { "src": "/robots.txt", "dest": "/robots.txt" },
+  { "src": "/sitemap.xml", "dest": "/client/sitemap.xml" },
+{ "src": "/robots.txt", "dest": "/client/robots.txt" },
   { "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|webp|svg|ico|woff|woff2|ttf|eot))", "dest": "/client/$1" },
   { "src": "/(.*)", "dest": "/client/index.html" }
 ],
