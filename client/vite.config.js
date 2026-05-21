@@ -17,6 +17,13 @@ export default defineConfig({
       workbox: {
         skipWaiting: true,
         clientsClaim: true,
+        navigateFallbackDenylist: [
+         /^\/sw\.js$/,
+         /^\/sitemap\.xml$/,
+         /^\/robots\.txt$/,
+         /^\/manifest\.webmanifest$/,
+         /^\/workbox-.*\.js$/,
+        ],
       },
       manifest: {
         name: 'Dibimovie',
