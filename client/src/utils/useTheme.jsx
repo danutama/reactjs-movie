@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 
 const useTheme = () => {
-  const initialTheme = localStorage.getItem('theme') || 'system';
+  const initialTheme = localStorage.getItem('theme') || 'light';
   const [theme, setTheme] = useState(initialTheme);
 
   const systemTheme = useMemo(() => {
